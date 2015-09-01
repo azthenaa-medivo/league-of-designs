@@ -1,0 +1,45 @@
+{% load staticfiles %}
+{% load template_tags %}
+
+<table id="red-table" class="stripe hover">
+    <thead>
+        <tr>
+            <th>Rioter</th>
+            <th>Date</th>
+            <th>Thread</th>
+            <th>Contents</th>
+            <th>Champions</th>
+            <th>Search</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Rioter</th>
+            <th>Date</th>
+            <th>Thread</th>
+            <th>Contents</th>
+            <th>Champions</th>
+            <th>Search</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        {% for r in reds %}
+        <tr>
+            <td><span class="rioter">{{r.rioter}}</span></td>
+            <td>{% include "utils/date_span.html" with date=r.date %}</td>
+            <td><a href="{{r.url}}" target="_blank">{{r.thread}}</a></td>
+            <td>{{r.contents|markdown | safe}}</td>
+            <td class="text-center">
+                {% for c in r.champions_data %}
+                    {% include "utils/mini_hero_icon.html" with champion=c %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for c in r.champions_data %}
+                    {{c.search}}
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

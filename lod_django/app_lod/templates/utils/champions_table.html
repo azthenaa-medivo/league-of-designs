@@ -1,0 +1,33 @@
+{% load staticfiles %}
+{% load template_tags %}
+<table id="{{id}}" class="stripe hover {{class}}">
+    <thead class="hidden">
+        <tr>
+            <th>Icon</th>
+            <th>Name</th>
+            <th>Red Posts</th>
+            <th>Link</th>
+            <th>Search String</th>
+        </tr>
+    </thead>
+    <tfoot class="hidden">
+        <tr>
+            <th>Icon</th>
+            <th>Name</th>
+            <th>Red Posts</th>
+            <th>Link</th>
+            <th>Search String</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        {% for c in champions %}
+        <tr data-href="{% url "champion" c|get:"url_id" %}">
+            <td><img class="medium-icon" src="{% static "images/portraits/" %}{{c.portrait}}"></img></td>
+            <td>{{c.name}}</td>
+            <td data-order="{{c.red_posts|length}}"><span class="rioter">{{c.red_posts|length}}</span> Red Posts</td>
+            <td>{% url "champion" c|get:"url_id" %}</td>
+            <td>{{c.search}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

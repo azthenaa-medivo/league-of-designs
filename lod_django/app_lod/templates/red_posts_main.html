@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}
+Red Posts -
+{% endblock %}
+
+{% block header %}
+    <h1>The Red Posts</h1>
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block contents %}
+    <h3>Filter by Rioter</h3>
+    <form method="#" action="#" id="filterForm">
+        {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="posts" type="posts" id="rioter-select" %}
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            If a Rioter has no Red Posts associated, it means LoD didn't <span id="wowUP">detect a champion design conversation</span>. <span class="hidden" id="wow">wowsoSTALKED</span>
+            <br>
+            {% if not all %}
+                <a href="{% url 'red-posts' %}?all=1">Show all Red Posts regardless of their theme (including Art, Dank memes, etc.).</a>
+            {% else %}
+                <a href="{% url 'red-posts' %}">Show Red Posts only from champion designs Boards
+                    (Gameplay & Balance, Champions & Gameplay, Maps & Modes).</a>
+            {% endif %}
+        </div>
+    </div>
+    <hr>
+    {% include "utils/red_posts_datatable.html" %}
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function() {
+            var redTable = $('#red-table').DataTable({
+                "order": [[ 2, "desc" ]],
+                "language": {
+                    "zeroRecords": "No Red Posts found. Soz boyz."
+                },
+                "dom": '<"top"flp>rt<"clear">',
+                "order": [[ 1, "asc" ]],
+                "columnDefs": [
+                {
+                    "targets": [ 5 ],
+                    "visible": false,
+                },]
+            });
+
+            // Filter Rioter
+            $('#rioter-select').change(function() {
+                redTable.column(0).search($(this).val()).draw();
+                console.log($(this).val())
+            });
+        } );
+    </script>
+    <!-- Lock the search bar when scrolling -->
+    <script>
+        $(document).scroll(function() {
+            var detect = 150;
+            if ($(document).scrollTop() >= detect)
+            {
+                $('#red-table_wrapper > .top').addClass('fixed-below-navbar');
+            } else {
+                $('#red-table_wrapper > .top').removeClass('fixed-below-navbar');
+            }
+        });
+    </script>
+    <!-- wowsoSTALKING -->
+    <script>
+        $(document).ready(function() {
+            $('#wowUP').hover(function() {
+                $('#wow').removeClass('hidden');
+            }, function() {
+                $('#wow').addClass('hidden');
+            });
+        });
+    </script>
+{% endblock %}

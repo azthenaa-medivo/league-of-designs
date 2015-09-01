@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Edit {{champion.name}} -
+{% endblock %}
+
+{% block header %}
+{% load staticfiles %}
+{% load template_tags %}
+            <div class="row">
+                {% include "utils/champion_header.html" with champion=champion %}
+            </div>
+{% endblock %}
+
+{% block contents %}
+    <form action="/champion/{{champion.url_id}}/edit" method="post">
+        {% csrf_token %}
+        {% include "utils/form_snippet.html" %}
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}

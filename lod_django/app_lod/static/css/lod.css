@@ -1,0 +1,265 @@
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Georgia';
+}
+
+p, div, body {
+    font-family: 'Georgia';
+}
+
+h1 > a {
+    color: black;
+}
+
+h1 > a:hover {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+textarea {
+    display: block;
+}
+
+blockquote {
+    font-size: inherit;
+    color: #660066;
+}
+
+
+.homeLOD {
+    width: 64px;
+    height: 64px;
+    z-index: 1;
+    position: relative;
+    cursor: help;
+}
+
+.home-col {
+    background-color: white;
+}
+
+.quote-op {
+    font-style: italic;
+}
+
+.red-contents {
+    position: relative;
+    overflow-y: hidden;
+    text-overflow: ellipsis;
+    border-top: 1px #aa0000 solid;
+    padding-top: 5px;
+    max-height: 120px;
+}
+
+.red-contents .read-more {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    margin: 0; padding: 30px 0;
+    background-image: linear-gradient(to bottom, transparent, white);
+}
+
+.msg {
+    background-color: rgba(255,0,0,0.5);
+    padding: 3px;
+    color: white;
+    border-radius: 10px;
+    border-bottom: 2px #aa0000 solid;
+    text-shadow: rgba(0,0,0,1) 0px 2px 3px;
+}
+
+.red-contents:hover {
+    max-height: 100%;
+    height: 100%;
+}
+
+.red-rioter {
+    padding-bottom: 3px;
+}
+
+.red-champions {
+    padding-top: 10px;
+}
+
+.fieldWrapper {
+    margin-bottom: 10px;
+}
+
+body { padding-top: 30px; }
+
+.top15 {
+    margin-top:15px;
+}
+
+.bot15 {
+    margin-bottom:15px;
+}
+
+.pic-h1-margin {
+    margin-left: 15px;
+}
+
+.rioter {
+    font-weight: bold;
+    color: red;
+}
+
+.norioter {
+    font-weight: normal;
+    color: black;
+}
+
+#display-buttons-div {
+    margin-top: 47px;
+}
+
+.display-button {
+    font-size: 18px;
+    width: 110px;
+    height: 60px;
+    border-radius: 5px;
+}
+
+.display-button-left {
+    margin-left: -20px;
+    margin-right: 15px;
+}
+
+.display-button-middle {
+    margin-right: 15px;
+}
+
+.red-outline {
+    border: 2px #c00000 solid;
+}
+
+.vtd {
+    vertical-align: middle !important;
+}
+
+.spell-pic {
+    margin: 5px;
+    border: 2px black solid;
+    border-radius: 10px;
+}
+
+.spell-name {
+    font-weight: bold;
+}
+
+#home-button {
+    position: fixed;
+    top: 25px;
+    right: 20px;
+}
+
+.nav-button {
+    width: 120px;
+}
+
+#champions-navbar {
+    position: absolute;
+    top: 35px;
+    border-radius: 5px;
+    border: 2px solid black;
+}
+
+a.no-underline:hover {
+    text-decoration: none;
+}
+
+#champions-grid-search {
+    width: 200px;
+}
+
+#champions-grid img {
+    border-radius: 60px;
+    border: 3px solid black;
+}
+
+.champion-block:hover {
+    background-color: #dddddd;
+    border-radius: 10px;
+}
+
+#search-row {
+    background-color: #ffffff;
+    padding-bottom: 15px;
+    border-bottom: 1px solid grey;
+}
+
+.fixed-below-navbar {
+    position: fixed;
+    width: 1140px;
+    top: 50px;
+    background-color: #ffffff;
+    padding-bottom: 15px;
+    border-bottom: 1px solid grey;
+}
+
+.filterCheckbox {
+    padding: 5px;
+}
+
+.filterCheckbox > *:hover {
+    cursor: pointer;
+    color: rgba(255,0,0,1);
+}
+
+.navbar > .container {
+    margin-top: 13px;
+}
+
+tr[data-href] {
+    cursor: pointer;
+}
+
+.small-pencil {
+    font-size: 14px;
+}
+
+/* Resource style */
+
+.resource-Mana {
+    color: blue;
+}
+
+.resource-Energy {
+    color: orange;
+}
+
+.resource-Health {
+    color: red;
+}
+
+/* Champions mini-portraits */
+
+.mini-icon {
+    width: 40px;
+    border-radius: 20px;
+    border: 2px solid black;
+}
+
+.mini-icon:hover {
+    cursor: pointer;
+    border: 2px solid red;
+}
+
+.medium-icon {
+    width: 60px;
+}
+
+/* http://jsfiddle.net/panman8201/mkzrm/10/ */
+
+#top-link-block.affix-top {
+    position: absolute; /* allows it to "slide" up into view */
+    bottom: -82px; /* negative of the offset - height of link element */
+    right: 10px; /* padding from the left side of the window */
+}
+#top-link-block.affix {
+    position: fixed; /* keeps it on the bottom once in view */
+    bottom: 25px; /* height of link element */
+    right: 20px; /* padding from the left side of the window */
+}

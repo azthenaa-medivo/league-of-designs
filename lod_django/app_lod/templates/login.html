@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Login -
+{% endblock %}
+
+{% block header %}
+            <h1>Login</h1>
+{% endblock %}
+
+{% block contents %}
+    <h3>Enter your credentials belown, matey !</h3>
+    <div>
+        <div>By the way, I don't want to break it to you, but as of now only an administrator may login. Soz boyz.</div>
+        <div class="text-danger">{{ message }}</div>
+        <form method="post" action="/login">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-1"><label for="username">Username</label></div>
+                <div class="col-md-5"><input type="text" name="username" value="{{username}}"></input></div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"><label for="password">Password</label></div>
+                <div class="col-md-5"><input type="password" name="password"></input></div>
+            </div>
+            <input type="hidden" name="next" value="{{ next }}" />
+            <input type="submit" value="Login">
+        </form>
+    </div>
+{% endblock %}

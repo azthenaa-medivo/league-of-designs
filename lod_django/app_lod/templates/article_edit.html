@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Edit Article -
+{% endblock %}
+
+{% block header %}
+{% load staticfiles %}
+{% load template_tags %}
+        {% if champion == None %}
+        <div class="row">
+            <div class="col-md-8">
+                <h1>
+                    Article edition about nobody
+                </h1>
+            </div>
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="col-md-8">
+                <h1>
+                    <a href="{% url "champion" champion|get:"url_id" %}">
+                        <img src="{% static "images/portraits/" %}{{champion.portrait}}"></img>
+                        <span class="pic-h1-margin">{{champion.name}}, {{champion.title}}</span>
+                    </a>
+                </h1>
+            </div>
+        </div>
+        {% endif %}
+{% endblock %}
+
+{% block contents %}
+    {% load template_tags %}
+    <form action="{% url "article-edit" article_id=article_id %}" method="post">
+        {% csrf_token %}
+        {% include "utils/form_snippet.html" %}
+        <input type="submit" value="Submit" />
+    </form>
+    <div class="autoGenButtonWrapper col-md-1"><button type="button" onclick="autoGen()">Auto</button></div>
+{% endblock %}
+
+{% block js %}
+    <!-- Auto-generation for URL_ID -->
+    <script>
+        $('input[name=url_id]').parent().before($('.autoGenButtonWrapper').detach());
+
+        function autoGen() {
+            $('input[name=url_id]').val($('input[name=title]').val().replace(/[^a-zA-Z\d\s-]|\s+$/g, '').replace(/ +/g, '-'));
+        }
+    </script>
+{% endblock %}

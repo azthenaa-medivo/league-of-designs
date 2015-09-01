@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Remove Article -
+{% endblock %}
+
+{% block header %}
+{% load staticfiles %}
+{% load template_tags %}
+        <div class="row">
+            <h1>
+                Are you sure you want to remove the article titled "{{article.title}}" ?
+            </h1>
+        </div>
+{% endblock %}
+
+{% block contents %}
+    {% load template_tags %}
+    {% load staticfiles %}
+    <p>Are you sure you want to remove the article titled "{{article.title}}" ? I mean really ? :-(</p>
+    <form action="{% url "article-kill" article_id=article.url_id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{next}}">
+        <input type="submit" value="BURN IT" />
+    </form>
+    <a href="{{next}}">Maybe not, I'm outta there.</a>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% load staticfiles %}
+{% load template_tags %}
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    {% include "utils/ascii_art.html" %}
+    <meta charset="UTF-8">
+    <!-- You'll need some M E T A T A G S because wowsoSEO -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="League of Designs - where the secrets behind League of Legends are unearthed and exposed to the world.">
+    <meta name="keywords" content="League of Legends, design, values, champions, knowledge, education, wowsoKEYWORD">
+    <meta name="author" content="Artemys">
+    <title>{% block title %}{% endblock %} League of Designs</title>
+    <link href="{% static "favicon.ico" %}" type="image/x-icon" rel="icon">
+    <!-- CSS -->
+    <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "bootstrap/css/bootstrap-theme.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/dataTables.min.css" %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+    <link href="{% static "css/lod.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-1">
+                    <a href="{% url "home" %}">
+                        <span class="text-center">
+                            <i class="glyphicon glyphicon-home"></i> Home
+                        </span>
+                    </a>
+                </div>
+                <div class="col-md-3 text-left">
+                    {% include "utils/champions_table.html" with champions=champions id="champions-navbar" class=" hidden " %}
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="row">
+                        <div class="col-md-4 text-right">
+                            <a href="{% url "red-posts" %}"><i class="glyphicon glyphicon-education"></i> Red Posts</a>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <a href="{% url "articles-list" %}"><i class="glyphicon glyphicon-book"></i> Articles</a>
+                        </div>
+                        <div class="col-md-4 text-left">
+                            <a href="{% url "champions-grid" %}"><i class="glyphicon glyphicon-queen"></i> Champions</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 text-right">
+                    <a href="{% url "about" %}"><i class="glyphicon glyphicon-info-sign"></i> About</a>
+                </div>
+                <div class="col-md-1 text-right">
+                {% if user.is_authenticated %}
+                    <a href="{% url "logout" %}?next={% firstof request.path '/' %}"><i class="glyphicon glyphicon-user"></i> Log out</a>
+                {% else %}
+                    <a href="{% url "login" %}?next={% firstof request.path '/' %}"><i class="glyphicon glyphicon-wrench"></i> Log in</a>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">00
+        <div class="page-header">
+            {% if messages %}
+            <div class="row" id="messagesDiv">
+                <ul>
+                    {% for message in messages %}
+                    <li {% if message.tags %}class="{{message.tags}}"{% endif %}>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        {% block header %}{% endblock %}
+        </div>
+        <div class="row">
+        <!-- What are you doing here ? -->
+        {% block contents %}{% endblock %}
+        </div>
+    </div>
+
+
+    <div id="nav-button">
+        <!-- Back to top button -->
+        <a href="#top" onclick="$('html,body').animate({scrollTop:0},'slow');return false;">
+            <span id="top-link-block" class="hidden text-center nav-button well well-sm">
+                <i class="glyphicon glyphicon-chevron-up"></i> Back to Top
+            </span>
+        </a>
+    </div>
+    <!-- JS -->
+    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/dataTables.min.js" %}"></script>
+    <script src="{% static "js/util.js" %}"></script>
+    <script src="{% static "js/lod.js" %}"></script>
+    {% block js %}{% endblock %}
+
+    <footer>
+        <div class="row">
+
+        </div>
+    </footer>
+</body>
+</html>

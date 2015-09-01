@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{article.title}} -
+{% endblock %}
+
+{% block header %}
+{% load staticfiles %}
+{% load template_tags %}
+        {% if article.champion == 'None' %}
+            <div class="row">
+                <h1>
+                    <span class="pic-h1-margin">{{article.title}}</span>
+                    {% include "utils/article_admin.html" with article=article %}
+                </h1>
+            </div>
+        {% else %}
+            <div class="row">
+                <h1>
+                    <img src="{% static "images/portraits/" %}{{article.champion_data.portrait}}"></img>
+                    <span class="pic-h1-margin">{{article.champion_data.name}}: {{article.title}}</span>
+                </h1>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6">
+                <div>Purposefully redacted on {{article.date_created}} ({% include "utils/date_span.html" with date=article.date_created|isoformat %}) by {{article.author}}.</div>
+                <div>Last modified {% include "utils/date_span.html" with date=article.date_modified|isoformat %}.</div>
+            </div>
+            <div class="col-md-6 text-right">
+                {% if article.champion != 'None' %}
+                <div>
+                    <a href="{% url "champion" article.champion_data|get:"url_id" %}#discussion">Back to {{article.champion_data.name}} discussions.</a>
+                </div>
+                {% endif %}
+                <div>
+                    <a href="{% url "articles-list" %}">Back to the Articles.</a>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block contents %}
+    {{article.contents|markdown | safe}}
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}
+Articles -
+{% endblock %}
+
+{% block header %}
+    <h1>The Articles</h1>
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block contents %}
+    {% if user.is_authenticated %}
+    <a href="{% url "article-edit" article_id='new' %}">How about a new article ?</a>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Filter by article type</h3>
+            <form method="#" action="#" id="filterForm">
+                {% include "utils/filters/filter_checkbox.html" with name="article-types-filter" filter=types colmd=3 %}
+            </form>
+        </div>
+    </div>
+    <hr>
+    {% include "utils/articles_datatable.html" %}
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function() {
+            var homeTable = $('#article-table').DataTable({
+                "order": [[ 2, "desc" ]],
+                "language": {
+                    "zeroRecords": "Ain't no articles there, mate."
+                },
+                "dom": '<"top"flp>rt<"clear">',
+                "order": [[ 2, "asc" ]],
+                "columnDefs": [{ "width": "80%", "targets": 0 },
+                { "width": "10%", "targets": 1 },
+                { "width": "10%", "targets": 2 },]
+            });
+
+            // Filter Article Type
+            $('.article-types-filter').change(function() {
+                var tmpTable = $('.article-types-filter:checked').map(function() {
+                    return $(this).val();
+                }).get();
+                homeTable.column(1).search('('+tmpTable.join('|')+')', true).draw();
+            });
+        });
+    </script>
+    <!-- Lock the search bar when scrolling -->
+    <script>
+        $(document).scroll(function() {
+            var detect = 150;
+            if ($(document).scrollTop() >= detect)
+            {
+                $('#red-table_wrapper > .top').addClass('fixed-below-navbar');
+            } else {
+                $('#red-table_wrapper > .top').removeClass('fixed-below-navbar');
+            }
+        });
+    </script>
+{% endblock %}

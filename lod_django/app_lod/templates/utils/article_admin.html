@@ -1,0 +1,11 @@
+{% load staticfiles %}
+{% load template_tags %}
+
+{% if user.is_authenticated %}
+    <a href="{% url "article-edit" article_id=article.url_id %}">
+        <i class="small-pencil glyphicon glyphicon-pencil"></i>
+    </a>
+    <a href="{% url "article-kill" article_id=article.url_id %}?next={% firstof request.path '/' %}">
+        <i class="small-pencil glyphicon glyphicon-trash"></i>
+    </a>
+{% endif %}

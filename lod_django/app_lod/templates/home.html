@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block header %}
+    {% load staticfiles %}
+            <h1>
+                <span id="homeLODWrapper">
+                    <img src="{% static "images/lod/lod.png" %}" alt="League of Designs" title="MWAAHAHAHHAAH" class="homeLOD"></img>
+                </span>
+                <audio preload="auto" id="singed1">
+                    <source src="{% static "audio/singed1.ogg" %}"></source>
+                </audio>
+                <audio preload="auto" id="singed2">
+                    <source src="{% static "audio/singed2.ogg" %}"></source>
+                </audio>
+                <audio preload="auto" id="singed3">
+                    <source src="{% static "audio/singed3.ogg" %}"></source>
+                </audio>
+                League of Designs
+            </h1>
+{% endblock %}
+
+{% block contents %}
+    {% load staticfiles %}
+    {% load template_tags %}
+        <div class="row">
+            <h2>Welcome !</h2>
+            <p>Please enjoy your stay on <b>L</b>eague <b>O</b>f <b>D</b>esigns, where the masterminds behind League of Legends unveil the
+                truth on Irelia nerf immunity and the upcoming ADC overhaul. All of that, soon™.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4 home-col">
+                <h3>
+                    <div class="row">
+                        <div class="col-md-8 home-col">
+                            Latest Red Posts
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <a href="{% url "red-posts" %}"><i class="grid-link glyphicon glyphicon-education"></i></a>
+                        </div>
+                    </div>
+                </h3>
+                <div>
+                    {% include "utils/mini_reds_list.html" with reds=reds %}
+                </div>
+            </div>
+            <div class="col-md-4 home-col">
+                <h3>
+                    <div class="row">
+                        <div class="col-md-8">
+                            News & Articles
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <a href="{% url "articles-list" %}"><i class="grid-link glyphicon glyphicon-book"></i></a>
+                        </div>
+                    </div>
+                </h3>
+                <div>
+                {% for a in articles %}
+                    <div>{{a.date_created}} ({% include "utils/date_span.html" with date=a.date_created|isoformat %})</div>
+                    <div>{{a.contents|markdown | safe}}</div>
+                    {% if not forloop.last %}
+                    <hr>
+                    {% endif %}
+                {% empty %}
+                    How comes, no NEWS ? HELL.
+                {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-4 home-col">
+                <h3>
+                    <div class="row">
+                        <div class="col-md-8">
+                            Champions
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <a href="{% url "champions-grid" %}"><i class="grid-link glyphicon glyphicon-queen"></i></a>
+                        </div>
+                    </div>
+                </h3>
+                <div>
+                    {% include "utils/champions_table.html" with champions=champions id="champions-home"%}
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function() {
+            var homeTable = $('#champions-home').DataTable({
+                "order": [[ 2, "desc" ]],
+                "info": false,
+                "dom": '<"top"fi>rt<"bottom"p><"clear">',
+                "language": {
+                    "search": "Search champion :",
+                    "zeroRecords": "Wait, <i>WHO</i> ?"
+                },
+                "lengthMenu": [[5], [5]],
+                "columnDefs": [
+                {
+                    "targets": [ 3, 4 ],
+                    "visible": false,
+                },
+                {
+                    "searchable": false,
+                    "targets": [ 2 ],
+                }
+                ]
+            });
+            // Search Enter Key
+            $('#champions-home_filter input').unbind();
+            $('#champions-home_filter input').bind('keyup', function(e) {
+                if (e.keyCode == 13) {
+                    rowData = homeTable.row(0, {row:  'current', search: 'applied'}).data();
+                    window.open(rowData[3], '_self');
+                }
+                homeTable.search($(this).val());
+                homeTable.draw();
+            });
+        } );
+    </script>
+    <script>
+        // Read more !
+        $(".read-more").each(function() {
+            if ($(this).parent().outerHeight() >= 120) {
+                $(this).parent().addClass("hovermore");
+            } else {
+                $(this).addClass("hidden");
+            }
+        });
+        // Red Posts Gradient !
+        $(".hovermore").hover(function() {
+            totalHeight = 0;
+            $el = $(this);
+            $p  = $el.parent();
+            $up = $p.parent();
+            $ps = $up.find("p:not('.read-more')");
+            $ps.each(function() {
+                totalHeight += $(this).outerHeight();
+            });
+            $(this).animate({'max-height': totalHeight+'px'}, 500);
+            $(this).children('.read-more').animate({'opacity':0}, 250);
+        }, function() {
+            $(this).animate({'max-height':'120px'});
+            $(this).children('.read-more').animate({'opacity':1}, 500);
+        });
+    </script>
+    <!-- CLASSY EFFECTS ON COLUMNS, jk it doesn't work :-( -->
+    <script>
+        $(".home-col").hover(function() {
+            $(this).animate({'background-color': 'red'});
+        }, function() {
+            $(this).animate({'background-color': 'white'});
+        });
+    </script>
+    <!-- wowsoSPOOKY -->
+    <script>
+        $(document).ready(function() {
+            var trollCounter = 0;
+            var trollArray = {
+                '3': 'Please stop making him laugh.',
+                '6': 'I am serious, stop it !',
+                '9': 'For the love of SATAN PLEASE STOOOOP MAKING HIM LAUGH',
+                '12': 'I DO NOT WANT TO TAKE EXTREME MEASURES',
+                '15': 'YOU HAVE BEEN WARNED',
+                '42': 'You dirty little cheater.',
+            };
+            $('h1').after('<div id="wowsoSHUTUP"></div>');
+            $('.homeLOD').click(function() {
+                $("#singed" + Math.ceil(Math.random() * 3))[0].play();
+                // SPOOKY ANIMATION
+                pos = $(this).position();
+                $(this).animate({'left':'-='+(pos.left+$(this).width())})
+                    .animate({'top':'+='+Math.random()*800}, function() {
+                        $(this).css({'transform':'scale(-1,1)'});
+                    })
+                    .animate({'left':$(window).width()}, 1000)
+                    .animate({'top':0}, function() {
+                        $(this).css({'transform':'scale(1,1)'});
+                    })
+                    .animate({'left':0}, function() {
+                        trollCounter++;
+                        if (trollCounter == 16)
+                        {
+                            window.location = 'http://www.finalesfunkeln.com';
+                        }
+                        if (trollCounter in trollArray) {
+                            $('#wowsoSHUTUP').text(trollArray[trollCounter]);
+                        }
+                    });
+            });
+        });
+    </script>
+{% endblock %}

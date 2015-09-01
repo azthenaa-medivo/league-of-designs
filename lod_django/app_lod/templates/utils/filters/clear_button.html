@@ -1,0 +1,10 @@
+<button id="clearButton" type="button" onclick="clearForm('{{formID}}')" >Clear</button>
+<!-- WE DON'T CARE -->
+<script>
+    function clearForm(id) {
+        $('#'+id).not(':button, :submit, :reset, :hidden')
+            .val('')
+            .removeAttr('checked')
+            .removeAttr('selected');
+    }
+</script>

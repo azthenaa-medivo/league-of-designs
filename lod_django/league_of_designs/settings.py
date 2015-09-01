@@ -14,7 +14,11 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
+# Paths for import/export and stuff
+SERVER_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'server')
+POSTIMPORT_PATH = os.path.join(SERVER_PATH, 'postimport')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -25,10 +29,15 @@ SECRET_KEY = 'qaiz#7ub^7kk+xyi72%u)1+hjh_dd&bg@!u65fa_2=r512(y0n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+APPEND_SLASH = True
 
+ALLOWED_HOSTS = ['*']
 
 # Application definition
+
+LOGIN_URL = '/login'
+
+LOGOUT_URL = '/logout'
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -37,6 +46,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app_lod',
+    'app_database',
+    'utilities',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,7 +67,7 @@ ROOT_URLCONF = 'league_of_designs.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'app_lod/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,13 +75,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'utilities.context_processors.champions_list_data',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'league_of_designs.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -100,3 +112,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = ''
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'app_lod/static'),
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)

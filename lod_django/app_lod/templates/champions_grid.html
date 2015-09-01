@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}
+Champions -
+{% endblock %}
+
+{% block header %}
+    <h1>The Champions</h1>
+{% endblock %}
+
+{% block css %}
+    {% load staticfiles %}
+    <link href="{% static "css/foundationTest.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block contents %}
+    {% load staticfiles %}
+    {% load template_tags %}
+    <div id="search-row">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Search</h3>
+                <input id="champions-grid-search" type="text" placeholder="Who you want me show ?">
+                <span id="error-message"></span>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div id="champions-grid">
+        <ul class="small-block-grid-5 medium-block-grid-6">
+            {% for c in champions %}
+                <li id="{{c.name}}" class="champion-block text-center" data-search="{{c.search}} {% for tag in c.tags %}{{tag}} {% endfor %}">
+                    <a href="{% url "champion" c|get:"url_id" %}" class="no-underline">
+                        <div>
+                            <img src="{% static "images/portraits/" %}{{c.portrait}}"></img>
+                        </div>
+                        <div>
+                            <span>{{c.name}}</span>
+                        </div>
+                        <div>
+                            <span class="rioter nRedPosts">{% if c.red_posts|length == 0%}{% else %}{{c.red_posts|length}} Red Posts{% endif %}</span>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <!-- Search input -->
+    <script>
+        $(document).ready(function() {
+            var all = $('.champion-block');
+
+            $('#champions-grid-search').bind('keyup', function(e) {
+                if (e.keyCode == 51)
+                {
+                    // WHY WOULD YOU DO THAT
+                    $('#champions-grid-search').val("( ° ͜ʖ͡°)");
+                    $('#error-message').text('Ah yes. You might want to stay away from those, ah, « " », mate.').addClass('text-danger').removeClass('text-success');
+                } else {
+                    $('#error-message').text('I read you.').addClass('text-success').removeClass('text-danger');
+                }
+                var search = $(this).val();
+                // Reset the grid
+                $('#champions-grid ul').html(all);
+                filter(search);
+            });
+
+            function filter(text) {
+                if (text !== '')
+                {
+                    // Filter the grid
+                    $('.champion-block').each(function() {
+                        if (!($(this).attr('data-search').toLowerCase().indexOf(text.toLowerCase()) > -1))
+                        {
+                            $(this).remove();
+                        }
+                    });
+                    // Print something is everyone's off.
+                    if ($('#champions-grid li').length == 0)
+                    {
+                        $('#champions-grid ul').text("No one\'s come by that name here, mate. I mean, who " +
+                                "would you call \""+text+"\" anyway ? Not me, flower.");
+                    }
+                }
+            }
+
+            // AND FOCUS IT MAN
+            $('#champions-grid-search').focus();
+        });
+    </script>
+    <!-- Filter tags -->
+    <script>
+
+    </script>
+    <!-- Fixed Search Div -->
+    <script>
+        $(document).scroll(function() {
+            var detect = $('#champions-grid').position()['top'] - 80;
+            if ($(document).scrollTop() >= detect)
+            {
+                $('#search-row').addClass('fixed-below-navbar');
+            } else {
+                $('#search-row').removeClass('fixed-below-navbar');
+            }
+        });
+    </script>
+    <!-- No Red Posts !  (╯°□°）╯︵ ┻━┻ -->
+    <script>
+        $(document).ready(function() {
+            $('.nRedPosts').each(function() {
+                if ($(this).text() === '')
+                {
+                    $(this).text(Math.random()<0.9 ? 'No Red Posts !' : '(╯°□°）╯︵ ┻━┻' ).removeClass('rioter').addClass('norioter');
+                }
+            });
+        });
+    </script>
+{% endblock %}

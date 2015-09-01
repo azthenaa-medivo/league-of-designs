@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+    About -
+{% endblock %}
+
+{% block header %}
+    <h1>About League of Designs</h1>
+{% endblock %}
+
+{% block contents %}
+    <h3>What's League of Designs about ?</h3>
+    <p>
+        My name is Artemys, and I'm fascinated by League of Legends' (or rather, Riot's) take on design and balance.
+        Because a lot of answers to our
+        everyday questions (such as why Irelia hasn't been reworked in years) can be found on the
+        <a href="http://forums.na.leagueoflegends.com/board/">Official Boards</a>, I built this hub that gathers
+        those <span class="ressource-Health">Red Posts</span> for you to read more easily. Have a good day !
+        (That was a tl;dr.)
+    </p>
+    <h3>What can we expect from League of Designs ?</h3>
+    <p>
+        A very convenient way to browse Red Posts. For starters :
+        <ul>
+            <li>A hopefully comprehensive list of all <a href="{% url "red-posts" %}">Red Posts</a> from
+            <a href="http://forums.na.leagueoflegends.com/board/">Riot's Boards</a>. It's a bit like The Red Tracker
+            you find on various websites (<a href="http://boards.na.leagueoflegends.com/en/redtracker">and the official
+            one</a>), with the added benefit of being sorted by champions. So you can check what CertainlyT is
+            secretly planning for <a href="{% url "champion" url_id="Teemo" %}">Teemo</a>. (That's a totally
+            innocent example.)</li>
+            <li>The goal is to help you understand Riot's stances on champion design. League of Legends is only
+            at the dawn of its potential awesomefulness (!!), it's a great time to learn why Irelia will be
+            reworked and why you can't just nerf/buff stuff and get away with it. (Another utterly unbiased
+            example.)</li>
+            <li>EASTER EGGS</li>
+            <li>In the future, I hope to add a section about items. They're equally important to the game, and
+            we are only starting to see more good iterations of them. I haven't studied the matter as much
+            as I have done with Champions though.</li>
+            <li><strike>Broken CSS</strike> sshhhhhh</li>
+        </ul>
+    </p>
+    <h3>Mandatory Legal Statement</h3>
+    <p>
+        League of Designs (LoD) isn't endorsed by Riot Games and doesn't reflect the views or opinions of
+        Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot
+        Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc. It's okay
+        though, I love you guys.
+    </p>
+    <h3>Glyphicons</h3>
+    <p>
+        LoD uses some slick Glyphicons, man !
+        <a href="http://glyphicons.com/" target="_blank">Check'em out there.</a>
+    </p>
+{% endblock %}

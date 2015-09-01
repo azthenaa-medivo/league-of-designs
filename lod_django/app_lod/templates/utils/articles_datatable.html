@@ -1,0 +1,47 @@
+{% load staticfiles %}
+{% load template_tags %}
+
+<table id="article-table" class="stripe hover">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th class="text-center">Section</th>
+            <th class="text-center">Date</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Title</th>
+            <th class="text-center">Section</th>
+            <th class="text-center">Date</th>
+        </tr>
+    </tfoot>
+    <tbody>
+        {% for a in articles %}
+        <tr>
+            <td>
+                <div class="row">
+                    <div class="col-md-1 text-center">
+                        <!-- WHAT ARE YOU LOOKING AT ? -->
+                    {% include "utils/article_admin.html" with article=a %}
+                    {% if user.is_authenticated == False %}
+                        -
+                    {% endif %}
+                    </div>
+                    <div class="col-md-11">
+                        <a href="{% url "article-view" article_id=a.url_id %}">{{a.title}}</a>
+                    </div>
+                </div>
+            </td>
+            <td class="text-center">
+                {{a.type}}
+                {% if a.type == 'Champion' %}
+                    <br>
+                    {% include "utils/mini_hero_icon.html" with champion=a.champion_data %}
+                {% endif %}
+            </td>
+            <td>{% include "utils/date_span.html" with date=a.date_created|isoformat %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
