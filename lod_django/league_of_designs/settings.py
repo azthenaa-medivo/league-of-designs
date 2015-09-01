@@ -24,7 +24,8 @@ POSTIMPORT_PATH = os.path.join(SERVER_PATH, 'postimport')
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'qaiz#7ub^7kk+xyi72%u)1+hjh_dd&bg@!u65fa_2=r512(y0n'
+with open(os.path.join(os.path.join(SERVER_PATH, 'django'), 'secret.txt')) as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
