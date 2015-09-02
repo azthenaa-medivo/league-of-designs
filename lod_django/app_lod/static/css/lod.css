@@ -35,11 +35,6 @@ blockquote {
     cursor: help;
 }
 
-.newsHomeContent:first-child:first-letter {
-    text-weight: bold;
-    color: red;
-}
-
 .home-col {
     background-color: white;
 }
