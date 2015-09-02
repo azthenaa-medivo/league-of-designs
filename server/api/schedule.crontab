@@ -1,1 +1,0 @@
-0 */1 * * * python ~/server/api/red_api.py r && sh ~/server/api/postimport.sh
