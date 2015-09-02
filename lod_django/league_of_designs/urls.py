@@ -15,8 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+from .sitemap import ChampionSitemap, ArticleSitemap, StaticSitemap
 from . import settings
 
+sitemaps = {
+    'champions': ChampionSitemap,
+    'articles': ArticleSitemap,
+    'static': StaticSitemap,
+}
+
 urlpatterns = [
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps},
+        name='django.contrib.sitemaps.views.sitemap'),
     url(r'', include('app_lod.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

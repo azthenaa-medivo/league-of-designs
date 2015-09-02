@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block contents %}
+    <blockquote>"All deeds are committed by Humans. Therefore, for every deed, there is a Heart." -- Willard H. Wright</blockquote>
     <h3>What's League of Designs about ?</h3>
     <p>
         My name is Artemys, and I'm fascinated by League of Legends' (or rather, Riot's) take on design and balance.
@@ -20,31 +21,44 @@
     </p>
     <h3>What can we expect from League of Designs ?</h3>
     <p>
-        A very convenient way to browse Red Posts. For starters :
         <ul>
             <li>A hopefully comprehensive list of all <a href="{% url "red-posts" %}">Red Posts</a> from
-            <a href="http://forums.na.leagueoflegends.com/board/">Riot's Boards</a>. It's a bit like The Red Tracker
-            you find on various websites (<a href="http://boards.na.leagueoflegends.com/en/redtracker">and the official
-            one</a>), with the added benefit of being sorted by champions. So you can check what CertainlyT is
-            secretly planning for <a href="{% url "champion" url_id="Teemo" %}">Teemo</a>. (That's a totally
-            innocent example.)</li>
+                <a href="http://forums.na.leagueoflegends.com/board/">Riot's Boards</a>. It's a bit like The Red Tracker
+                you find on various websites (<a href="http://boards.na.leagueoflegends.com/en/redtracker">and the official
+                    one</a>), with the added benefit of being sorted by champions. So you can check what CertainlyT is
+                secretly planning for <a href="{% url "champion" url_id="Teemo" %}">Teemo</a>. (That's a totally
+                innocent example.)</li>
             <li>The goal is to help understand Riot's stances on champion design. League of Legends is only
-            at the dawn of its potential awesomefulness (!!), it's a great time to learn why Irelia will be
-            reworked and why you can't just nerf/buff stuff and get away with it. (Another utterly unbiased
-            example.)</li>
+                at the dawn of its potential awesomefulness (don't forget 'esome' !!), it's a great time to learn why Irelia will be
+                reworked and why you couldn't just nerf/buff Darius/Garen/Mordekaiser/Skarner and get away with it. (Another utterly unbiased
+                example.)</li>
             <li>EASTER EGGS</li>
             <li>In the future, I hope to add a section about items. They're equally important to the game, and
-            we are only starting to see more good iterations of them. I haven't studied the matter as much
-            as I have done with Champions though.</li>
+                we are only starting to see more good iterations of them. I haven't studied the matter as much
+                as I have done with Champions though.</li>
             <li><strike>Broken CSS</strike> sshhhhhh</li>
-            <li>I will probably use this website as a blog - them Articles -, but if you want to contribute,
-            you can send me a mail at <b>azthenaa (dot) medivo (at) gmail (dot) com</b>.</li>
+            <li>I will probably use this website as a blog and write some condensed Articles to streamline (I USED THAT
+                WORD YIISSSS) things, or expose my ideas for Champion reworks, or give you the best Cookie recipe out there.</li>
         </ul>
+    </p>
+    <h3>Can I help ? I have a thing or two to say about <a href="{% url "champion" url_id="Riven" %}" title="OMGBROKENNERF">Riven</a>.</h3>
+    <p>
+        Sure ! You can send me a mail at <b>azthenaa (dot) medivo (at) gmail (dot) com</b> for anything ranging to
+        feedback and suggestions, wallpaper suggestion, CSS rage/protips or articles you might want to add.
+        <br>
+        Note that I haven't allowed people to register and do that themselves <i>yet</i>. The main reason is that I want
+        to ensure top quality among the articles. <b>This is not another LolKing clone, you won't find any Champion Guide
+        here. Or eSports related stuff. Nope.</b>
     </p>
     <h3>Source Code</h3>
     <p>
         You can check the source code for League of Designs on GitHub.
         <a href="https://github.com/azthenaa-medivo/league-of-designs"><span title="wowsoHAX">It's right there</span></a>.
+    </p>
+    <h3>Glyphicons</h3>
+    <p>
+        LoD uses some slick Glyphicons, man !
+        <a href="http://glyphicons.com/" target="_blank">Check'em out there.</a>
     </p>
     <h3>Mandatory Legal Statement</h3>
     <p>
@@ -52,10 +66,5 @@
         Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot
         Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc. It's okay
         though, I love you guys.
-    </p>
-    <h3>Glyphicons</h3>
-    <p>
-        LoD uses some slick Glyphicons, man !
-        <a href="http://glyphicons.com/" target="_blank">Check'em out there.</a>
     </p>
 {% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sitemap -
+{% endblock %}
+
+{% block header %}
+            <h1>Sitemap (tl;dr : everything)</h1>
+{% endblock %}
+
+{% block contents %}
+    <div id="index" class="col-md-12">
+        <ul></ul>
+    </div>
+    <hr>
+    <div class="col-md-12">
+        <h2 id="static">Static stuff</h2>
+        <ul>
+            <li><a href="{% url "home" %}">Home</a></li>
+            <li><a href="{% url "red-posts" %}">Champions Grid</a></li>
+            <li><a href="{% url "red-posts" %}">Red Posts</a></li>
+            <li><a href="{% url "articles-list" %}">Articles</a></li>
+            <li><a href="{% url "about" %}">About</a></li>
+        </ul>
+        <h2 id="champions">Champions</h2>
+        <ul>
+            {% for c in champions %}
+                <li><a href="{% url "champion" url_id=c.url_id %}">{{c.name}}</a></li>
+            {% endfor %}
+        </ul>
+        <h2 id="articles">Articles</h2>
+        <ul>
+            {% for a in articles %}
+                <li><a href="{% url "article-view" article_id=a.url_id %}">{{a.title}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $('h2').each(function() {
+        $('#index > ul').append('<li><a href="#'+$(this).attr('id')+'">'+$(this).text()+'</a></li>');
+    });
+</script>
+{% endblock %}

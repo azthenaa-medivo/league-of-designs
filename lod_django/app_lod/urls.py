@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^articles$', views.view_articles_list, name="articles-list"),
     url(r'^login', views.view_login, name="login"),
     url(r'^logout', views.view_logout, name="logout"),
+    url(r'^sitemap', views.view_sitemap, name="sitemap"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'.*', RedirectView.as_view(url='/')),
 ]

@@ -148,3 +148,9 @@ def view_login(request):
             messages.add_message(request, messages.ERROR, 'Something went wrong with the provided credentials.', extra_tags='text-danger')
     return render(request, "login.html", context=RequestContext(request, {'username': username,
                                                                           'next': next}))
+
+@render_to('sitemap.html')
+def view_sitemap(request):
+    """RENDER ALL THE DATA"""
+    articles = consumer.get_articles()
+    return {'articles': articles}
