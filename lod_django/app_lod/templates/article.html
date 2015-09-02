@@ -11,7 +11,6 @@
             <div class="row">
                 <h1>
                     <span class="pic-h1-margin">{{article.title}}</span>
-                    {% include "utils/article_admin.html" with article=article %}
                 </h1>
             </div>
         {% else %}
@@ -25,7 +24,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div>Purposefully redacted on {{article.date_created}} ({% include "utils/date_span.html" with date=article.date_created|isoformat %}) by {{article.author}}.</div>
-                <div>Last modified {% include "utils/date_span.html" with date=article.date_modified|isoformat %}.</div>
+                <div>Last modified {% include "utils/date_span.html" with date=article.date_modified|isoformat %}. {% include "utils/article_admin.html" with article=article %}</div>
             </div>
             <div class="col-md-6 text-right">
                 {% if article.champion != 'None' %}
