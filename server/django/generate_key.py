@@ -6,9 +6,9 @@ This snippet
 1. uses `SystemRandom()` instead to generate a random key
 2. saves a local `secret.txt`
 The result is a random and safely hidden `SECRET_KEY`.
-"""
 
-import os
+https://gist.github.com/ndarville/3452907
+"""
 
 SECRET_FILE = 'secret.txt'
 try:

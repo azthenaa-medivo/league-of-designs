@@ -51,20 +51,20 @@ def view_champions_grid(request):
 @render_to('champion_edit.html')
 def edit_champion(request, url_id):
     champion = consumer.get_champion({'url_id':url_id})
-    errors = None
     if champion is None:
         return {'champion': {'name':'Kappa'}}
     if request.method == 'POST':
-        errors = []
         form = ChampionForm(request.POST)
         if form.is_valid():
-            errors.append({'class': 'text-success', 'text':'All set !'})
+            messages.add_message(request, messages.SUCCESS, 'Champion '+champion['name']+' was successfully updated !',
+                                 extra_tags='text-success')
             form.save()
         else:
-            errors.append({'class': 'text-danger', 'text': 'Something didn\'t work... Try again !'})
+            messages.add_message(request, messages.ERROR, 'There was an error updating the champion. Try again !',
+                                extra_tags='text-danger')
     else:
         form = ChampionForm(champion)
-    return {'champion': champion, 'form': form, 'errors': errors if errors is not None else ''}
+    return {'champion': champion, 'form': form}
 
 @render_to('article.html')
 def view_article(request, article_id):
