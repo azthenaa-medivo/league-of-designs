@@ -114,7 +114,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 
 # Additional locations of static files
 STATICFILES_DIRS = (
