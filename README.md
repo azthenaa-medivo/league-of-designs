@@ -8,8 +8,9 @@ and yell at me because I'm not doing any caching *yet*.
 
 # Requirements
 
+* Python    3.2
 * Django	1.8
 * Markdown	2.6
-* pymongo	3.0
-* requests	2.7
+* Pymongo	3.0
+* Requests	2.7
 * Fabric	1.10
