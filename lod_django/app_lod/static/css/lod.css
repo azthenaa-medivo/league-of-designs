@@ -6,6 +6,8 @@ p, div, body {
     font-family: 'Georgia';
 }
 
+body { padding-top: 30px; }
+
 h1 > a {
     color: black;
 }
@@ -25,13 +27,17 @@ blockquote {
     color: #660066;
 }
 
-
 .homeLOD {
     width: 64px;
     height: 64px;
     z-index: 1;
     position: relative;
     cursor: help;
+}
+
+.newsHomeContent:first-child:first-letter {
+    text-weight: bold;
+    color: red;
 }
 
 .home-col {
@@ -87,7 +93,6 @@ blockquote {
     margin-bottom: 10px;
 }
 
-body { padding-top: 30px; }
 
 .top15 {
     margin-top:15px;
