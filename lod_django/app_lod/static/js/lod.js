@@ -88,4 +88,10 @@
     }, function() {
         $(this).animate({'background-color': 'white'});
     });
+
+    $("th").hover(function() {
+        $(this).animate({'background-color': 'rgba(128,0,0,1)', 'color':'white'});
+    }, function() {
+        $(this).animate({'background-color': 'rgba(240,240,240,1)', 'color':'black'});
+    });
  });
