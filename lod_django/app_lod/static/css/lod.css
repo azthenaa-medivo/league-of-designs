@@ -37,6 +37,7 @@ blockquote {
 
 .home-col {
     background-color: white;
+    border-radius: 15px;
 }
 
 .quote-op {

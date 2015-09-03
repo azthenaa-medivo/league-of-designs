@@ -81,4 +81,11 @@
 
     // Timeout messages
     setTimeout(function() { $('#messagesDiv').animate({'height':'0px'}, function() { $('#messagesDiv').hide() } );}, 5000);
+
+    // Pretty tables
+    $("tr").hover(function() {
+        $(this).animate({'background-color': 'rgba(0,255,0,0.2)'});
+    }, function() {
+        $(this).animate({'background-color': 'white'});
+    });
  });

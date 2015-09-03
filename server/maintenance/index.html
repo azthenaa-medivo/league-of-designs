@@ -119,18 +119,18 @@
             $('h3').animate({'color':'black'}, speed);
         });
 
-        /*
-        *	Return a random hexadecimal color starting with #, like #4fa5cd.
-        *	I had my own but this one's neater.
-        */
-        function generateRGBAColor()
+        function generateRGBAColor(opacity)
         {
+            if (opacity === undefined)
+            {
+                opacity = 1;
+            }
             res = 'rgba(';
             for (j=0;j<3;j++)
             {
                 res += Math.floor(Math.random()*255)+',';
             }
-            return res+'0.5)';
+            return res+opacity+')';
         }
     </script>
 </body>

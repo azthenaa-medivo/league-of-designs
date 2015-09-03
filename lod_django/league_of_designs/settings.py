@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from .prod import DEBUG
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
@@ -26,9 +27,6 @@ POSTIMPORT_PATH = os.path.join(SERVER_PATH, 'postimport')
 # SECURITY WARNING: keep the secret key used in production secret!
 with open(os.path.join(os.path.join(SERVER_PATH, 'django'), 'secret.txt')) as f:
     SECRET_KEY = f.read().strip()
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 APPEND_SLASH = True
 

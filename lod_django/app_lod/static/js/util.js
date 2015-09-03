@@ -53,3 +53,26 @@ function plural(number) {
         return 's';
     }
 }
+
+function generateRGBAColor(opacity)
+{
+    if (opacity === undefined)
+    {
+        opacity = 1;
+    }
+    res = 'rgba(';
+    for (j=0;j<3;j++)
+    {
+        res += Math.floor(Math.random()*255)+',';
+    }
+    return res+opacity+')';
+}
+
+/*
+*	Return a random hexadecimal color starting with #, like #4fa5cd.
+*	I had my own but this one's neater.
+*/
+function generateHexColor()
+{
+	return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+}
