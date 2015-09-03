@@ -9,6 +9,12 @@ function generateSearchString(text) {
             return text + ' ' + text.toLowerCase() + ' ' + initials + ' ' + initials.toLowerCase();
 }
 
+var special_champion_names = {
+    'Caitlyn': 'Cait cait',
+    'Mordekaiser': 'kaiser',
+    'Nidalee': 'Nida nida',
+}
+
 var special_champion_resources = {
     'Aatrox': 'Health',
     'Akali': 'Energy',
@@ -86,7 +92,12 @@ db.champions.find().forEach(function(res) {
     }
     new_champion['$set']['spells'] = champ_spells;
     // Search strings
-    new_champion['$set']['search'] = generateSearchString(res['name']);
+    s = generateSearchString(res['name']);
+    if (res['name'] in special_champion_names)
+    {
+        s = s + ' ' + special_champion_names[res['name']];
+    }
+    new_champion['$set']['search'] = s;
     bulk.find({'name': res['name']}).upsert().updateOne(new_champion);
 });
 
