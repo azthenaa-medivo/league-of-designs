@@ -11,7 +11,11 @@
         <div class="row">
             <div class="col-md-8">
                 <h1>
-                    Article edition about nobody
+                    {% if article %}
+                        <a href="{% url "article-view" article_id=article_id %}">View article.</a>
+                    {% else %}
+                        Article edition about nobody
+                    {% endif %}
                 </h1>
             </div>
         </div>
@@ -27,6 +31,7 @@
             </div>
         </div>
         {% endif %}
+        <a href="{% url "article-view" article_id=article_id %}">View article.</a>
 {% endblock %}
 
 {% block contents %}

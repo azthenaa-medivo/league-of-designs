@@ -83,6 +83,7 @@ def view_articles_list(request):
 def edit_article(request, article_id):
     # Okay *maybe* a bit of cleanup would be <good>... <GOOD VERY GOOD ONE MORE!!!!>
     champion = None
+    context = {}
     # If we're saving an article
     if request.method == 'POST':
         if request.POST.get('champion') is not None:
@@ -128,6 +129,7 @@ def kill_article(request, article_id):
 
 def view_logout(request):
     logout(request)
+    messages.add_message(request, messages.WARNING, 'See you later !', extra_tags='text-warning')
     return HttpResponseRedirect(request.GET.get('next'))
 
 def view_login(request):
@@ -141,6 +143,7 @@ def view_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                messages.add_message(request, messages.SUCCESS, 'Welcome, ' + username + ' !', extra_tags='text-success')
                 return HttpResponseRedirect(next)
             else:
                 messages.add_message(request, messages.WARNING, 'User '+username+' has been deactivated.', extra_tags='text-warning')

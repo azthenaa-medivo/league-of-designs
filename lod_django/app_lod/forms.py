@@ -25,7 +25,7 @@ class NewArticleForm(Form):
                                     list(consumer.get_champions(projection={'_id': 1, 'name': 1}))), (('None', '--- None ---'),)))
     type = ChoiceField(choices=ARTICLE_TYPE, required=True, initial='General')
     # We'll add 'created' and 'last_edited' fields alla mano.
-    contents = CharField(required=True, widget=Textarea(attrs={'cols': '60', 'rows': 12}))
+    contents = CharField(required=True, widget=Textarea(attrs={'cols': '120', 'rows': 20}))
 
     def save(self):
         return consumer.update_article(self.cleaned_data)

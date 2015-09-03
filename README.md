@@ -16,5 +16,6 @@ everything myself.
 * Python    3.2
 * Django	1.8
 * Markdown	2.6
+    * Markdown Superscript
 * Pymongo	3.0
 * Requests	2.7
