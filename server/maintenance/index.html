@@ -59,6 +59,7 @@
         <iframe width="640" height="400" src="https://www.youtube.com/embed/5R42qtQy8Jk" frameborder="0" allowfullscreen></iframe>
     </div>
     <script src="decoratum/js/jquery.js"></script>
+    <script src="decoratum/js/jquery.color.js"></script>
     <script>
         $('.donger').click(function() {
             var wh = $(window).height();
@@ -107,11 +108,30 @@
                         at = wh - dsh - dph;
                         break;
                 }
-
                 $(this).animate({'top':at+'px', 'left': al+'px'}, speed);
+                $('#contents').animate({'background-color':generateRGBAColor()}, speed);
+                $('h1').animate({'color':generateRGBAColor()}, speed);
+                $('h3').animate({'color':generateRGBAColor()}, speed);
             }
-            $(this).animate({'top':'0px', 'left':'0px'});
+            $(this).animate({'top':'0px', 'left':'0px'}, speed);
+            $('#contents').animate({'background-color':'rgba(255,255,255,0.5)'}, speed);
+            $('h1').animate({'color':'black'}, speed);
+            $('h3').animate({'color':'black'}, speed);
         });
+
+        /*
+        *	Return a random hexadecimal color starting with #, like #4fa5cd.
+        *	I had my own but this one's neater.
+        */
+        function generateRGBAColor()
+        {
+            res = 'rgba(';
+            for (j=0;j<3;j++)
+            {
+                res += Math.floor(Math.random()*255)+',';
+            }
+            return res+'0.5)';
+        }
     </script>
 </body>
 
