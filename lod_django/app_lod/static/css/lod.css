@@ -27,6 +27,10 @@ blockquote {
     color: #660066;
 }
 
+table.dataTable span.highlight {
+    background-color: #ffff00;
+}
+
 .homeLOD {
     width: 64px;
     height: 64px;

@@ -41,9 +41,3 @@ class QuotePattern(LinkPattern):
 class QuoteExtension(Extension):
     def extendMarkdown(self, md, md_globals):
         md.inlinePatterns['link'] = QuotePattern(LINK_RE, md)
-
-if __name__ == "__main__":
-    print(m('[{quoted}](name=patmax17,realm=EUW,application-id=6kFXY1kR,discussion-id=hKbmq2Ta,comment-id=00040002,timestamp=2015-07-17T10:01:15.014+0000)',
-            extensions=[QuoteExtension()]
-            )
-          )
