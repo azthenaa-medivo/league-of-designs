@@ -2,6 +2,7 @@
 
 import requests
 from pymongo import MongoClient
+from .key import THE_KEY
 
 class RiotAPI:
     """This is the module that retrieves everything !
@@ -9,7 +10,7 @@ class RiotAPI:
     Red Posts differ from one region to another - so we have to
     check them thoroughly."""
 
-    THE_KEY = '4b8e7fd9-5f62-4db9-b289-1b0247967643'
+    key = THE_KEY
     database_server = 'localhost'
     database_port = 27017
 
@@ -22,7 +23,7 @@ class RiotAPI:
         """Collects the champion pool and stores it."""
         url_champions = 'https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion'
         fields = 'altimages,blurb,image,info,lore,partype,passive,spells,tags'
-        champ_data = requests.get(url_champions, params={'champData': fields, 'api_key': self.THE_KEY}).json()['data']
+        champ_data = requests.get(url_champions, params={'champData': fields, 'api_key': self.key}).json()['data']
         self.champion_collection.insert_many([d for c, d in champ_data.items()])
 
     def get_redposts(self):
