@@ -123,6 +123,7 @@ def kill_article(request, article_id):
             return {'next': request.GET.get('next'), 'article': article}
         if request.method == 'POST':
             consumer.remove_article(query={'url_id': article_id})
+            messages.add_message(request, messages.SUCCESS, "Article " + article['title'] + " was successfully ANNIHILATED. Rejoice !",  extra_tags='text-success')
             return HttpResponseRedirect(request.POST.get('next'))
     else:
         return HttpResponseRedirect('/')
