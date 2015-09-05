@@ -1,12 +1,21 @@
 function generateSearchString(text) {
-            // Produces a string used to search with CSS selectors !
-            var s = text.split(' ');
-            var initials = '';
-            for (i=0;i<s.length;i++)
-            {
-               initials += s[i][0];
-            }
-            return text + ' ' + text.toLowerCase() + ' ' + initials + ' ' + initials.toLowerCase();
+    // Produces a string used to search with CSS selectors !
+    var s = text.split(/['\s]/g);
+    if (s.length != 1)
+    {
+        init = buildInitials(s);
+        return text + ' ' + init;
+    }
+    return text + ' ' + text.toLowerCase();
+}
+
+function buildInitials(textArray) {
+    var initials = '';
+    for (i=0;i<textArray.length;i++)
+    {
+       initials += textArray[i][0];
+    }
+    return initials + ' ' + initials.toLowerCase() + ' ' + initials[0].toUpperCase() + initials[1].toLowerCase();
 }
 
 var special_champion_names = {
