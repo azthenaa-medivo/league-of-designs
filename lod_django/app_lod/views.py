@@ -26,7 +26,7 @@ def view_home(request):
 @render_to('red_posts_main.html')
 def view_red_posts(request):
     boards_sections = request.GET.get('all')
-    the_query = {'champions': {'$exists': True}}
+    the_query = {}
     if not boards_sections:
         the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes"]}
     reds = consumer.get_red_posts(query=the_query, limit=0)
