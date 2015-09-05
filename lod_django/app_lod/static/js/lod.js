@@ -12,20 +12,13 @@
         });
     }
 
-    // Ago function
-    var now = new Date();
-    $('.computed-date').each(function() {
-        var then = new Date($(this).attr('data-date'));
-        $(this).text(ago(now - then));
-        $(this).parent('td').attr('data-order', now-then);
-    });
     // Navbar search tool
     $(document).ready(function() {
         var champNav = $('#champions-navbar').DataTable({
             "order": [[ 2, "desc" ]],
             "info": false,
             "lengthMenu": [[1], [1]],
-            "dom": '<"top"f>rt<"bottom"><"clear">',
+            "dom": 'rt<"clear">',
             "language": {
                 "search": "Search:",
                 "zeroRecords": "Wait, <i>WHO</i> ?"
@@ -37,8 +30,8 @@
             },]
         });
         // Search Enter Key
-        $('#champions-navbar_filter input').unbind();
-        $('#champions-navbar_filter input').bind('keyup', function(e) {
+        $('#champion-navbar-search').unbind();
+        $('#champion-navbar-search').bind('keyup', function(e) {
             if ($(this).val() === '')
             {
                 $('#champions-navbar').addClass('hidden');
@@ -53,14 +46,14 @@
             champNav.draw();
         });
         // Hide everything if out of focus.
-        $('#champions-navbar_filter input').focusout(function() {
+        $('#champion-navbar-search input').focusout(function() {
             // Minor timeout to allow redirection.
             setTimeout(function() {
                     $('#champions-navbar').addClass('hidden');
                 }, 100);
         });
-        $('#champions-navbar_filter input').focus(function() {
-            if ($('#champions-navbar_filter input').val() !== '')
+        $('#champion-navbar-search input').focus(function() {
+            if ($('#champion-navbar-search input').val() !== '')
             {
                 $('#champions-navbar').removeClass('hidden');
             }
@@ -94,4 +87,16 @@
     }, function() {
         $(this).animate({'background-color': 'rgba(240,240,240,1)', 'color':'black'});
     });
+
+    // Ago function (+ interval wowsoSPOOKY)
+    function agoStuff() {
+        var now = new Date();
+        $('.computed-date').each(function() {
+            var then = new Date($(this).attr('data-date'));
+            $(this).text(ago(now - then));
+            $(this).parent('td').attr('data-order', now-then);
+        });
+    }
+    agoStuff();
+    setInterval(agoStuff, 1000);
  });

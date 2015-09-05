@@ -23,43 +23,29 @@
     {% load staticfiles %}
     {% load template_tags %}
         <div class="row">
-            <h2>Welcome !</h2>
-            <p>Please enjoy your stay on <b>L</b>eague <b>O</b>f <b>D</b>esigns, where the masterminds behind League of Legends unveil the
+            <div class="col-md-12">
+                <h2>Welcome !</h2>
+                <p>Please enjoy your stay on <b>L</b>eague <b>O</b>f <b>D</b>esigns, where the masterminds behind League of Legends unveil the
                 truth on Irelia nerf immunity and the upcoming ADC overhaul. All of that, soon™.</p>
+            </div>
         </div>
         <div class="row">
-            <div class="col-md-4 home-col">
+            <div class="col-md-3 home-col hidden-xs">
                 <h3>
-                    <div class="row">
-                        <div class="col-md-8">
-                            Latest Red Posts
+                    <a href="{% url "articles-list" %}">
+                        <div class="row">
+                                <div class="col-md-8">
+                                    News & Articles
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    <i class="grid-link glyphicon glyphicon-book"></i>
+                                </div>
                         </div>
-                        <div class="col-md-4 text-right">
-                            <a href="{% url "red-posts" %}"><i class="grid-link glyphicon glyphicon-education"></i></a>
-                        </div>
-                    </div>
-                </h3>
-                <div>
-                    {% include "utils/mini_reds_list.html" with reds=reds %}
-                </div>
-                <div>
-                    <a href="{% url "red-posts" %}"><i class="grid-link glyphicon glyphicon-education"></i> View more Red Posts...</a>
-                </div>
-            </div>
-            <div class="col-md-4 home-col">
-                <h3>
-                    <div class="row">
-                        <div class="col-md-8">
-                            News & Articles
-                        </div>
-                        <div class="col-md-4 text-right">
-                            <a href="{% url "articles-list" %}"><i class="grid-link glyphicon glyphicon-book"></i></a>
-                        </div>
-                    </div>
+                    </a>
                 </h3>
                 <div>
                 {% for a in articles %}
-                    <div><h3>{{a.title}}</h3></div>
+                    <div><h4>{{a.title}}</h4></div>
                     <div class="text-right"><small>{{a.date_created}} ({% include "utils/date_span.html" with date=a.date_created|isoformat %})</small></div>
                     <div class="newsHomeContent">{{a.contents|markdown | safe}}</div>
                     {% if not forloop.last %}
@@ -70,16 +56,40 @@
                 {% endfor %}
                 </div>
             </div>
-            <div class="col-md-4 home-col">
+
+            <div class="col-md-6 home-col">
                 <h3>
-                    <div class="row">
-                        <div class="col-md-8">
-                            Champions
+                    <a href="{% url "red-posts" %}">
+                        <div class="row">
+                            <div class="col-md-8">
+                                Latest Red Posts
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <i class="grid-link glyphicon glyphicon-education"></i>
+                            </div>
                         </div>
-                        <div class="col-md-4 text-right">
-                            <a href="{% url "champions-grid" %}"><i class="grid-link glyphicon glyphicon-queen"></i></a>
+                    </a>
+                </h3>
+                <div>
+                    {% include "utils/mini_reds_list.html" with reds=reds %}
+                </div>
+                <div>
+                    <a href="{% url "red-posts" %}"><i class="grid-link glyphicon glyphicon-education"></i> View more Red Posts...</a>
+                </div>
+            </div>
+
+            <div class="col-md-3 home-col hidden-xs">
+                <h3>
+                    <a href="{% url "champions-grid" %}">
+                        <div class="row">
+                            <div class="col-md-8">
+                                Champions
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <i class="grid-link glyphicon glyphicon-queen"></i>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </h3>
                 <div>
                     {% include "utils/champions_table.html" with champions=champions id="champions-home"%}

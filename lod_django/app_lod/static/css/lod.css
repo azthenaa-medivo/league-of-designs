@@ -8,11 +8,19 @@ p, div, body {
 
 body { padding-top: 30px; }
 
-h1 > a {
+h1 a {
     color: black;
 }
 
-h1 > a:hover {
+h3 a {
+    color: black;
+}
+
+h3 i.glyphicon {
+    color: darkred;
+}
+
+h1 a:hover {
     text-decoration: none;
     color: black;
     cursor: pointer;
@@ -166,7 +174,8 @@ table.dataTable span.highlight {
 
 #champions-navbar {
     position: absolute;
-    top: 35px;
+    top: 0px;
+    width: 300px !important;
     border-radius: 5px;
     border: 2px solid black;
 }
