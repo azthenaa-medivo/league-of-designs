@@ -85,7 +85,7 @@
     $("th").hover(function() {
         $(this).animate({'background-color': 'rgba(128,0,0,1)', 'color':'white'});
     }, function() {
-        $(this).animate({'background-color': 'rgba(240,240,240,1)', 'color':'black'});
+        $(this).animate({'background-color': 'rgba(255,255,255,1)', 'color':'black'});
     });
 
     // Ago function (+ interval wowsoSPOOKY)

@@ -45,7 +45,7 @@
                 </h3>
                 <div>
                 {% for a in articles %}
-                    <div><h4>{{a.title}}</h4></div>
+                    <div><h4>{{a.title}} {% include "utils/article_admin.html" with article=a %}</h4></div>
                     <div class="text-right"><small>{{a.date_created}} ({% include "utils/date_span.html" with date=a.date_created|isoformat %})</small></div>
                     <div class="newsHomeContent">{{a.contents|markdown | safe}}</div>
                     {% if not forloop.last %}
