@@ -1,25 +1,19 @@
 /*
- *  League of Designs Postimport v1.0.
+ *  League of Designs Postimport v1.1.
+ *  Now checks if we haven't filled the Champions field (hue) beforehand to save us some time (up to thrice as fast !).
  *  By Artemys, m'lord humble butler.
  *  Looks for the champion's name in the Thread title and Post contents. It's that simple !
  */
-
-// Point system : the more point, the more relevant it is to the discussion.
-// More points with 'gameplay-balance', more points if the original comment contains the name, etc.
-// Also check if the name was written wrongly. Like drmundo, dr mundo, d. mundo etc.
-// Check for doubles so you don't push the champion or the red post twice in the same document.
 
 print('postimport:lod');
 
 db.mr_champions.find().forEach(function(champion_res) {
     var rioter_counter = {};
-    db.mr_reds.find({'$text': {'$search': champion_res['name']}},
+    db.mr_reds.find({'$text': {'$search': champion_res['search']}, 'champions': {'$not': {'$in': [champion_res['name']]}},},
                     {'post_id': 1, 'rioter': 1, 'url': 1, 'contents': 1, 'date': 1, 'thread': 1}).forEach(
                         function(red){
                             // Update champion data if it's not already done.
-                            op_r = db.mr_reds.update({'_id': red['_id'],
-                                        'champions': {'$not': {'$in': [champion_res['name']]}}
-                                    },
+                            op_r = db.mr_reds.update({'_id': red['_id'],},
                                 {
                                     '$push': {
                                             'champions_data': {

@@ -2,7 +2,7 @@
 
 import requests
 from pymongo import MongoClient
-from .key import THE_KEY
+from key import THE_KEY
 
 class RiotAPI:
     """This is the module that retrieves everything !
@@ -41,7 +41,7 @@ class RiotAPI:
                     post_id = d['comment']['discussion']['id'] + ',' + d['comment']['id']
                 d['post_id'] = post_id
                 bulk.find({'post_id': post_id}).upsert().update({'$set': d})
-            self.red_posts_collection.insert_many(data)
+        bulk.execute()
 
     def flush(self):
         self.champion_collection.drop()

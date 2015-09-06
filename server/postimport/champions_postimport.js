@@ -4,7 +4,10 @@ function generateSearchString(text) {
     if (s.length != 1)
     {
         init = buildInitials(s);
-        return text + ' ' + init;
+        if (init != false)
+        {
+            return text + ' ' + text.toLowerCase() + ' ' + init;
+        }
     }
     return text + ' ' + text.toLowerCase();
 }
@@ -15,13 +18,24 @@ function buildInitials(textArray) {
     {
        initials += textArray[i][0];
     }
+    // Check for words to cleanse
+    for (i=0;i<cleanse_words.length;i++)
+    {
+        if (initials.toLowerCase() === cleanse_words[i])
+        {
+            return false;
+        }
+    }
     return initials + ' ' + initials.toLowerCase() + ' ' + initials[0].toUpperCase() + initials[1].toLowerCase();
 }
+
+var cleanse_words = ['my',]
 
 var special_champion_names = {
     'Caitlyn': 'Cait cait',
     'Mordekaiser': 'kaiser',
     'Nidalee': 'Nida nida',
+    'Gangplank': 'GP gp Gp',
 }
 
 var special_champion_resources = {
@@ -107,6 +121,8 @@ db.champions.find().forEach(function(res) {
         s = s + ' ' + special_champion_names[res['name']];
     }
     new_champion['$set']['search'] = s;
+    // Init Rioter Counter
+    new_champion['$set']['rioter_counter'] = [];
     bulk.find({'name': res['name']}).upsert().updateOne(new_champion);
 });
 
