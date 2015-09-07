@@ -34,7 +34,6 @@ def view_red_posts(request):
     else:
         rioters = [{'name': r['name'], 'posts': len(r['posts'])} for r in consumer.get_rioters()]
     reds = consumer.get_red_posts(query=the_query, limit=0)
-    rioters.sort(key=operator.itemgetter('name'))
     return {'reds': reds, 'rioters': rioters, 'all': not not boards_sections, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
 
 @render_to('about.html')

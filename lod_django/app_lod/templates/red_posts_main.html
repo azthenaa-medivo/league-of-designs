@@ -12,11 +12,13 @@ Red Posts -
 {% endblock %}
 
 {% block contents %}
+    {% load staticfiles %}
+    {% load template_tags %}
     <div class="col-md-12">
         <div class="col-md-4">
             <h3>Filter by Rioter</h3>
             <form method="#" action="#" id="filterForm">
-                {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="posts" type="posts" id="rioter-select" %}
+                {% include "utils/filters/filter_choice.html" with list=rioters|sort:"name" value="name" label="name" sub="posts" type="posts" id="rioter-select" %}
             </form>
         </div>
         <div class="col-md-4">

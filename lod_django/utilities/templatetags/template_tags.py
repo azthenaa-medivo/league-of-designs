@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+
+import operator
 from django import template
 from markdown import markdown
 from .markdown_extension import QuoteExtension
@@ -35,6 +37,11 @@ def isoformat(date):
         return date.isoformat()
     else:
         return date
+
+@register.filter(name="sort")
+def sort(the_list, key):
+    the_list.sort(key=operator.itemgetter(key))
+    return the_list
 
 @register.simple_tag
 def active_page(request, view_name):
