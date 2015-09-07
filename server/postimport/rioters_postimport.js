@@ -50,12 +50,10 @@ db.mr_rioters.find().forEach(function(rioter) {
     var glorious_posts = 0;
     for (i=0;i<rioter['posts'].length;i++)
     {
-        print('First : ' + i+ ' sur '+rioter['posts'].length);
         if ('champions' in rioter.posts[i])
         {
             for (j=0;j<rioter['posts'][i]['champions_data'].length;j++)
             {
-                print('Second : ' + j+ ' sur '+rioter['posts'][i]['champions_data'][j].length);
                 if (!(rioter['posts'][i]['champions_data'][j]['name'] in champ_occ))
                 {
                     champ_occ[rioter['posts'][i]['champions_data'][j]['name']] = rioter['posts'][i]['champions_data'][j];
