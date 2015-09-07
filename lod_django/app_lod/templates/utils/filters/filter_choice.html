@@ -6,6 +6,7 @@
             {% for option in list %}
             {% if option|get:sub != 0 %}
             <option value="{{option|get:value}}">
+                <!-- TODO : Optimize that stuff so I don't load the Rioters in Memory OOOOPS YOU DIDN'T READ THAT -->
                 {{option|get:label}} ({{option|get:sub|int}} {{type}})
             </option>
             {% endif %}

@@ -29,8 +29,10 @@ def view_red_posts(request):
     the_query = {}
     if not boards_sections:
         the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes"]}
+        rioters = [{'name': r['name'], 'posts': r['glorious_posts']} for r in consumer.get_rioters()]
+    else:
+        rioters = [{'name': r['name'], 'posts': len(r['posts'])} for r in consumer.get_rioters()]
     reds = consumer.get_red_posts(query=the_query, limit=0)
-    rioters = [{'name': r['name'], 'posts': int(r['champions_posts_counter'])} for r in consumer.get_rioters()]
     rioters.sort(key=operator.itemgetter('name'))
     return {'reds': reds, 'rioters': rioters, 'all': not not boards_sections} # TRICK SHOT
 
