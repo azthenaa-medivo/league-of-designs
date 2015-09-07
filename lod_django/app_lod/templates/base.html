@@ -23,7 +23,7 @@
 <body>
     <!-- N A V B A R -->
     <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
+        <div class="container-fluid" id="lod-navbar-intro">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#lod-navbar-collapse" aria-expanded="false">
@@ -38,8 +38,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="lod-navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li id="li-red-posts" class="{% active_page request "red-posts" %}"><a href="{% url "red-posts" %}"><i class="glyphicon glyphicon-education"></i> Red Posts</a></li>
                     <li id="li-articles" class="{% active_page request "article" %}"><a href="{% url "articles-list" %}"><i class="glyphicon glyphicon-book"></i> Articles</a></li>
+                    <li id="li-red-posts" class="{% active_page request "red-posts" %}"><a href="{% url "red-posts" %}"><i class="glyphicon glyphicon-education"></i> Red Posts</a></li>
                     <li id="li-champions" class="{% active_page request "champion" %}"><a href="{% url "champions-grid" %}"><i class="glyphicon glyphicon-queen"></i> Champions</a></li>
                     <form class="navbar-form navbar-left" role="search">
                         <div class="form-group">

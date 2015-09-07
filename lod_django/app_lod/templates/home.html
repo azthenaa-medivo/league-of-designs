@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block css %}
+    {% load staticfiles %}
+    <link href="{% static "css/introjs.min.css" %}" rel="stylesheet">
+{% endblock %}
+
 {% block header %}
     {% load staticfiles %}
             <h1>
@@ -27,10 +32,14 @@
                 <h2>Welcome !</h2>
                 <p>Please enjoy your stay on <b>L</b>eague <b>O</b>f <b>D</b>esigns, where the masterminds behind League of Legends unveil the
                 truth on Irelia nerf immunity and the upcoming ADC overhaul. All of that, soon™.</p>
+                <p><b>How to use ?</b> On League of Designs, you can check out what Rioters have to say about your
+                <a href="{% url "champion" url_id="Singed" %}">favourite champion</a> ! Will it get nerfed ? Reworked ? What are Riot's plans for the future ? Rioters
+                speak a lot on Riot's Boards, and League of Designs conveniently gathers everything here !</p>
+                <p><button type="button" id="tourButton" class="btn btn-default">Take the guided tour for more.</button></p>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3 home-col hidden-xs">
+            <div class="col-md-3 home-col hidden-xs" id="news">
                 <h3>
                     <a href="{% url "articles-list" %}">
                         <div class="row">
@@ -57,7 +66,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 home-col">
+            <div class="col-md-6 home-col" id="latest-red-posts">
                 <h3>
                     <a href="{% url "red-posts" %}">
                         <div class="row">
@@ -78,7 +87,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3 home-col hidden-xs">
+            <div class="col-md-3 home-col hidden-xs" id="champions-list">
                 <h3>
                     <a href="{% url "champions-grid" %}">
                         <div class="row">
@@ -99,6 +108,7 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static "js/intro.min.js" %}"></script>
     <script>
         $(document).ready(function() {
             var homeTable = $('#champions-home').DataTable({
@@ -163,7 +173,7 @@
     <!-- CLASSY EFFECTS ON COLUMNS maybe -->
     <script>
         $(".home-col").hover(function() {
-            $(this).animate({'background-color': 'rgba(255,0,0,0.1)'});
+            $(this).animate({'background-color': '#f9dbdb'});
         }, function() {
             $(this).animate({'background-color': 'white'});
         });
@@ -204,6 +214,29 @@
                         }
                     });
             });
+        });
+    </script>
+    <!-- INTRO !!!!! wowsoBAKED -->
+    <script>
+        $(document).ready(function() {
+            var intro = {
+                "latest-red-posts": {'intro': "Check the latest Red Posts here ! Links will send you directly to Riot's Boards. Click a Champion's portrait to check all Red Posts about that Champion. Alternatively, click the cap icon up there to view ALL the Red Posts.", 'position':'left'},
+                "champions-list": {'intro': "Looking for a particular champion ? Type his/her/its name there and press Enter !", 'position':'left'},
+                "lod-navbar-intro": {'intro': "Access Red Posts and Champions from anywhere on the website through this handy navigation bar !"},
+                "li-articles": {'intro': "If you enjoy the concept, there are some articles down there you can read."},
+                "li-about": {'intro': "Read more about League of Designs philosophy here. If you want to contribute, there's a link for that, too."},
+                "news": {'intro': "Thank you for your time ! I hope League of Designs will help you understand Riot's (some may say uncanny) way of doing things ! News are displayed there by the way. Just saying.", 'position':'right'},
+            }
+
+            var step = 1;
+            for (var entry in intro)
+            {
+                $('#'+entry).attr('data-step', step).attr('data-intro', intro[entry]['intro']).attr('data-position', intro[entry]['position'] === undefined ? 'bottom':intro[entry]['position']);
+                step++;
+            }
+
+            introJs().setOption({'doneLabel': 'Awesomelycious !', 'exitOnOverlayClick': true});
+            $('#tourButton').click(function() { introJs().start(); });
         });
     </script>
 {% endblock %}

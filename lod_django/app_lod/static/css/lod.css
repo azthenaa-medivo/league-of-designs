@@ -52,6 +52,10 @@ table.dataTable span.highlight {
     border-radius: 15px;
 }
 
+#tourButton {
+    border-radius;
+}
+
 .quote-op {
     font-style: italic;
 }
@@ -191,11 +195,6 @@ a.no-underline:hover {
 #champions-grid img {
     border-radius: 60px;
     border: 3px solid black;
-}
-
-.champion-block:hover {
-    background-color: #dddddd;
-    border-radius: 10px;
 }
 
 #search-row {

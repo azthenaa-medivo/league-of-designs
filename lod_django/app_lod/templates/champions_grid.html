@@ -66,6 +66,19 @@ Champions -
                 // Reset the grid
                 $('#champions-grid ul').html(all);
                 filter(search);
+
+                // Slick animation renewed
+                $('.champion-block').hover(function() {
+                    $(this).animate({
+                        'background-color': '#bbbbbb',
+                        'border-radius': '60px',
+                    });
+                }, function() {
+                    $(this).animate({
+                        'background-color': '#ffffff',
+                        'border-radius': '0px',
+                    });
+                });
             });
 
             function filter(text) {
@@ -89,6 +102,19 @@ Champions -
 
             // AND FOCUS IT MAN
             $('#champions-grid-search').focus();
+
+            // Slick animation
+            $('.champion-block').hover(function() {
+                $(this).animate({
+                    'background-color': '#bbbbbb',
+                    'border-radius': '60px',
+                });
+            }, function() {
+                $(this).animate({
+                    'background-color': '#ffffff',
+                    'border-radius': '0px',
+                });
+            });
         });
     </script>
     <!-- Filter tags -->
