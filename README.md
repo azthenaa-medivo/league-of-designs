@@ -8,8 +8,6 @@ and yell at me because I'm not doing any caching *yet*.
 
 * LoD regularly collects Red Posts from Riot's Board and sort them by Champion, Rioter, etc.
 * You may also read some chilled Articles.
-* I avoid Mongoengine because it's never worked properly withotu tons of monkey patching... So yes I take care of
-everything myself.
 
 # Requirements
 

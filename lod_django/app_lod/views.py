@@ -18,6 +18,7 @@ consumer = Consumer()
 @render_to('home.html')
 def view_home(request):
     reds = consumer.get_red_posts(limit=5, query={'champions': {'$exists': True},
+                                                  'region': 'na',
                                                   'section' : {'$in': ["Gameplay & Balance", "Champions & Gameplay",
                                                                        "Maps & Modes"]}})
     articles = consumer.get_articles(limit=5, query={'type': 'News'})

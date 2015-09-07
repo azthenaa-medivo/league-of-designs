@@ -41,7 +41,7 @@ var special_champion_names = {
     'Ezreal': 'Ez ez',
     'Fiddlesticks': 'Fiddle fiddle',
     'Gangplank': 'GP gp Gp',
-    'Heimerdinger': 'Heimer heimer donger',
+    'Heimerdinger': 'Heimer heimer donger ヽ༼ຈل͜ຈ༽ﾉ',
     'Jarvan IV': 'j4 J4',
     'Kassadin': 'Kass kass',
     'Katarina': 'Kata kata',
