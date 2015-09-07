@@ -7,6 +7,22 @@
 
 print('postimport:lod');
 
+function getElementMatching(array, field, value)
+{
+    if (array === undefined)
+    {
+        return null;
+    }
+    for(var l;l<array.length;l++)
+    {
+        if (array[l][field] === value)
+        {
+            return array[l];
+        }
+    }
+    return null;
+}
+
 db.mr_champions.find().forEach(function(champion_res) {
     var rioter_counter = {};
     db.mr_reds.find({'$text': {'$search': champion_res['search']},
@@ -63,10 +79,19 @@ db.mr_champions.find().forEach(function(champion_res) {
                                 rioter_counter[red['rioter']]['name'] = red['rioter'];
                             }
                         });
-    update_rioter_counter = [];
-    for (r in rioter_counter)
+    var update_rioter_counter = champion_res['rioter_counter'] === undefined ? []:champion_res['rioter_counter'];
+    for (var r in rioter_counter)
     {
-        update_rioter_counter.push(rioter_counter[r]);
+        var current = getElementMatching(update_rioter_counter, 'name', r);
+        if (current != null)
+        {
+            // If it exists we had the points
+            current['count'] += rioter_counter['count'];
+            update_rioter_counter.push(current);
+        } else {
+            // If it doesn't exist it's the start of a new journey
+            update_rioter_counter.push(rioter_counter[r]);
+        }
     }
     db.mr_champions.update({'_id': champion_res['_id']}, {$set: {'rioter_counter': update_rioter_counter}});
 });
