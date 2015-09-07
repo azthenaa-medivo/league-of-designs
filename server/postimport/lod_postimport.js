@@ -9,8 +9,8 @@ print('postimport:lod');
 
 db.mr_champions.find().forEach(function(champion_res) {
     var rioter_counter = {};
-    db.mr_reds.find({'$text': {'$search': champion_res['search']}, 'champions': {'$not': {'$in': [champion_res['name']]}},},
-                    {'post_id': 1, 'rioter': 1, 'url': 1, 'contents': 1, 'date': 1, 'thread': 1}).forEach(
+    db.mr_reds.find({'$text': {'$search': champion_res['search']},
+                        'champions': {'$not': {'$in': [champion_res['name']]}}}).forEach(
                         function(red){
                             // Update champion data if it's not already done.
                             op_r = db.mr_reds.update({'_id': red['_id'],},
