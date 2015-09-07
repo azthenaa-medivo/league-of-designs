@@ -25,11 +25,20 @@
         <div id="toggle-tabs" class="row">
             <div id="tab-red-posts" class="col-md-12">
                 <h2>Red Posts about {{champion.name}}</h2>
-                <h3>Filter by Rioter</h3>
-                <form method="#" action="#" id="filterForm">
-                    {% include "utils/filters/filter_choice.html" with list=champion.rioter_counter value="name" label="name" sub="count" type="posts" id="rioter-select" %}
-                </form>
-                <hr>
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <h3>Filter by Rioter</h3>
+                        <form method="#" action="#" id="filterForm">
+                            {% include "utils/filters/filter_choice.html" with list=champion.rioter_counter value="name" label="name" sub="count" type="posts" id="rioter-select" %}
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>Filter by region</h3>
+                        <form method="#" action="#" id="regionFilter">
+                            {% include "utils/filters/filter_checkbox.html" with name="region-filter" types=regions colmd=3 %}
+                        </form>
+                    </div>
+                </div>
                 {% include "utils/red_posts_datatable.html" with reds=champion.red_posts %}
             </div>
             <div id="tab-discussion" class="hidden col-md-12">
@@ -151,7 +160,7 @@
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
                 "columnDefs": [
                 {
-                    "targets": [ 4, 5 ],
+                    "targets": [ 4, 5, 6 ],
                     "visible": false,
                 },]
             });
@@ -159,8 +168,15 @@
             // Filter Rioter
             $('#rioter-select').change(function() {
                 redTable.column(0).search($(this).val()).draw();
-                console.log($(this).val())
             });
+
+            // Filter out EUW
+            $('.region-filter').change(function() {
+                redTable.column(6).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
+            });
+
+            // Auto search NA
+            $('.region-filter[value=NA]').click();
         } );
     </script>
 {% endblock %}

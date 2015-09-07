@@ -19,4 +19,7 @@ ARTICLE_TYPE = (
     ('General', 'General'),
 )
 
-ROLES = ['Assassin', 'Fighter', 'Mage', 'Support', 'Tank', 'Marksman']
+ROLES = ['Assassin', 'Fighter', 'Mage', 'Support', 'Tank', 'Marksman', 'Juggernaut']
+
+REGIONS = ['NA', 'EUW']
+

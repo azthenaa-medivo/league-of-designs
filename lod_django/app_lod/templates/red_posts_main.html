@@ -12,10 +12,20 @@ Red Posts -
 {% endblock %}
 
 {% block contents %}
-    <h3>Filter by Rioter</h3>
-    <form method="#" action="#" id="filterForm">
-        {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="posts" type="posts" id="rioter-select" %}
-    </form>
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <h3>Filter by Rioter</h3>
+            <form method="#" action="#" id="filterForm">
+                {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="posts" type="posts" id="rioter-select" %}
+            </form>
+        </div>
+        <div class="col-md-4">
+            <h3>Filter by region</h3>
+            <form method="#" action="#" id="regionFilter">
+                {% include "utils/filters/filter_checkbox.html" with name="region-filter" types=regions colmd=3 %}
+            </form>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             If a Rioter has no Red Posts associated, it means LoD didn't <span id="wowUP">detect a champion design conversation</span>. <span class="hidden" id="wow">wowsoSTALKED</span>
@@ -44,7 +54,7 @@ Red Posts -
                 "order": [[ 1, "asc" ]],
                 "columnDefs": [
                 {
-                    "targets": [ 5 ],
+                    "targets": [ 5, 6 ],
                     "visible": false,
                 },],
                 searchHighlight: true,
@@ -55,6 +65,14 @@ Red Posts -
                 redTable.column(0).search($(this).val()).draw();
                 console.log($(this).val())
             });
+
+            // Filter out EUW
+            $('.region-filter').change(function() {
+                redTable.column(6).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
+            });
+
+            // Auto search NA
+            $('.region-filter[value=NA]').click();
         } );
     </script>
     <!-- Lock the search bar when scrolling -->

@@ -3,7 +3,7 @@ __author__ = 'artemys'
 import operator
 from utilities.snippets import render_to
 from app_database.consumer import Consumer
-from .models import ARTICLE_TYPE, ROLES
+from .models import ARTICLE_TYPE, ROLES, REGIONS
 from .forms import ChampionForm, ArticleForm, NewArticleForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -35,7 +35,7 @@ def view_red_posts(request):
         rioters = [{'name': r['name'], 'posts': len(r['posts'])} for r in consumer.get_rioters()]
     reds = consumer.get_red_posts(query=the_query, limit=0)
     rioters.sort(key=operator.itemgetter('name'))
-    return {'reds': reds, 'rioters': rioters, 'all': not not boards_sections} # TRICK SHOT
+    return {'reds': reds, 'rioters': rioters, 'all': not not boards_sections, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
 
 @render_to('about.html')
 def view_about(request):
@@ -46,7 +46,7 @@ def view_champion(request, url_id):
     champion = consumer.get_champion({'url_id':url_id})
     if champion is None:
         return HttpResponseRedirect('/')
-    return {'champion': champion}
+    return {'champion': champion, 'regions': zip(REGIONS, REGIONS)}
 
 @render_to('champions_grid.html')
 def view_champions_grid(request):
