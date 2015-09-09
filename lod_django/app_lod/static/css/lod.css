@@ -47,6 +47,10 @@ table.dataTable span.highlight {
     cursor: help;
 }
 
+#homeHeaderCaret {
+    cursor: pointer;
+}
+
 .home-col {
     background-color: white;
     border-radius: 15px;
@@ -182,6 +186,7 @@ table.dataTable span.highlight {
     width: 300px !important;
     border-radius: 5px;
     border: 2px solid black;
+    z-index: 4799;
 }
 
 a.no-underline:hover {
