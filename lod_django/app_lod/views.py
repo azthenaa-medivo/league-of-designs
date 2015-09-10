@@ -32,6 +32,7 @@ def view_red_posts(request):
         the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes"]}
         rioters = [{'name': r['name'], 'posts': r['glorious_posts']} for r in consumer.get_rioters()]
     else:
+        the_query['champions'] = {'$exists': 1}
         rioters = [{'name': r['name'], 'posts': len(r['posts'])} for r in consumer.get_rioters()]
     reds = consumer.get_red_posts(query=the_query, limit=0)
     return {'reds': reds, 'rioters': rioters, 'all': not not boards_sections, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
