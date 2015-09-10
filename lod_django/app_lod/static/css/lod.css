@@ -64,12 +64,22 @@ table.dataTable span.highlight {
     font-style: italic;
 }
 
+.red-quote {
+    background-image: url('/static/images/lod/quote.png');
+    background-repeat: no-repeat;
+    background-position: top left;
+}
+
+.red-quote:hover {
+    background-image: none;
+}
+
 .red-contents {
     position: relative;
     overflow-y: hidden;
     text-overflow: ellipsis;
-    border-top: 1px #aa0000 solid;
-    padding-top: 5px;
+    border-bottom: 1px #aa0000 solid;
+    padding-top: 0px;
     max-height: 120px;
 }
 
@@ -83,15 +93,6 @@ table.dataTable span.highlight {
     background-image: linear-gradient(to bottom, transparent, white);
 }
 
-.msg {
-    background-color: rgba(255,0,0,0.5);
-    padding: 3px;
-    color: white;
-    border-radius: 10px;
-    border-bottom: 2px #aa0000 solid;
-    text-shadow: rgba(0,0,0,1) 0px 2px 3px;
-}
-
 .red-contents:hover {
     max-height: 100%;
     height: 100%;
@@ -102,13 +103,21 @@ table.dataTable span.highlight {
 }
 
 .red-champions {
-    padding-top: 10px;
+    padding-top: 0px;
 }
 
 .fieldWrapper {
     margin-bottom: 10px;
 }
 
+.msg {
+    background-color: rgba(255,0,0,0.5);
+    padding: 3px;
+    color: white;
+    border-radius: 10px;
+    border-bottom: 2px #aa0000 solid;
+    text-shadow: rgba(0,0,0,1) 0px 2px 3px;
+}
 
 .top15 {
     margin-top:15px;

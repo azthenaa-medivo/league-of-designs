@@ -30,7 +30,7 @@
             <td><span class="rioter">{{r.rioter}}</span></td>
             <td>{% include "utils/date_span.html" with date=r.date %}</td>
             <td><a href="{{r.url}}" target="_blank">{{r.thread}}</a> ~ {{ r.section }}</td>
-            <td>{{r.contents|markdown | safe}}</td>
+            <td class="red-quote">{{r.contents|markdown | safe}}</td>
             <td class="text-center">
                 {% if r.champions_data %}
                     {% for c in r.champions_data %}
