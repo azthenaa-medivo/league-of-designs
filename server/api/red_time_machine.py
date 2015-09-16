@@ -1,3 +1,5 @@
+"""Recovers every redpost you want as long as it was posted after the Boards migration (~08/09/2013)."""
+
 if __name__ == '__main__':
     import argparse
     import logging as log
