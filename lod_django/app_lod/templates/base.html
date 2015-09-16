@@ -40,6 +40,11 @@
                 <ul class="nav navbar-nav">
                     <li id="li-articles" class="{% active_page request "article" %}"><a href="{% url "articles-list" %}"><i class="glyphicon glyphicon-book"></i> Articles</a></li>
                     <li id="li-red-posts" class="{% active_page request "red-posts" %}"><a href="{% url "red-posts" %}"><i class="glyphicon glyphicon-education"></i> Red Posts</a></li>
+                    <form class="navbar-form navbar-left" role="search" method="GET" action="/redposts">
+                        <div class="form-group">
+                            <input id="red-posts-navbar-search" name="search" type="text" class="form-control" placeholder="Search Red Post...">
+                        </div>
+                    </form>
                     <li id="li-champions" class="{% active_page request "champion" %}"><a href="{% url "champions-grid" %}"><i class="glyphicon glyphicon-queen"></i> Champions</a></li>
                     <form class="navbar-form navbar-left" role="search">
                         <div class="form-group">

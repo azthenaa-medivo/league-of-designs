@@ -28,8 +28,12 @@ def view_home(request):
 def view_red_posts(request):
     boards_sections = request.GET.get('all')
     the_query = {}
+    q = request.GET.get('search')
+    if q and q != '':
+        the_query['$text'] = {'$search': q}
     if not boards_sections:
-        the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes"]}
+        the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
+                                        "Champions & Gameplay Feedback"]} # PBE related stuff
         rioters = [{'name': r['name'], 'posts': r['glorious_posts']} for r in consumer.get_rioters()]
     else:
         the_query['champions'] = {'$exists': 1}
