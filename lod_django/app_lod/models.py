@@ -21,5 +21,5 @@ ARTICLE_TYPE = (
 
 ROLES = ['Assassin', 'Fighter', 'Mage', 'Support', 'Tank', 'Marksman', 'Juggernaut']
 
-REGIONS = ['NA', 'EUW']
+REGIONS = ['NA', 'EUW', 'PBE']
 

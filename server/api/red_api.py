@@ -2,6 +2,7 @@
 
 import requests
 from pymongo import MongoClient
+from pymongo.errors import InvalidOperation
 from key import THE_KEY
 
 class RiotAPI:
@@ -26,22 +27,28 @@ class RiotAPI:
         champ_data = requests.get(url_champions, params={'champData': fields, 'api_key': self.key}).json()['data']
         self.champion_collection.insert_many([d for c, d in champ_data.items()])
 
-    def get_redposts(self):
+    def get_redposts(self, regions=None, parameters=None):
         """Retrieves the latest Red Posts and puts them into the database."""
         bulk = self.red_posts_collection.initialize_ordered_bulk_op()
-        region_redposts = ['na', 'euw']
-        for region in region_redposts:
-            data = requests.get('http://boards.'+region+'.leagueoflegends.com/en/redtracker.json').json()
+        if regions is None:
+            realms = ['na', 'euw', 'pbe']
+        total = 0
+        for realm in realms:
+            data = requests.get('http://boards.'+realm+'.leagueoflegends.com/en/redtracker.json', params=parameters).json()
+            total += len(data)
             for d in data:
-                d.update({'region':region})
-                post_id = ''
+                d.update({'region': realm})
                 if d.get('comment') is None:
                     post_id = d['discussion']['id']
                 else:
                     post_id = d['comment']['discussion']['id'] + ',' + d['comment']['id']
                 d['post_id'] = post_id
                 bulk.find({'post_id': post_id}).upsert().update({'$set': d})
-        bulk.execute()
+        try:
+            bulk.execute()
+        except InvalidOperation:
+            print('Nothing to insert !')
+        return total
 
     def flush(self):
         self.champion_collection.drop()
