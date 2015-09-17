@@ -34,12 +34,11 @@ def view_red_posts(request):
             the_query['$text'] = {'$search': q}
         if not boards_sections:
             the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
-                                            "Champions & Gameplay Feedback"]} # PBE related stuff
+                                            "Champions & Gameplay Feedback"]}
         else:
             the_query['$or'] = [{'champions': {'$exists': 1},
                                  'section': {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
                                                     "Champions & Gameplay Feedback"]}}]
-        # Markdown the contents, will try to do that on the Javascript side later :^)
         reds = consumer.get_red_posts(query=the_query, limit=0)
         data = list(reds)
         for d in data:
