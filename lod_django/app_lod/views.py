@@ -1,11 +1,11 @@
 __author__ = 'artemys'
 
-import operator
-from utilities.snippets import render_to
+import json
+from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown
 from app_database.consumer import Consumer
 from .models import ARTICLE_TYPE, ROLES, REGIONS
 from .forms import ChampionForm, ArticleForm, NewArticleForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -26,8 +26,8 @@ def view_home(request):
 
 @render_to('red_posts_main.html')
 def view_red_posts(request):
-    boards_sections = request.GET.get('all')
     the_query = {}
+    boards_sections = request.GET.get('all')
     q = request.GET.get('search')
     if q and q != '':
         the_query['$text'] = {'$search': q}
@@ -38,8 +38,14 @@ def view_red_posts(request):
     else:
         the_query['champions'] = {'$exists': 1}
         rioters = [{'name': r['name'], 'posts': len(r['posts'])} for r in consumer.get_rioters()]
-    reds = consumer.get_red_posts(query=the_query, limit=0)
-    return {'reds': reds, 'rioters': rioters, 'all': not not boards_sections, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
+    reds = consumer.get_red_posts(query={'$text': {'$search': q}}, limit=0)
+    if request.is_ajax():
+        # Markdown the contents
+        data = list(reds)
+        for d in data:
+            d['contents'] = to_markdown(d['contents'])
+        return HttpResponse(JSONObjectIdEncoder().encode({'data': data}), content_type='application/json')
+    return {'rioters': rioters, 'all': not not boards_sections, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
 
 @render_to('about.html')
 def view_about(request):

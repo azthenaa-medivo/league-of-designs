@@ -1,6 +1,10 @@
+from bson import ObjectId
+from json import JSONEncoder
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from app_database.postimport import postimport as pi
+from .templatetags.markdown_extension import QuoteExtension
+from markdown import markdown
 
 def render_to(template):
     """
@@ -42,3 +46,15 @@ def postimport(script):
             return res
         return wrapper
     return execute_script
+
+class JSONObjectIdEncoder(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return JSONEncoder.default(self, o)
+
+def to_markdown(string):
+    if string is None:
+        return markdown("**LoD has encountered an error processing this post ! Rito pls fix**")
+    else:
+        return markdown(string, extensions=[QuoteExtension()])

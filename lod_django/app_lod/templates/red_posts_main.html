@@ -41,25 +41,73 @@ Red Posts -
         </div>
     </div>
     <hr>
+    {% csrf_token %}
     {% include "utils/red_posts_datatable.html" %}
 {% endblock %}
 
 {% block js %}
     <script>
         $(document).ready(function() {
+            // Ready the Handlebars !
+            Handlebars.registerHelper('agoHB', function(date) {
+                var now = new Date();
+                var then = new Date(date);
+                return now - then;
+            });
+            var template_champions = Handlebars.compile($("#handlebars-champions").html());
+            var template_contents = Handlebars.compile($("#handlebars-contents").html());
+            var template_date = Handlebars.compile($("#handlebars-date").html());
+            var template_quote = Handlebars.compile($("#handlebars-quote").html());
+            var template_region = Handlebars.compile($("#handlebars-region").html());
+            var template_rioter = Handlebars.compile($("#handlebars-rioter").html());
+            var template_thread = Handlebars.compile($("#handlebars-thread").html());
+            // Then ready the Red Table !
             var redTable = $('#red-table').DataTable({
+                "ajax": {
+                    "url": "/red-posts",
+                    "type": "GET",
+                    "data": {
+                        "search": "{{request.GET.search}}"
+                    }
+                },
+                "columns": [
+                    { "render": function( data, type, full, meta ) {
+                        return template_rioter(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        if (type === 'display' || type === 'filter') {
+                            // If displaying
+                            return template_date(full);
+                        } else {
+                            // If sorting
+                            return full['date'];
+                        }
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_thread(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_contents(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_champions(full);
+                    }},
+                    { "data": "region" },
+                ],
                 "order": [[ 2, "desc" ]],
                 "language": {
+                    "loadingRecords": "Getting all them Red Posts...",
                     "zeroRecords": "No Red Posts found. Soz boyz."
                 },
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
-                "order": [[ 1, "asc" ]],
+                "order": [[ 1, "desc" ]],
                 "columnDefs": [
                 {
-                    "targets": [ 5, 6 ],
+                    "targets": [ 5 ],
                     "visible": false,
-                },],
-                searchHighlight: true,
+                },
+                ],
+                "searchHighlight": true,
             });
 
             // Filter Rioter
@@ -70,7 +118,7 @@ Red Posts -
 
             // Filter out EUW
             $('.region-filter').change(function() {
-                redTable.column(6).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
+                redTable.column(5).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
             });
 
             // Auto search NA

@@ -1,6 +1,8 @@
 {% load staticfiles %}
 {% load template_tags %}
 
+{% spaceless %}
+
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -40,7 +42,7 @@
                 <ul class="nav navbar-nav">
                     <li id="li-articles" class="{% active_page request "article" %}"><a href="{% url "articles-list" %}"><i class="glyphicon glyphicon-book"></i> Articles</a></li>
                     <li id="li-red-posts" class="{% active_page request "red-posts" %}"><a href="{% url "red-posts" %}"><i class="glyphicon glyphicon-education"></i> Red Posts</a></li>
-                    <form class="navbar-form navbar-left" role="search" method="GET" action="/redposts">
+                    <form class="navbar-form navbar-left" role="search" method="GET" action="{% url "red-posts" %}">
                         <div class="form-group">
                             <input id="red-posts-navbar-search" name="search" type="text" class="form-control" placeholder="Search Red Post...">
                         </div>
@@ -67,7 +69,7 @@
         </div><!-- /.container-fluid -->
     </nav>
 
-    <div class="container">00
+    <div class="container">
         <div class="page-header">
             {% if messages %}
             <div class="row" id="messagesDiv">
@@ -94,6 +96,7 @@
             </span>
         </a>
     </div>
+
     <!-- JS wait there are many... oh well. Just download them once. -->
     <script src="{% static "js/jquery.js" %}"></script>
     <script src="{% static "js/jquery.highlight.js" %}"></script>
@@ -102,8 +105,22 @@
     <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
     <script src="{% static "js/dataTables.min.js" %}"></script>
     <script src="{% static "js/dataTables.highlight.min.js" %}"></script>
+    <script src="{% static "js/handlebars.js" %}"></script>
     <script src="{% static "js/util.js" %}"></script>
     <script src="{% static "js/lod.js" %}"></script>
+    <script>
+    var csrftoken = Cookies.get('csrftoken');
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    </script>
     {% block js %}{% endblock %}
 
     <footer>
@@ -125,3 +142,5 @@
     </footer>
 </body>
 </html>
+
+{% endspaceless %}

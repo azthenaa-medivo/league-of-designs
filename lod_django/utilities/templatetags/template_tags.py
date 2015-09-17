@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
 
 import operator
+from .markdown_extension import QuoteExtension
 from django import template
 from markdown import markdown
-from .markdown_extension import QuoteExtension
 from app_lod.models import STATUS_MESSAGES
+from utilities.snippets import to_markdown
 from datetime import datetime
 
 register = template.Library()
@@ -21,11 +22,8 @@ def integer_filter(i):
         return i
 
 @register.filter(name="markdown")
-def to_markdown(string):
-    if string is None:
-        return markdown("**LoD has encountered an error processing this post ! Rito pls fix**")
-    else:
-        return markdown(string, extensions=[QuoteExtension()])
+def to_markdown_wrapper(string):
+    return to_markdown(string)
 
 @register.filter(name="status")
 def status(string):

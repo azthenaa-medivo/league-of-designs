@@ -17,18 +17,18 @@ class Consumer:
         self.articles_collection = self.client.lod.articles
         self.rioters_collection = self.client.lod.mr_rioters
 
-    def get_champions(self, query={}, projection=None, sort_field='name', sort_order=1):
+    def get_champions(self, query={}, projection=None, sort_field='name', sort_order=DESCENDING):
         """Return a simple list of all Champions."""
         return self.champions_collection.find(query, projection).sort(sort_field, sort_order)
 
     def get_champion(self, query, projection=None):
-        """Returns a single champion. If none is found, returns a random champion."""
+        """Returns a single champion. If none is found, returns a random champion. (maybe)"""
         # TODO : RANDOM CHAMPION GENERATOR
         return self.champions_collection.find_one(query, projection)
 
-    def get_red_posts(self, query, projection=None, limit=10, *args, **kwargs):
+    def get_red_posts(self, query={}, projection=None, limit=10):
         """Returns the qty last Red Posts."""
-        return self.red_posts_collection.find(query, projection).limit(limit).sort('date', DESCENDING)
+        return self.red_posts_collection.find(query, projection).limit(limit)
 
     def get_articles(self, query={}, limit=10, proj=None):
         """What could this method do ?"""

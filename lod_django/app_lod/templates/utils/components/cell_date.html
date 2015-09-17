@@ -1,0 +1,12 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-date{% endblock %}
+
+{% block template %}
+{% verbatim %}
+<div>
+    <span data-date="{{date}}" class="computed-date"></span>
+    <span> ({{region}})</span>
+</div>
+{% endverbatim %}
+{% endblock %}

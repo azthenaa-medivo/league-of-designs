@@ -1,0 +1,21 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-champions{% endblock %}
+
+{% block template %}
+{% load staticfiles %}
+{% verbatim %}
+<div class="text-center">
+{{#if champions_data }}
+    {{#each champions_data}}
+        <a href="{% endverbatim %}{% url "champion" '' %}{% verbatim %}{{this.name}}"><img class="mini-icon" alt="{{this.name}}" title="{{this.name}}" src="{% endverbatim %}{% static "images/portraits/" %}{% verbatim %}{{this.portrait}}"></img></a>
+        <span class="hidden">
+            {{this.search}}
+        </span>
+    {{/each}}
+{{else}}
+    {{section}}
+{{/if}}
+</div>
+{% endverbatim %}
+{% endblock %}

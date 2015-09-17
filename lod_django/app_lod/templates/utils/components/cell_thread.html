@@ -1,0 +1,11 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-thread{% endblock %}
+
+{% block template %}
+{% verbatim %}
+<p>
+    <a href="{{url}}" target="_blank">{{thread}}</a>
+</p>
+{% endverbatim %}
+{% endblock %}
