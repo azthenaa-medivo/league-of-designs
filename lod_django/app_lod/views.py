@@ -26,25 +26,24 @@ def view_home(request):
 
 @render_to('red_posts_main.html')
 def view_red_posts(request):
-    the_query = {}
     boards_sections = request.GET.get('all')
-    q = request.GET.get('search')
-    if q and q != '':
-        the_query['$text'] = {'$search': q}
-    if not boards_sections:
-        the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
-                                        "Champions & Gameplay Feedback"]} # PBE related stuff
-        rioters = [{'name': r['name'], 'posts': r['glorious_posts']} for r in consumer.get_rioters()]
-    else:
-        the_query['champions'] = {'$exists': 1}
-        rioters = [{'name': r['name'], 'posts': len(r['posts'])} for r in consumer.get_rioters()]
-    reds = consumer.get_red_posts(query=the_query, limit=0)
     if request.is_ajax():
+        the_query = {}
+        q = request.GET.get('search')
+        if q and q != '':
+            the_query['$text'] = {'$search': q}
+        if not boards_sections:
+            the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
+                                            "Champions & Gameplay Feedback"]} # PBE related stuff
+        else:
+            the_query['champions'] = {'$exists': 1}
         # Markdown the contents
+        reds = consumer.get_red_posts(query=the_query, limit=0)
         data = list(reds)
         for d in data:
             d['contents'] = to_markdown(d['contents'])
         return HttpResponse(JSONObjectIdEncoder().encode({'data': data}), content_type='application/json')
+    rioters = consumer.get_rioters()
     return {'rioters': rioters, 'all': not not boards_sections, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
 
 @render_to('about.html')

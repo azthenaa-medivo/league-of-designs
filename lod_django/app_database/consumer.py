@@ -69,8 +69,8 @@ class Consumer:
         res = self.articles_collection.remove(query)
         return res
 
-    def get_rioters(self, query={}, projection=None):
-        return self.rioters_collection.find(query, projection)
+    def get_rioters(self, query={}, projection=None, sort_field='name', sort_order=ASCENDING):
+        return self.rioters_collection.find(query, projection).sort(sort_field, sort_order)
 
 if __name__ == '__main__':
     c = Consumer()

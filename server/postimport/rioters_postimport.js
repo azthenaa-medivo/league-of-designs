@@ -48,6 +48,7 @@ function contains(array, value) {
 db.mr_rioters.find().forEach(function(rioter) {
     var champ_occ = {}; // 8/8 would name a variable again
     var glorious_posts = 0;
+    var total_posts = rioter['posts'].length;
     for (i=0;i<rioter['posts'].length;i++)
     {
         if ('champions' in rioter.posts[i])
@@ -73,7 +74,11 @@ db.mr_rioters.find().forEach(function(rioter) {
     {
         update.push(champ_occ[k]);
     }
-    rioters_bulk.find({'_id': rioter['_id']}).update({$set: {'champion_occurrences': update, 'glorious_posts': glorious_posts}});
+    rioters_bulk.find({'_id': rioter['_id']}).update({$set: {
+                                                                'champion_occurrences': update,
+                                                                'glorious_posts': glorious_posts,
+                                                                'total_posts': total_posts,
+                                                            }});
 });
 
 rioters_bulk.execute();
