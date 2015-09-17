@@ -36,8 +36,8 @@ def view_red_posts(request):
             the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
                                             "Champions & Gameplay Feedback"]}
         else:
-            the_query['$or'] = [{'champions': {'$exists': 1},
-                                 'section': {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
+            the_query['$or'] = [{'champions': {'$exists': 1}},
+                                {'section': {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
                                                     "Champions & Gameplay Feedback"]}}]
         reds = consumer.get_red_posts(query=the_query, limit=0)
         data = list(reds)
