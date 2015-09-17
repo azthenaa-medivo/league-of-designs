@@ -38,7 +38,7 @@ def view_red_posts(request):
     else:
         the_query['champions'] = {'$exists': 1}
         rioters = [{'name': r['name'], 'posts': len(r['posts'])} for r in consumer.get_rioters()]
-    reds = consumer.get_red_posts(query={'$text': {'$search': q}}, limit=0)
+    reds = consumer.get_red_posts(query=the_query, limit=0)
     if request.is_ajax():
         # Markdown the contents
         data = list(reds)

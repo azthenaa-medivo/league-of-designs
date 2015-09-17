@@ -2,7 +2,7 @@ __author__ = 'artemys'
 
 import re
 import datetime
-from pymongo import MongoClient, DESCENDING
+from pymongo import MongoClient, DESCENDING, ASCENDING
 from bson.objectid import ObjectId
 from utilities.snippets import postimport
 
@@ -17,7 +17,7 @@ class Consumer:
         self.articles_collection = self.client.lod.articles
         self.rioters_collection = self.client.lod.mr_rioters
 
-    def get_champions(self, query={}, projection=None, sort_field='name', sort_order=DESCENDING):
+    def get_champions(self, query={}, projection=None, sort_field='name', sort_order=ASCENDING):
         """Return a simple list of all Champions."""
         return self.champions_collection.find(query, projection).sort(sort_field, sort_order)
 
@@ -26,9 +26,9 @@ class Consumer:
         # TODO : RANDOM CHAMPION GENERATOR
         return self.champions_collection.find_one(query, projection)
 
-    def get_red_posts(self, query={}, projection=None, limit=10):
+    def get_red_posts(self, query={}, projection=None, limit=10, sort_field='date', sort_order=DESCENDING):
         """Returns the qty last Red Posts."""
-        return self.red_posts_collection.find(query, projection).limit(limit)
+        return self.red_posts_collection.find(query, projection).limit(limit).sort(sort_field, sort_order)
 
     def get_articles(self, query={}, limit=10, proj=None):
         """What could this method do ?"""
