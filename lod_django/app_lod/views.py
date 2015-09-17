@@ -81,8 +81,6 @@ def edit_champion(request, url_id):
         form = ChampionForm(champion)
     return {'champion': champion, 'form': form}
 
-# Rioters
-
 @render_to('rioters.html')
 def view_rioters(request):
     rioters = consumer.get_rioters()
