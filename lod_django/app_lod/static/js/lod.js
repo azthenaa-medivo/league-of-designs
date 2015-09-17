@@ -77,7 +77,7 @@
 
     // Pretty tables
     $("tr").hover(function() {
-        $(this).animate({'background-color': 'rgba(0,255,0,0.2)'});
+        $(this).animate({'background-color': 'rgba(230,255,230,1)'});
     }, function() {
         $(this).animate({'background-color': 'white'});
     });

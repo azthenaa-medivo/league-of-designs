@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}
+Rioters -
+{% endblock %}
+
+{% block header %}
+    <h1>The Rioters</h1>
+{% endblock %}
+
+{% block contents %}
+    {% load staticfiles %}
+    {% load template_tags %}
+    <table id="rioters-table">
+        <thead>
+            <th>Name</th>
+            <th>Posts</th>
+            <th>Latest Red Post</th>
+        </thead>
+        <tfoot>
+            <th>Name</th>
+            <th>Posts</th>
+            <th>Latest Red Post</th>
+        </tfoot>
+        <tbody>
+            {% for r in rioters %}
+            <tr>
+                <td><span class="rioter">{{r.name}}</span></td>
+                <td data-order="{{r.glorious_posts|int}}">{% if r.glorious_posts == 0 %}{{r.posts|length|int}} Red Posts{% else %}{{r.posts|length|int}} Red Posts (<span class="rioter">{{r.glorious_posts|int}}</span> about Design){% endif %}</td>
+                <td>
+                    {% with p=r.posts|last %}
+                    In <a href="{{p.url}}">{{p.thread}}</a>
+                    ({% include "utils/date_span.html" with date=p.date %})
+                    {% endwith%}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block js %}
+    <script>
+     $(document).ready(function() {
+        var rioterTable = $('#rioters-table').DataTable({
+                "order": [[ 1, "desc" ]],
+                "language": {
+                    "zeroRecords": 'Hm ? Ah come on, Rioters are pretty silent..'
+                },
+                "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
+            });
+    });
+    </script>
+{% endblock %}

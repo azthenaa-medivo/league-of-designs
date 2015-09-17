@@ -81,6 +81,13 @@ def edit_champion(request, url_id):
         form = ChampionForm(champion)
     return {'champion': champion, 'form': form}
 
+# Rioters
+
+@render_to('rioters.html')
+def view_rioters(request):
+    rioters = consumer.get_rioters()
+    return {'rioters': rioters}
+
 @render_to('article.html')
 def view_article(request, article_id):
     article = consumer.get_article({'url_id': article_id})

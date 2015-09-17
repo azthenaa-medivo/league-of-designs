@@ -39,7 +39,7 @@
                         </form>
                     </div>
                 </div>
-                {% include "utils/red_posts_datatable.html" with reds=champion.red_posts %}
+                {% include "utils/champion_red_posts_datatable.html" with reds=champion.red_posts %}
             </div>
             <div id="tab-discussion" class="hidden col-md-12">
                 <h2>Discussions and Articles about {{champion.name}}</h2>
@@ -152,11 +152,10 @@
     <script>
         $(document).ready(function() {
             var redTable = $('#red-table').DataTable({
-                "order": [[ 2, "desc" ]],
+                "order": [[ 1, "asc" ]],
                 "language": {
                     "zeroRecords": 'Ain\'t nobody got time for {{champion.name}}. <a href="http://shamenun.com/" target="_blank">Shame</a>.'
                 },
-                "order": [[ 1, "asc" ]],
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
                 "columnDefs": [
                 {

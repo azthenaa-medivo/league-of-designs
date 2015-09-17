@@ -51,6 +51,11 @@ def active_page(request, view_name):
     except Resolver404:
         return ""
 
+@register.filter(name="last")
+def get_last(array):
+    array.sort(key=operator.itemgetter('date'))
+    return array[-1]
+
 @register.filter
 def truncatesmart(value, limit=80):
     """
