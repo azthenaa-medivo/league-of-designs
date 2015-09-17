@@ -30,9 +30,9 @@ class Consumer:
         """Returns the qty last Red Posts."""
         return self.red_posts_collection.find(query, projection).limit(limit).sort(sort_field, sort_order)
 
-    def get_articles(self, query={}, limit=10, proj=None):
+    def get_articles(self, query={}, limit=10, projection=None, sort_field='date_created', sort_order=DESCENDING):
         """What could this method do ?"""
-        return self.articles_collection.find(query, proj).limit(limit)
+        return self.articles_collection.find(query, projection).limit(limit).sort(sort_field, sort_order)
 
     def get_article(self, query, projection=None):
         """Return A Single Article."""
