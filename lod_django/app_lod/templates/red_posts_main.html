@@ -66,6 +66,7 @@ Red Posts -
             var template_rioter = Handlebars.compile($("#handlebars-rioter").html());
             var template_thread = Handlebars.compile($("#handlebars-thread").html());
             // Then ready the Red Table !
+            var language = '<b><img src="{% static "images/loading.gif" %}" width="40px" alt="Loading" title="Loading"></img> Getting all them Red Posts... (If it takes forever it might mean there aren\'t any.)</b>';
             var redTable = $('#red-table').DataTable({
                 "ajax": {
                     "url": "/red-posts",
@@ -100,8 +101,8 @@ Red Posts -
                 ],
                 "order": [[ 2, "desc" ]],
                 "language": {
-                    "loadingRecords": "Getting all them Red Posts...",
-                    "zeroRecords": "Getting all them Red Posts... (If it takes forever it ight mean there aren't any.)",
+                    "loadingRecords": language,
+                    "zeroRecords": language,
                 },
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
                 "order": [[ 1, "desc" ]],

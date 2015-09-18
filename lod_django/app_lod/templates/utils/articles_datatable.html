@@ -37,7 +37,7 @@
                 {{a.type}}
                 {% if a.type == 'Champion' %}
                     <br>
-                    {% include "utils/mini_hero_icon.html" with champion=a.champion_data %}
+                    {% include "utils/mini_champion_icon.html" with champion=a.champion_data %}
                 {% endif %}
             </td>
             <td>{% include "utils/date_span.html" with date=a.date_created|isoformat %}</td>
