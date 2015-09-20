@@ -1,3 +1,5 @@
+load('utils.js');
+
 var bulk = db.mr_reds.initializeUnorderedBulkOp();
 print('postimport:red-posts');
 
@@ -28,6 +30,7 @@ db.reds.find().forEach(function(res) {
         'contents': digInto['message'],
         'thread': post_thread,
         'section': post_section,
+        'is_glorious': contains(glorious_sections, post_section),
     }
     bulk.find({'post_id': res['post_id']}).upsert().update({'$set': new_post});
 });

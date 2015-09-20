@@ -112,6 +112,8 @@ db.champions.find().forEach(function(res) {
             'riot_id': res['id'],
             'url_id': url_id,
             'articles': [],
+            'total_posts': 0,
+            'glorious_posts': 0,
         }
     };
     // Resource

@@ -1,6 +1,8 @@
 /*
- *  Version 1.1 : Now adds a 'done' field to Red Posts and bypass them next time ! WOW SO SPEED
+ *  Version 1.2 : Now adds the number of posts to stuff
  */
+
+load('utils.js');
 
 print('postimport:rioters');
 
@@ -32,18 +34,6 @@ db.mr_reds.update({'done': {'$ne': 1}}, {'$set':{'done':1}}, {'multi': 1});
 // And now we check the different champions they talked about.
 
 var rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
-var glorious_sections = ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes"];
-
-function contains(array, value) {
-    for (var p=0;p<array.length;p++)
-    {
-        if (array[p] === value)
-        {
-            return true;
-        }
-    }
-    return false;
-}
 
 db.mr_rioters.find().forEach(function(rioter) {
     var champ_occ = {}; // 8/8 would name a variable again

@@ -7,18 +7,20 @@
 print('reset:mr_reds[done,champions,champions_data]');
 
 db.mr_reds.update({},
-                    {'$unset': {
+                    {'$set': {
                                 'done': 0,
                                 'champions': [],
                                 'champions_data': [],
                     }},
                     {'multi': 1});
 
-print('reset:mr_champions[red_posts,rioter_counter,]');
+print('reset:mr_champions[red_posts,rioter_counter,glorious_posts,total_posts,]');
 
 db.mr_champions.update({},
-                        {'$unset': {
+                        {'$set': {
                                     'rioter_counter': [],
                                     'red_posts': [],
+                                    'glorious_posts': 0,
+                                    'total_posts': 0,
                         }},
                         {'multi':1});

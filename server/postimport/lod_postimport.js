@@ -5,26 +5,14 @@
  *  Looks for the champion's name in the Thread title and Post contents. It's that simple !
  */
 
-print('postimport:lod');
+load('utils.js');
 
-function getElementMatching(array, field, value)
-{
-    if (array === undefined)
-    {
-        return null;
-    }
-    for(var l;l<array.length;l++)
-    {
-        if (array[l][field] === value)
-        {
-            return array[l];
-        }
-    }
-    return null;
-}
+print('postimport:lod');
 
 db.mr_champions.find().forEach(function(champion_res) {
     var rioter_counter = {};
+    var glorious = champion_res['glorious_posts'];
+    var total = champion_res['total_posts'];
     db.mr_reds.find({'$text': {'$search': champion_res['search']},
                         'champions': {'$not': {'$in': [champion_res['name']]}}}).forEach(
                         function(red){
@@ -51,6 +39,7 @@ db.mr_champions.find().forEach(function(champion_res) {
                                         'thread': red['thread'],
                                         'section': red['section'],
                                         'region': red['region'],
+                                        'is_glorious': red['is_glorious'],
                             };
                             op_c = db.mr_champions.update(
                             {'_id': champion_res['_id'], 'red_posts.post_id': red['post_id']},
@@ -78,6 +67,13 @@ db.mr_champions.find().forEach(function(champion_res) {
                                 rioter_counter[red['rioter']]['count'] = 1;
                                 rioter_counter[red['rioter']]['name'] = red['rioter'];
                             }
+
+                            // Update posts number ! wowsoLOD1.2
+                            if (contains(glorious_sections, red['section']))
+                            {
+                                glorious++;
+                            }
+                            total++;
                         });
     var update_rioter_counter = champion_res['rioter_counter'] === undefined ? []:champion_res['rioter_counter'];
     for (var r in rioter_counter)
@@ -93,5 +89,7 @@ db.mr_champions.find().forEach(function(champion_res) {
             update_rioter_counter.push(rioter_counter[r]);
         }
     }
-    db.mr_champions.update({'_id': champion_res['_id']}, {$set: {'rioter_counter': update_rioter_counter}});
+    db.mr_champions.update({'_id': champion_res['_id']}, {$set: {'rioter_counter': update_rioter_counter,
+                                                                 'total_posts': total,
+                                                                 'glorious_posts': glorious}});
 });
