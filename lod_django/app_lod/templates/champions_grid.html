@@ -38,7 +38,7 @@ Champions -
                             <span>{{c.name}}</span>
                         </div>
                         <div>
-                            <p class="rioter nRedPosts">{% if c.total_posts == 0%}{% else %}{{c.total_posts|int}} Red Posts{% endif %}</p>
+                            <p data-posts="{{c.total_posts|int}}" class="norioter">{{c.total_posts|int}} Red Posts (<span class="rioter">{{c.glorious_posts|int}}</span> about Design)</p>
                         </div>
                     </a>
                 </li>
@@ -136,11 +136,8 @@ Champions -
     <!-- No Red Posts !  (╯°□°）╯︵ ┻━┻ -->
     <script>
         $(document).ready(function() {
-            $('.nRedPosts').each(function() {
-                if ($(this).text() === '')
-                {
-                    $(this).text(Math.random()<0.9 ? 'No Red Posts !' : '(╯°□°）╯︵ ┻━┻' ).removeClass('rioter').addClass('norioter');
-                }
+            $('p[data-posts=0]').each(function() {
+                $(this).text(Math.random()<0.9 ? 'No Red Posts !' : '(╯°□°）╯︵ ┻━┻' ).removeClass('rioter').addClass('norioter');
             });
         });
     </script>
