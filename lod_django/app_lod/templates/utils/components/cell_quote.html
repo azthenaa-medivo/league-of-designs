@@ -1,9 +1,0 @@
-{% extends "utils/components/handlebar_main.html" %}
-
-{% block h_id %}handlebars-quote{% endblock %}
-
-{% block template %}
-{% verbatim %}
-<p class="red-quote">{{r.contents|markdown | safe}}</p>
-{% endverbatim %}
-{% endblock %}

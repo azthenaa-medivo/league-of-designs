@@ -31,6 +31,17 @@ Red Posts -
                 {% include "utils/filters/filter_checkbox.html" with name="region-filter" types=regions colmd=3 %}
             </form>
         </div>
+        {% if all %}
+        <div class="col-md-4">
+            <h3 class="cursorHelp" title="Includes {{glorious_sections|join:', '}}">Show Design Boards only</h3>
+            <form method="#" action="#" id="designFilter">
+                <div class="col-md-12 filterCheckbox">
+                    <input class="design-only" value="design-only" type="checkbox" name="design-only">
+                    <label for="design-only">Design Only</label>
+                </div>
+            </form>
+        </div>
+        {% endif %}
     </div>
     <div class="row">
         <div class="col-md-12">
@@ -97,6 +108,7 @@ Red Posts -
                         return template_champions(full);
                     }},
                     { "data": "region" },
+                    { "data": "is_glorious" },
                 ],
                 "order": [[ 2, "desc" ]],
                 "language": {
@@ -127,6 +139,14 @@ Red Posts -
 
             // Auto search NA
             $('.region-filter[value=NA]').click();
+
+            // You know I should template them scripts...
+            $('.design-only').change(function() {
+                redTable.column(6).search($(this).is(':checked') ? 'true':'').draw();
+            });
+
+            // Auto filter Gloriou-- alright, relevant sections
+            $('.design-only').click();
         } );
     </script>
     <!-- Lock the search bar when scrolling -->

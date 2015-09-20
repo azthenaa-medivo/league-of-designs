@@ -38,8 +38,17 @@
                             {% include "utils/filters/filter_checkbox.html" with name="region-filter" types=regions colmd=3 %}
                         </form>
                     </div>
+                    <div class="col-md-4">
+                        <h3 class="cursorHelp" title="Includes {{glorious_sections|join:', '}}">Show Design Boards only</h3>
+                        <form method="#" action="#" id="designFilter">
+                            <div class="col-md-12 filterCheckbox">
+                                <input class="design-only" value="design-only" type="checkbox" name="design-only">
+                                <label for="design-only">Design Only</label>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                {% include "utils/champion_red_posts_datatable.html" with reds=champion.red_posts %}
+                {% include "utils/pre_templated_red_posts_datatable.html" with reds=champion.red_posts %}
             </div>
             <div id="tab-discussion" class="hidden col-md-12">
                 <h2>Discussions and Articles about {{champion.name}}</h2>
@@ -125,7 +134,7 @@
 {% endblock %}
 
 {% block js %}
-    <!-- If you come with #reds or something, automatically open the tab. -->
+    <!-- If you came with #reds or something, automatically open the tab. -->
     <script>
         $(document).ready(function() {
             var hash = window.location.hash;
@@ -154,12 +163,12 @@
             var redTable = $('#red-table').DataTable({
                 "order": [[ 1, "asc" ]],
                 "language": {
-                    "zeroRecords": 'Ain\'t nobody got time for {{champion.name}}. <a href="http://shamenun.com/" target="_blank">Shame</a>.'
+                    "zeroRecords": 'Ain\'t nobody got time for {{champion.name}}. <a href="http://shamenun.com/" target="_blank">Shame</a>.',
                 },
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
                 "columnDefs": [
                 {
-                    "targets": [ 4, 5, 6 ],
+                    "targets": [ 4, 5 ],
                     "visible": false,
                 },]
             });
@@ -171,11 +180,19 @@
 
             // Filter out EUW
             $('.region-filter').change(function() {
-                redTable.column(6).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
+                redTable.column(4).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
             });
 
             // Auto search NA
             $('.region-filter[value=NA]').click();
+
+            // Filter Glorious Sections (alright maybe I'll change that name)
+            $('.design-only').change(function() {
+                redTable.column(5).search($(this).is(':checked') ? 'true':'').draw();
+            });
+
+            // Auto filter Gloriou-- alright, relevant sections
+            $('.design-only').click();
         } );
     </script>
 {% endblock %}

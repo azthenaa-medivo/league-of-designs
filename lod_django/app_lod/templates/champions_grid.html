@@ -30,7 +30,7 @@ Champions -
         <ul class="small-block-grid-5 medium-block-grid-6">
             {% for c in champions %}
                 <li id="{{c.name}}" class="champion-block text-center" data-search="{{c.search}} {% for tag in c.tags %}{{tag}} {% endfor %}">
-                    <a href="{% url "champion" c|get:"url_id" %}" class="no-underline">
+                    <a href="{% url "champion" c.url_id %}" class="no-underline">
                         <div>
                             <img src="{% static "images/portraits/" %}{{c.portrait}}"></img>
                         </div>
@@ -38,7 +38,7 @@ Champions -
                             <span>{{c.name}}</span>
                         </div>
                         <div>
-                            <span class="rioter nRedPosts">{% if c.red_posts|length == 0%}{% else %}{{c.red_posts|length}} Red Posts{% endif %}</span>
+                            <p class="rioter nRedPosts">{% if c.total_posts == 0%}{% else %}{{c.total_posts|int}} Red Posts{% endif %}</p>
                         </div>
                     </a>
                 </li>

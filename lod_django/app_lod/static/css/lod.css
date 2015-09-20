@@ -44,6 +44,9 @@ table.dataTable span.highlight {
     height: 64px;
     z-index: 1;
     position: relative;
+}
+
+.cursorHelp {
     cursor: help;
 }
 
