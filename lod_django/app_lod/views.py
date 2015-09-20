@@ -36,7 +36,6 @@ def view_red_posts(request):
             the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
                                             "Champions & Gameplay Feedback"]}
         else:
-            print('getting all')
             the_query['$or'] = [{'champions': {'$exists': 1}},
                                 {'section': {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
                                                     "Champions & Gameplay Feedback"]}}  ]
