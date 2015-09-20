@@ -29,6 +29,10 @@ def to_markdown_wrapper(string):
 def status(string):
     return STATUS_MESSAGES[string]
 
+@register.filter(name="join")
+def status(a, j):
+    return j.join(a) if type(a) == list else a
+
 @register.filter(name="isoformat")
 def isoformat(date):
     if type(date) is datetime:
