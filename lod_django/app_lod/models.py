@@ -19,6 +19,8 @@ ARTICLE_TYPE = (
     ('General', 'General'),
 )
 
+GLORIOUS_SECTIONS = ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes", "Champions & Gameplay Feedback"]
+
 ROLES = ['Assassin', 'Fighter', 'Mage', 'Support', 'Tank', 'Marksman', 'Juggernaut']
 
 REGIONS = ['NA', 'EUW', 'PBE']
