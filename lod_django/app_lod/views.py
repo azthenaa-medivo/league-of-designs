@@ -3,7 +3,7 @@ __author__ = 'artemys'
 import json
 from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown
 from app_database.consumer import Consumer
-from .models import ARTICLE_TYPE, ROLES, REGIONS
+from .models import ARTICLE_TYPE, ROLES, REGIONS, GLORIOUS_SECTIONS
 from .forms import ChampionForm, ArticleForm, NewArticleForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -17,10 +17,9 @@ consumer = Consumer()
 
 @render_to('home.html')
 def view_home(request):
-    reds = consumer.get_red_posts(limit=5, query={'champions': {'$exists': True},
+    reds = consumer.get_red_posts(limit=5, query={'champions': {'$exists': True, '$ne': []},
                                                   'region': 'NA',
-                                                  'section' : {'$in': ["Gameplay & Balance", "Champions & Gameplay",
-                                                                       "Maps & Modes"]}})
+                                                  'section' : {'$in': GLORIOUS_SECTIONS}})
     articles = consumer.get_articles(limit=5, query={'type': 'News'})
     return {'reds': reds, 'articles': articles}
 
@@ -33,12 +32,10 @@ def view_red_posts(request):
         if q and q != '':
             the_query['$text'] = {'$search': q}
         if not boards_sections:
-            the_query['section'] = {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
-                                            "Champions & Gameplay Feedback"]}
+            the_query['section'] = {'$in': GLORIOUS_SECTIONS}
         else:
             the_query['$or'] = [{'champions': {'$exists': 1}},
-                                {'section': {'$in': ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
-                                                    "Champions & Gameplay Feedback"]}}  ]
+                                {'section': {'$in': GLORIOUS_SECTIONS}}]
         reds = consumer.get_red_posts(query=the_query, limit=0)
         data = list(reds)
         for d in data:
