@@ -24,7 +24,7 @@
         <tr data-href="{% url "champion" c|get:"url_id" %}">
             <td><img class="medium-icon" src="{% static "images/portraits/" %}{{c.portrait}}"></img></td>
             <td>{{c.name}}</td>
-            <td data-order="{{c.glorious_posts|int}}">{% if c.glorious_posts == 0%}{{c.total_posts|int}} Red Posts{% else %}<span class="rioter">{{c.glorious_posts|int}}</span> Red Posts{% endif %}</td>
+            <td data-order="{{c.glorious_posts|int}}">{% if c.glorious_posts == 0%}{{c.total_posts|int}} Red Posts{% else %}<span class="rioter">{{c.glorious_posts|int}}</span> Red Posts ({{c.total_posts|int}} total){% endif %}</td>
             <td>{% url "champion" c|get:"url_id" %}</td>
             <td>{{c.search}}</td>
         </tr>
