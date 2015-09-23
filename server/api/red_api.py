@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import copy
 import requests
 from pymongo import MongoClient
 from pymongo.errors import InvalidOperation
@@ -20,34 +21,52 @@ class RiotAPI:
     champion_collection = database.champions
     red_posts_collection = database.reds
 
+    realms = ['na', 'euw', 'pbe']
+
     def get_champions(self):
-        """Collects the champion pool and stores it."""
+        """Fetches the champion pool."""
         url_champions = 'https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion'
         fields = 'altimages,blurb,image,info,lore,partype,passive,spells,tags'
-        champ_data = requests.get(url_champions, params={'champData': fields, 'api_key': self.key}).json()['data']
+        return requests.get(url_champions, params={'champData': fields, 'api_key': self.key}).json()['data']
+
+    def get_champions_and_store(self):
+        """Collects the champion pool and stores it."""
+        champ_data = self.get_champions()
         self.champion_collection.insert_many([d for c, d in champ_data.items()])
 
-    def get_redposts(self, regions=None, parameters=None):
-        """Retrieves the latest Red Posts and puts them into the database."""
+    def get_red_posts(self, realm='na', parameters=None):
+        """Retrieves the latest Red Posts."""
+        return requests.get('http://boards.'+realm+'.leagueoflegends.com/en/redtracker.json', params=parameters)
+
+    def store_red_posts(self, data, realm):
+        """Stores Red Posts. Currently broken for main thread contents (waiting for Riot's fix)."""
+        if len(data) == 0:
+            print('Nothing to insert for realm "%s" !' % realm)
+            return 0
         bulk = self.red_posts_collection.initialize_ordered_bulk_op()
-        if regions is None:
-            realms = ['na', 'euw', 'pbe']
+        for d in data:
+            d.update({'region': realm})
+            if d.get('comment') is None:
+                post_id = d['discussion']['id']
+            else:
+                post_id = d['comment']['discussion']['id'] + ',' + d['comment']['id']
+            d['post_id'] = post_id
+            bulk.find({'post_id': post_id}).upsert().update({'$set': d})
+        try:
+            return bulk.execute()
+        except InvalidOperation:
+            print('Nothing to insert for realm "%s" !' % realm)
+            return 0
+
+    def get_red_posts_and_store(self, realms=None, parameters=None):
+        """Retrieves the latest Red Posts and puts them into the database."""
+        if realms is None:
+            realms = self.realms
         total = 0
         for realm in realms:
-            data = requests.get('http://boards.'+realm+'.leagueoflegends.com/en/redtracker.json', params=parameters).json()
+            data = self.get_red_posts(realm, parameters=parameters).json()
             total += len(data)
-            for d in data:
-                d.update({'region': realm})
-                if d.get('comment') is None:
-                    post_id = d['discussion']['id']
-                else:
-                    post_id = d['comment']['discussion']['id'] + ',' + d['comment']['id']
-                d['post_id'] = post_id
-                bulk.find({'post_id': post_id}).upsert().update({'$set': d})
-        try:
-            bulk.execute()
-        except InvalidOperation:
-            print('Nothing to insert !')
+            self.store_red_posts(data, realm)
         return total
 
     def flush(self):
@@ -69,7 +88,7 @@ if __name__ == '__main__':
     r = RiotAPI()
     if 'c' in args.mode:
         print('get:champions')
-        r.get_champions()
+        r.get_champions_and_store()
     if 'r' in args.mode:
         print('get:red-posts')
-        r.get_redposts()
+        r.get_red_posts_and_store()

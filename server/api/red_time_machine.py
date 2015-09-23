@@ -28,7 +28,7 @@ if __name__ == '__main__':
     while True:
         loops += 1
         log.info("Loop %d, time is %s" %(loops, current.isoformat()))
-        res = api.get_redposts(parameters={'created_to': current.isoformat()})
+        res = api.get_red_posts_and_store(parameters={'created_to': current.isoformat()})
         if res == 0 or current < args.end:
             break
         current -= timedelta(minutes=args.increment)
