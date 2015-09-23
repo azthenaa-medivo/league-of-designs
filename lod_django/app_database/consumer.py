@@ -44,7 +44,7 @@ class Consumer:
         return self.champions_collection.update_one({'_id': ObjectId(c_id)}, {'$set': data})
 
     @postimport('articles_postimport.js')
-    def update_article(self, data, auto_pi=True):
+    def update_article(self, data):
         """Update article with Mongo id with $set: data and map it to its related champion if specified.
         Also generates a proper url_id if needed. If auto_pi is True, we will also execute the map/reduce
         operations."""

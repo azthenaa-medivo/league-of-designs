@@ -21,8 +21,8 @@ class NewArticleForm(Form):
     title = CharField(required=True, widget=TextInput(attrs={'size': '60'}))
     url_id = CharField(required=False, widget=TextInput(attrs={'size': '60'}))
     author = CharField()
-    champion = ChoiceField(choices=itertools.chain(((c['_id'], c['name']) for c in
-                                    list(consumer.get_champions(projection={'_id': 1, 'name': 1}))), (('None', '--- None ---'),)))
+    champion = ChoiceField(choices=itertools.chain((('None', '--- None ---'),), ((c['name'], c['name']) for c in
+                                    list(consumer.get_champions(projection={'name': 1}))),))
     type = ChoiceField(choices=ARTICLE_TYPE, required=True, initial='General')
     # We'll add 'created' and 'last_edited' fields alla mano.
     contents = CharField(required=True, widget=Textarea(attrs={'cols': '120', 'rows': 20}))

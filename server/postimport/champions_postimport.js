@@ -6,10 +6,11 @@ function generateSearchString(text) {
         init = buildInitials(s);
         if (init != false)
         {
-            return text + ' ' + text.toLowerCase() + ' ' + init;
+            text = text + ' ' + init;
         }
     }
-    return text + ' ' + text.toLowerCase();
+    text = text.replace(cleanse_regex, '').trim().replace(/\s+/g, ' ');
+    return text;
 }
 
 function buildInitials(textArray) {
@@ -18,61 +19,53 @@ function buildInitials(textArray) {
     {
        initials += textArray[i][0];
     }
-    // Check for words to cleanse
-    for (i=0;i<cleanse_words.length;i++)
-    {
-        if (initials.toLowerCase() === cleanse_words[i])
-        {
-            return false;
-        }
-    }
-    return initials + ' ' + initials.toLowerCase() + ' ' + initials[0].toUpperCase() + initials[1].toLowerCase();
+    return initials;
 }
 
-var cleanse_words = ['my',]
+var cleanse_words = ['my', 'miss'];
+var cleanse_regex = new RegExp('\\b('+cleanse_words.join('|')+')\\b', 'gi');
 
 var special_champion_names = {
     'Amumu': 'mumu',
     'Blitzcrank': 'bc bitchcrank',
-    'Caitlyn': 'Cait cait',
-    'Cassiopeia': 'Cass cass',
+    'Caitlyn': 'cait',
+    'Cassiopeia': 'cass',
     'Cho\'Gath': 'nomnomnom',
-    'Evelynn': 'Eve eve',
-    'Ezreal': 'Ez ez',
-    'Fiddlesticks': 'Fiddle fiddle',
-    'Gangplank': 'GP gp Gp',
-    'Heimerdinger': 'Heimer heimer donger ヽ༼ຈل͜ຈ༽ﾉ',
-    'Jarvan IV': 'j4 J4',
-    'Kassadin': 'Kass kass',
-    'Katarina': 'Kata kata',
-    'LeBlanc': 'lb LB',
-    'Leona': 'Leo leo',
-    'Lissandra': 'Liss liss',
-    'Lucian': 'Losian',
+    'Ezreal': 'ez',
+    'Fiddlesticks': 'fiddle',
+    'Gangplank': 'gp',
+    'Heimerdinger': 'heimer donger ヽ༼ຈل͜ຈ༽ﾉ',
+    'Jarvan IV': 'j4',
+    'Kassadin': 'kass',
+    'Katarina': 'kata',
+    'LeBlanc': 'lb',
+    'Leona': 'leo',
+    'Lissandra': 'liss',
+    'Lucian': 'losian',
     'Lux': 'finales funklen',
-    'Maokai': 'ayyy lemao Mao mao',
+    'Maokai': 'ayyy lemao mao',
     'Mordekaiser': 'morde kaiser',
-    'Morgana': 'Morg morg',
+    'Morgana': 'morg',
     'Nasus': 'doge',
-    'Nautilus': 'Naut naut',
-    'Nidalee': 'Nida nida',
-    'Nocturne': 'Noc noc',
-    'Pantheon': 'Panth panth',
-    'Quinn': 'Valor valor squak',
-    'Renekton': 'Renek renek',
+    'Nautilus': 'naut',
+    'Nidalee': 'nida',
+    'Nocturne': 'noc',
+    'Pantheon': 'panth',
+    'Quinn': 'valor squak',
+    'Renekton': 'renek',
     'Riven': 'OPSHIT',
-    'Sejuani': 'Seju seju',
-    'Shyvana': 'Shyv shyv',
+    'Sejuani': 'seju',
+    'Shyvana': 'shyv',
     'Soraka': 'raka',
     'Taric': 'outrageous',
     'Teemo': 'satan 666',
-    'Tristana': 'trist Trist',
-    'Tryndamere': 'Trynda trynda Tryn trynd',
-    'Urgot': 'Urgod urgod',
-    'Vladimir': 'Vlad vlad',
-    'Volibear': 'Volibro volibro Voli voli',
-    'Warwick': 'WW ww',
-    'Wukong': 'Wu wu',
+    'Tristana': 'trist',
+    'Tryndamere': 'trynd',
+    'Urgot': 'urgod',
+    'Vladimir': 'vlad',
+    'Volibear': 'volibro voli',
+    'Warwick': 'ww',
+    'Wukong': 'wu',
 }
 
 var special_champion_resources = {

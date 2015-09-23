@@ -3,5 +3,5 @@
 
 <a href="{% url "champion" champion.url_id %}"><img class="mini-icon" alt="{{ champion.name }}" title="{{ champion.name }}" src="{% static "images/portraits/" %}{{champion.portrait}}"></img></a>
 <span class="hidden">
-    {{ champion.name }}
+    {{ champion.name }} {{champion.search}}
 </span>

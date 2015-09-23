@@ -4,13 +4,14 @@ print('postimport:articles');
 
 db.mr_champions.find().forEach(function(res) {
     var articles = [];
-    db.articles.find({'champion': res['_id'].str}).forEach(function(a) {
+    db.articles.find({'champion': res['name']}).forEach(function(a) {
         var a_up = {'$set': {
             'champion_data': {
                 '_id': res['_id'],
                 'name': res['name'],
                 'url_id': res['url_id'],
                 'portrait': res['portrait'],
+                'search': res['search'],
         }}};
         articles.push({
             'title': a['title'],

@@ -96,9 +96,8 @@ def view_articles_list(request):
 @login_required
 @render_to('article_edit.html')
 def edit_article(request, article_id):
-    # Okay *maybe* a bit of cleanup would be <good>... <GOOD VERY GOOD ONE MORE!!!!>
+    # Okay *maybe* a bit of cleanup would be <good>... <GOOD VERY GOOD ONE MORE!!!!> ahaha.wav
     champion = None
-    context = {}
     # If we're saving an article
     if request.method == 'POST':
         if request.POST.get('champion') is not None:

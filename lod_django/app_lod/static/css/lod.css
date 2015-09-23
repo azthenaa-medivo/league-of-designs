@@ -207,6 +207,7 @@ a.no-underline:hover {
 
 #champions-grid-search {
     width: 200px;
+    margin-right: 10px;
 }
 
 #champions-grid img {

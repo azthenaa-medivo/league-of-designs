@@ -20,8 +20,12 @@ Champions -
         <div class="row">
             <div class="col-md-12">
                 <h3>Search</h3>
-                <input id="champions-grid-search" type="text" placeholder="Who you want me show ?">
-                <span id="error-message"></span>
+                <div class="row">
+                    <div class="col-md-12 form-inline">
+                        <input id="champions-grid-search" class="form-control" type="text" placeholder="Who you want me show ?">
+                        <label id="error-message" for="champions-grid-search" class="control-label">...</label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -29,7 +33,7 @@ Champions -
     <div id="champions-grid">
         <ul class="small-block-grid-5 medium-block-grid-6">
             {% for c in champions %}
-                <li id="{{c.name}}" class="champion-block text-center" data-search="{{c.search}} {% for tag in c.tags %}{{tag}} {% endfor %}">
+                <li id="{{c.name}}" class="champion-block text-center" data-search="{{c.name}} {{c.search}} {% for tag in c.tags %}{{tag}} {% endfor %}">
                     <a href="{% url "champion" c.url_id %}" class="no-underline">
                         <div>
                             <img src="{% static "images/portraits/" %}{{c.portrait}}"></img>
