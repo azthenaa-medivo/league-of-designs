@@ -19,6 +19,7 @@
             "info": false,
             "lengthMenu": [[1], [1]],
             "dom": 'rt<"clear">',
+            "order": [[ 1, "asc" ]],
             "language": {
                 "search": "Search:",
                 "zeroRecords": "Wait, <i>WHO</i> ?"
@@ -42,8 +43,7 @@
                 window.open(rowData[3], '_self');
             }
             $('#champions-navbar').removeClass('hidden');
-            champNav.search($(this).val());
-            champNav.draw();
+            champNav.column(4).search($(this).val()).draw();
         });
         // Hide everything if out of focus.
         $('#champion-navbar-search input').focusout(function() {
