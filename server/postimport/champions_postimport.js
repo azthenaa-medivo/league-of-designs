@@ -1,6 +1,7 @@
 function generateSearchString(text) {
     // Produces a string used to search with CSS selectors !
     var s = text.split(/['\s]/g);
+    text = '\"'+text+'\"';
     if (s.length != 1)
     {
         init = buildInitials(s);
@@ -22,7 +23,7 @@ function buildInitials(textArray) {
     return initials;
 }
 
-var cleanse_words = ['my', 'miss', 'master'];
+var cleanse_words = ['my',];
 var cleanse_regex = new RegExp('\\b('+cleanse_words.join('|')+')\\b', 'gi');
 
 var special_champion_names = {
@@ -34,7 +35,7 @@ var special_champion_names = {
     'Ezreal': 'ez',
     'Gangplank': 'gp',
     'Heimerdinger': 'heimer donger ヽ༼ຈل͜ຈ༽ﾉ',
-    'Jarvan IV': 'j4',
+    'Jarvan IV': 'jarvan j4',
     'Kassadin': 'kass',
     'Katarina': 'kata',
     'LeBlanc': 'lb',
