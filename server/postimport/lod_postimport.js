@@ -17,18 +17,26 @@ db.mr_champions.find().forEach(function(champion_res) {
                         'champions': {'$not': {'$in': [champion_res['name']]}}}).forEach(
                         function(red){
                             // Update champion data if it's not already done.
-                            op_r = db.mr_reds.update({'_id': red['_id'],},
-                                {
-                                    '$push': {
+                            // Check the tags
+                            var new_tags = [];
+                            var up_op_r = {'$push': {
                                             'champions_data': {
                                                 'name': champion_res['name'],
                                                 'url_id': champion_res['url_id'],
                                                 'portrait': champion_res['portrait'],
                                                 'search': champion_res['search'],
                                             },
-                                            'champions': champion_res['name']
-                                    },
-                            });
+                                            'champions': champion_res['name'],
+                            },};
+                            for (var t=0;t<champion_res['tags'].length;t++)
+                            {
+                                if (!(contains(new_tags, champion_res['tags'][t])))
+                                {
+                                    new_tags.push(champion_res['tags'][t]);
+                                }
+                            }
+                            up_op_r['$push']['tags'] = {'$each': new_tags};
+                            op_r = db.mr_reds.update({'_id': red['_id'],}, up_op_r);
                             // Taking care of the champions now.
                             update = {
                                         'post_id': red['post_id'],

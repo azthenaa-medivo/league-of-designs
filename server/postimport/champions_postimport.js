@@ -1,3 +1,5 @@
+load('utils.js');
+
 function generateSearchString(text) {
     // Produces a string used to search with CSS selectors !
     var s = text.split(/['\s]/g);
@@ -103,7 +105,6 @@ db.champions.find().forEach(function(res) {
     var new_champion = {'$set': {
             'name': res['name'],
             'title': res['title'],
-            'tags': res['tags'],
             'lore': res['lore'],
             'portrait': res['image']['full'],
             'riot_id': res['id'],
@@ -157,6 +158,12 @@ db.champions.find().forEach(function(res) {
         s = s + ' ' + special_champion_names[res['name']];
     }
     new_champion['$set']['search'] = s;
+    // ADC tag
+    if (contains(res['tags'], 'Marksman'))
+    {
+        res['tags'].push('ADC');
+    }
+    new_champion['$set']['tags'] = res['tags'];
     // Init Rioter Counter
     new_champion['$set']['rioter_counter'] = [];
     bulk.find({'name': res['name']}).upsert().updateOne(new_champion);

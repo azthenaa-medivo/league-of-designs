@@ -31,6 +31,16 @@ db.reds.find().forEach(function(res) {
         'thread': post_thread,
         'section': post_section,
         'is_glorious': contains(glorious_sections, post_section),
+        'tags': [],
+    }
+    // Check for tags !
+    for (i=0;i<tags.length;i++)
+    {
+        var regexTest = new RegExp("\\b" + tags[i] + "\\b", "gi");
+        if (regexTest.test(new_post['contents']) || regexTest.test(new_post['thread']))
+        {
+           new_post['tags'].push(tags[i]);
+        }
     }
     bulk.find({'post_id': res['post_id']}).upsert().update({'$set': new_post});
 });
