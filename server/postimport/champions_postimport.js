@@ -32,7 +32,7 @@ var special_champion_names = {
     'Caitlyn': 'cait',
     'Cassiopeia': 'cass',
     'Cho\'Gath': 'nomnomnom cho gath',
-    'Dr. Mundo': 'mundo'
+    'Dr. Mundo': 'mundo',
     'Ezreal': 'ez',
     'Gangplank': 'gp',
     'Heimerdinger': 'heimer donger ヽ༼ຈل͜ຈ༽ﾉ',
