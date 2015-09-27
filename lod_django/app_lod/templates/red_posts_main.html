@@ -75,6 +75,7 @@ Red Posts -
             var template_region = Handlebars.compile($("#handlebars-region").html());
             var template_rioter = Handlebars.compile($("#handlebars-rioter").html());
             var template_thread = Handlebars.compile($("#handlebars-thread").html());
+            var template_tags = Handlebars.compile($("#handlebars-tags").html());
             // Then ready the Red Table !
             var language = '<b><img src="{% static "images/loading.gif" %}" width="40px" alt="Loading" title="Loading"></img> Getting all them Red Posts... (If it takes forever it might mean there aren\'t any.)</b>';
             var redTable = $('#red-table').DataTable({
@@ -110,6 +111,9 @@ Red Posts -
                     }},
                     { "data": "region" },
                     { "data": "is_glorious" },
+                    { "render": function( data, type, full, meta ) {
+                        return template_tags(full);
+                    }},
                 ],
                 "order": [[ 2, "desc" ]],
                 "language": {
@@ -120,7 +124,7 @@ Red Posts -
                 "order": [[ 1, "desc" ]],
                 "columnDefs": [
                 {
-                    "targets": [ 5, 6 ],
+                    "targets": [ 5, 6, 7 ],
                     "visible": false,
                 },
                 ],

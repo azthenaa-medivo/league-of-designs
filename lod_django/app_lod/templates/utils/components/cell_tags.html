@@ -1,0 +1,14 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-tags{% endblock %}
+
+{% block template %}
+{% load staticfiles %}
+{% verbatim %}
+<div class="text-center">
+{{#each tags }}
+    {{this}}
+{{/each}}
+</div>
+{% endverbatim %}
+{% endblock %}
