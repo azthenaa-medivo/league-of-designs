@@ -223,10 +223,11 @@ a.no-underline:hover {
 
 .fixed-below-navbar {
     position: fixed;
-    width: 1140px;
+    width: inherit;
     top: 50px;
+    z-index: 9;
     background-color: #ffffff;
-    padding-bottom: 15px;
+    padding-top: 5px;
     border-bottom: 1px solid grey;
 }
 
@@ -280,6 +281,34 @@ tr[data-href] {
 
 .medium-icon {
     width: 60px;
+}
+
+img.formIcon {
+    width: 16px;
+}
+
+/* Red Posts Search */
+
+.searchChampionIcon {
+    cursor: pointer;
+    opacity: 1;
+    width: 32px;
+}
+
+.searchChampionIcon:hover {
+    border: 2px solid darkred;
+}
+
+#id_champions[class*="block-grid-"] > li {
+    padding: 1px;
+    margin-left: 0px;
+    margin-right: 0px;
+    text-align: center;
+}
+
+.formScrolls ul {
+    max-height: 170px;
+    overflow-y: scroll;
 }
 
 /* http://jsfiddle.net/panman8201/mkzrm/10/ */

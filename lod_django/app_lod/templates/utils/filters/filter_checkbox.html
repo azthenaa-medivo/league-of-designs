@@ -1,8 +1,9 @@
 <div class="row">
 {% for filter, label in types %}
     <div class="col-md-{{colmd}} filterCheckbox">
-        <input class="{{name}}" value="{{filter}}" type="checkbox" name="{{filter}}">
-        <label for="{{filter}}">{{label}}</label>
+        <label class="checkbox-inline" for="{{filter}}">
+            <input class="{{name}}" value="{{filter}}" type="checkbox" name="{{filter}}"> {{label}}
+        </label>
     </div>
 {% endfor %}
 </div>

@@ -1,3 +1,4 @@
+import datetime
 from bson import ObjectId
 from json import JSONEncoder
 from django.shortcuts import render_to_response
@@ -51,6 +52,8 @@ class JSONObjectIdEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, ObjectId):
             return str(o)
+        if isinstance(o, datetime.datetime):
+            return o.isoformat()
         return JSONEncoder.default(self, o)
 
 def to_markdown(string):

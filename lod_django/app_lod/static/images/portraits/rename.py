@@ -4,5 +4,5 @@
 import os
 for filename in os.listdir("."):
     if filename.endswith(".png"):
-        groups = filename.split('_')
-        os.rename(filename, groups[0] + '.png')
+        groups = filename.split('.')
+        os.rename(filename, groups[0].capitalize() + '.png')

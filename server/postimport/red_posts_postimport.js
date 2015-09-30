@@ -26,7 +26,7 @@ db.reds.find().forEach(function(res) {
         'url': post_url,
         'rioter': digInto['user']['name'],
         'region': res['region'].toUpperCase(),
-        'date': digInto['createdAt'],
+        'date': new Date(digInto['createdAt']),
         'contents': digInto['message'],
         'thread': post_thread,
         'section': post_section,

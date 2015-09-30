@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}
+Search -
+{% endblock %}
+
+{% block header %}
+    <h1>Search Red Posts</h1>
+{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block contents %}
+    {% load staticfiles %}
+    {% load template_tags %}
+    <form method="GET" action="{% url "red-posts" %}">
+        <div class="container">
+              <div id="topRowFixed" class="row">
+            <div class="col-md-2 text-center">
+                <div>
+                    {{form.is_and.label}} {% include "utils/help_text.html" with text=form.is_and.help_text placement="bottom" %}
+                </div>
+                <div>
+                    {{form.is_and}}
+                </div>
+                {{form.all}}
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary btn-block">Search</button>
+            </div>
+            <div id="searchSummary" class="col-md-7">
+                <ul>
+                    <li>If "Match All" is unchecked, additional search strings will <b>not</b> be included in the search.</li>
+                </ul>
+            </div>
+        </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <h3>{{form.champions.label}}</h3>
+                <div class="row bot15">
+                    <div class="col-md-1">
+
+                    </div>
+                    <div class="col-md-10">
+                        <div class="input-group bot15">
+                            <span class="input-group-addon btn btn-default" id="clear_champion-filter">Clear</span>
+                            <input type="text" id="champion-filter" class="form-control" placeholder="Find champion...">
+                        </div>
+                        {{form.champions}}
+                    </div>
+                    <div class="col-md-1">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 formScrolls">
+                <h3>{{form.tags.label}}</h3>
+                {{form.tags}}
+                <h3>{{form.section.label}}</h3>
+                {{form.section}}
+                <h3>{{form.region.label}}</h3>
+                {{form.region}}
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>{{form.date_before.label}}</h3>
+                        {{form.date_before}}
+                    </div>
+                    <div class="col-md-6">
+                        <h3>{{form.date_after.label}}</h3>
+                        {{form.date_after}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>{{form.rioter.label}} {% include "utils/help_text.html" with text=form.rioter.help_text placement="top" %}</h3>
+                        {{form.rioter}}
+                        <div id="rioters-list"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>{{form.search.label}} {% include "utils/help_text.html" with text=form.search.help_text placement="top" %}</h3>
+                        {{form.search}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function() {
+            // I'm pretty sure I can condense all that. Well another day maybe~ NOW IT'S DONE HUE
+            var url_portraits = "{% static "images/portraits/" %}";
+            var url_icons = "{% static "images/icons/" %}";
+
+            // Champions
+            buttonize('#id_champions input', function(o) { var champ = o.val(); return '<img class="searchChampionIcon" title="'+champ+'" data-ref="'+champ+'" src="'+url_portraits+capitalize(champ.replace(/\W/g, '').toLowerCase())+'.png"></img>'; }, '#id_champions', 'medium-block-grid-9 small-block-grid-8');
+            $('.searchChampionIcon').css({'opacity':'0.4'});
+            $('.searchChampionIcon').click(function() {
+                ref = $(this).attr('data-ref');
+                rel = $('input[value="'+ref+'"]');
+                if (rel.is(':checked'))
+                {
+                    $(this).animate({'opacity':'0.4'}, 250);
+                } else {
+                    $(this).animate({'opacity':'1'}, 250);
+                }
+                rel.click();
+                stats['champions'] = $('#id_champions input:checked').length;
+            });
+
+            $('#champion-filter').bind('keyup', function(e) {
+                val = $('#champion-filter').val();
+                $('#id_champions input').each(function() {
+                    if ($(this).attr('value').toLowerCase().indexOf(val.toLowerCase()) === -1)
+                    {
+                        $(this).parent().parent().hide();
+                    } else {
+                        $(this).parent().parent().show();
+                    }
+                });
+            });
+
+            $('#clear_champion-filter').click(function() {
+                $('#champion-filter').val('').trigger('keyup');
+            });
+
+            // Rioters
+
+            $('#id_rioter').change(function() {
+                var list = $('#id_rioter > option:selected').map(function() { return $(this).val(); }).get();
+                $('#rioters-list').text(list.length + ' Rioter'+(list.length > 1 ? 's':'')+' selected (' + list.slice(0, 10).join(', ') + (list.length > 10 ? ' (+'+(list.length-10)+' others...':'') + ').');
+            });
+
+            // Sections
+            buttonize('#id_section input', function(o) { var section = o.val(); return '<button type="button" data-ref="'+section+'" class="btn-form btn btn-default btn-block">'+section+'</button>' }, '#id_section', 'medium-block-grid-4 small-block-grid-4');
+
+            // Tags
+            buttonize('#id_tags input', function(o) { var tag = o.val(); return '<button type="button" data-ref="'+tag+'" class="btn-form btn btn-default btn-block"><img class="formIcon" title="'+tag+'" src="'+url_icons+tag+'.jpg"></img> '+tag+'</button>' }, '#id_tags', 'medium-block-grid-4 small-block-grid-4');
+
+            // Regions
+            buttonize('#id_region input', function(o) { var r = o.val(); return '<button type="button" data-ref="'+r+'" class="btn-form btn btn-default btn-block">'+r+'</button>' }, '#id_region', 'medium-block-grid-4 small-block-grid-4');
+
+            // Usable buttons
+            $('.btn-form').click(function() {
+                $('input[value="'+$(this).attr('data-ref')+'"]').click();
+                $(this).toggleClass('active btn-success btn-default');
+            });
+
+            var d = $(".datePicker").datepicker({'dateFormat': 'dd/mm/yy'});
+
+            // Activate tooltips
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        });
+    </script>
+    <script>
+        $(document).scroll(function() {
+            var detect = 100;
+            if ($(document).scrollTop() >= detect)
+            {
+                $('#topRowFixed').addClass('fixed-below-navbar');
+            } else {
+                $('#topRowFixed').removeClass('fixed-below-navbar');
+            }
+        });
+    </script>
+{% endblock %}

@@ -14,7 +14,7 @@ Red Posts -
 {% block contents %}
     {% load staticfiles %}
     {% load template_tags %}
-    <div class="col-md-12">
+    <div class="col-md-12 bot15">
         <div class="col-md-4">
             <h3>Filter by Rioter</h3>
             <form method="#" action="#" id="filterForm">
@@ -43,17 +43,17 @@ Red Posts -
         </div>
         {% endif %}
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            If a Rioter has no Red Posts associated, it means LoD didn't <span id="wowUP">detect a champion design conversation</span>. <span class="hidden" id="wow">wowsoSTALKED</span>
-            <br>
-            {% if not all %}
-                <a href="{% url 'red-posts' %}?all=1">Show all Red Posts regardless of their theme (including Art, dank memes, etc.).</a>
-            {% else %}
-                <a href="{% url 'red-posts' %}">Show Red Posts only from champion designs Boards
-                    (Gameplay & Balance, Champions & Gameplay, Maps & Modes).</a>
-            {% endif %}
-        </div>
+    <div class="col-md-12">
+        <a href="{% url "red-posts-search" %}">
+            <button type="button" class="btn btn-default">More search options...</button>
+        </a>
+        <br>
+        {% if not all %}
+            <a href="{% url 'red-posts' %}?all=1">Show all Red Posts regardless of their theme (including Art, dank memes, etc.).</a>
+        {% else %}
+            <a href="{% url 'red-posts' %}">Show Red Posts only from champion designs Boards
+                (Gameplay & Balance, Champions & Gameplay, Maps & Modes).</a>
+        {% endif %}
     </div>
     <hr>
     {% csrf_token %}
@@ -84,7 +84,8 @@ Red Posts -
                     "type": "GET",
                     "data": {
                         "all": "{{request.GET.all}}",
-                        {% if request.GET.search %}"search": "{{request.GET.search}}",{% endif %}
+                        {% for g in get_data %}{% if get_data|get:g %}"{{g}}": {{get_data|get:g|print_js | safe}},{% endif %}
+                        {% endfor %}
                     },
                 },
                 "columns": [
@@ -149,28 +150,21 @@ Red Posts -
             $('.design-only').change(function() {
                 redTable.column(6).search($(this).is(':checked') ? 'true':'').draw();
             });
+
+            // Hey !
+            $('#red-table_wrapper > .top').wrapInner('<div class="container"></div>');
         } );
     </script>
     <!-- Lock the search bar when scrolling -->
     <script>
         $(document).scroll(function() {
-            var detect = 150;
+            var detect = 230;
             if ($(document).scrollTop() >= detect)
             {
                 $('#red-table_wrapper > .top').addClass('fixed-below-navbar');
             } else {
                 $('#red-table_wrapper > .top').removeClass('fixed-below-navbar');
             }
-        });
-    </script>
-    <!-- wowsoSTALKING -->
-    <script>
-        $(document).ready(function() {
-            $('#wowUP').hover(function() {
-                $('#wow').removeClass('hidden');
-            }, function() {
-                $('#wow').addClass('hidden');
-            });
         });
     </script>
 {% endblock %}

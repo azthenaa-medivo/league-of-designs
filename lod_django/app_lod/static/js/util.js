@@ -76,3 +76,20 @@ function generateHexColor()
 {
 	return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
 }
+
+function capitalize(s)
+{
+    return s[0].toUpperCase() + s.slice(1);
+}
+
+// Buttonize Django CheckboxSelectMultiple Forms. param:element is expected to be a function (anonymous ?)
+function buttonize(selector, element, what_class, add_class) {
+    $(selector).each(function() {
+        $(this).parent().first().addClass('hidden');
+        $(this).parent().parent().first().append(element($(this)));
+        if (add_class != undefined && what_class != undefined)
+        {
+            $(what_class).addClass(add_class);
+        }
+    });
+}

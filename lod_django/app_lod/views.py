@@ -1,10 +1,9 @@
 __author__ = 'artemys'
 
-import json
 from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown
 from app_database.consumer import Consumer
 from .models import ARTICLE_TYPE, ROLES, REGIONS, GLORIOUS_SECTIONS
-from .forms import ChampionForm, ArticleForm, NewArticleForm
+from .forms import ChampionForm, ArticleForm, NewArticleForm, RedPostDetailedSearchForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
@@ -28,21 +27,29 @@ def view_red_posts(request):
     boards_sections = request.GET.get('all')
     if request.is_ajax():
         the_query = {}
-        q = request.GET.get('search')
-        if q and q != '':
-            the_query['$text'] = {'$search': q}
-        if not boards_sections:
-            the_query['section'] = {'$in': GLORIOUS_SECTIONS}
+        if boards_sections == 'S':
+            form = RedPostDetailedSearchForm(request.GET)
+            if form.is_valid():
+                the_query = form.get_search()
         else:
-            the_query['$or'] = [{'champions': {'$exists': 1}},
-                                {'section': {'$in': GLORIOUS_SECTIONS}}]
+            if not boards_sections:
+                the_query['section'] = {'$in': GLORIOUS_SECTIONS}
+            else:
+                the_query['$or'] = [{'champions': {'$exists': 1}},
+                                    {'section': {'$in': GLORIOUS_SECTIONS}}]
+
         reds = consumer.get_red_posts(query=the_query, limit=0)
         data = list(reds)
         for d in data:
             d['contents'] = to_markdown(d['contents'])
         return HttpResponse(JSONObjectIdEncoder().encode({'data': data}), content_type='application/json')
     rioters = consumer.get_rioters()
-    return {'rioters': rioters, 'all': not not boards_sections, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
+    form = RedPostDetailedSearchForm(request.GET)
+    return {'rioters': rioters, 'get_data': form.cleaned_data if form.is_valid() else None, 'all': not not boards_sections, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
+
+@render_to('red_posts_search.html')
+def view_red_posts_search(request):
+    return {'form': RedPostDetailedSearchForm()}
 
 @render_to('about.html')
 def view_about(request):

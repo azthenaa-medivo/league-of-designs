@@ -8,22 +8,19 @@ Champions -
     <h1>The Champions</h1>
 {% endblock %}
 
-{% block css %}
-    {% load staticfiles %}
-    <link href="{% static "css/foundationTest.css" %}" rel="stylesheet">
-{% endblock %}
-
 {% block contents %}
     {% load staticfiles %}
     {% load template_tags %}
-    <div id="search-row">
-        <div class="row">
-            <div class="col-md-12">
-                <h3>Search</h3>
-                <div class="row">
-                    <div class="col-md-12 form-inline">
-                        <input id="champions-grid-search" class="form-control" type="text" placeholder="Who you want me show ?">
-                        <label id="error-message" for="champions-grid-search" class="control-label">...</label>
+    <div class="container">
+        <div id="search-row">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Search</h3>
+                    <div class="row">
+                        <div class="col-md-12 form-inline">
+                            <input id="champions-grid-search" class="form-control" type="text" placeholder="Who you want me show ?">
+                            <label id="error-message" for="champions-grid-search" class="control-label">...</label>
+                        </div>
                     </div>
                 </div>
             </div>

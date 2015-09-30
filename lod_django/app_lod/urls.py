@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^$', views.view_home, name="home"),
     url(r'^about$', views.view_about, name="about"),
     url(r'^red-posts$', views.view_red_posts, name="red-posts"),
+    url(r'^red-posts/search$', views.view_red_posts_search, name="red-posts-search"),
     url(r'^rioters$', views.view_rioters, name="rioters"),
     url(r'^champions$', views.view_champions_grid, name="champions-grid"),
     url(r'^champion/(?P<url_id>[\w]*)$', views.view_champion, name="champion"),

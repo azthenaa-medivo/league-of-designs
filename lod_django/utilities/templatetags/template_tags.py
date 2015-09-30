@@ -14,6 +14,16 @@ register = template.Library()
 def get_filter(d, k):
     return d.get(k, None)
 
+@register.filter(name="print_js")
+def print_rightfully(data):
+    if isinstance(data, datetime):
+        return '"'+data.strftime("%d/%m/%Y")+'"'
+    if isinstance(data, str):
+        return '"'+data+'"'
+    if isinstance(data, bool):
+        return str(data).lower()
+    return data
+
 @register.filter(name="int")
 def integer_filter(i):
     try:

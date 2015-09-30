@@ -1,7 +1,7 @@
 {% load template_tags %}
 <div class="row">
-    <div class="col-md-2">
-        <select id="{{id}}">
+    <div class="col-md-12">
+        <select class="form-control" id="{{id}}">
             <option value="">--- All ---</option>
             {% for option in list %}
             {% if option|get:sub != 0 %}

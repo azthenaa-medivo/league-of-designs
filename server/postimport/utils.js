@@ -29,3 +29,8 @@ function getElementMatching(array, field, value)
     }
     return null;
 }
+
+function capitalize(s)
+{
+    return s[0].toUpperCase() + s.slice(1);
+}

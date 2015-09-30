@@ -19,6 +19,8 @@
     <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
     <link href="{% static "bootstrap/css/bootstrap-theme.min.css" %}" rel="stylesheet">
     <link href="{% static "css/dataTables.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/jquery-ui.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/foundationTest.css" %}" rel="stylesheet">
     {% block css %}{% endblock %}
     <link href="{% static "css/lod.css" %}" rel="stylesheet">
 </head>
@@ -45,7 +47,13 @@
                     <li id="li-red-posts" class="{% active_page request "red-posts" %}"><a href="{% url "red-posts" %}"><i class="glyphicon glyphicon-education"></i> Red Posts</a></li>
                     <form class="navbar-form navbar-left" role="search" method="GET" action="{% url "red-posts" %}">
                         <div class="form-group">
-                            <input id="red-posts-navbar-search" name="search" type="text" class="form-control" placeholder="Search Red Post...">
+                            <div class="input-group">
+                                <!--<input id="red-posts-navbar-search" name="search" type="text" class="form-control" placeholder="Search Red Post...">-->
+                                {{navbarsearch.search}}
+                                {{navbarsearch.all}}
+                                <div class="hidden">{{navbarsearch.is_and}}</div>
+                                <span class="input-group-addon btn btn-default" id="to-search-page">Detailed search</span>
+                            </div>
                         </div>
                     </form>
                     <li id="li-champions" class="{% active_page request "champion" %}"><a href="{% url "champions-grid" %}"><i class="glyphicon glyphicon-queen"></i> Champions</a></li>
@@ -100,6 +108,7 @@
 
     <!-- JS wait there are many... oh well. Just download them once. -->
     <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/jquery-ui.min.js" %}"></script>
     <script src="{% static "js/jquery.highlight.js" %}"></script>
     <script src="{% static "js/jquery.color.js" %}"></script>
     <script src="{% static "js/js.cookie.js" %}"></script>
@@ -119,8 +128,15 @@
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
-        }
+        },
+        traditional: true,
     });
+    </script>
+    <script>
+        // To search page
+        $('#to-search-page').click(function() {
+            window.location = '{% url "red-posts-search" %}';
+        });
     </script>
     {% block js %}{% endblock %}
 

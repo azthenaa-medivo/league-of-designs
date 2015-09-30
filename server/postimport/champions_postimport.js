@@ -106,7 +106,7 @@ db.champions.find().forEach(function(res) {
             'name': res['name'],
             'title': res['title'],
             'lore': res['lore'],
-            'portrait': res['image']['full'],
+            'portrait': capitalize(url_id.toLowerCase())+'.png', // RIOT SANITIZE YOUR POOPOO DATA PLEASE
             'riot_id': res['id'],
             'url_id': url_id,
             'articles': [],

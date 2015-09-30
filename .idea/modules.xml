@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../interaca-marvel/.idea/interaca-marvel.iml" filepath="$PROJECT_DIR$/../interaca-marvel/.idea/interaca-marvel.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/league-of-designs.iml" filepath="$PROJECT_DIR$/.idea/league-of-designs.iml" />
     </modules>
   </component>
