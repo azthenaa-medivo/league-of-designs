@@ -31,6 +31,11 @@ def integer_filter(i):
     except ValueError:
         return i
 
+@register.filter(name="to_epoch_s")
+def to_epoch_s(d):
+    if isinstance(d, datetime):
+        return int(d.strftime('%s'))*1000
+
 @register.filter(name="markdown")
 def to_markdown_wrapper(string):
     return to_markdown(string)
