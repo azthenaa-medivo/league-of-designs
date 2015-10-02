@@ -30,7 +30,7 @@ Rioters -
                 <td>
                     {% with p=r.posts|last %}
                     In <a href="{{p.url}}">{{p.thread}}</a>
-                    ({% include "utils/date_span.html" with date=p.date %})
+                    ({% include "utils/date_span.html" with date=p.date|isoformat %})
                     {% endwith%}
                 </td>
             </tr>
