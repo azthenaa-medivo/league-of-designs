@@ -58,6 +58,6 @@ class JSONObjectIdEncoder(JSONEncoder):
 
 def to_markdown(string):
     if string is None:
-        return markdown("**LoD has encountered an error processing this post ! Rito pls fix**")
+        return markdown("**Click on the thread link to view this post !**")
     else:
         return markdown(string, extensions=[QuoteExtension()])
