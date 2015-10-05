@@ -12,7 +12,7 @@
     </div>
     <div class="red-rioter">
         <span class="rioter">{{red.rioter}}</span>,
-        {% include "utils/date_span.html" with date=red.date %} in thread <a href="{{red.url}}" target="_blank">{{red.thread}}</a>
+        {% include "utils/date_span.html" with date=red.date|isoformat %} in thread <a href="{{red.url}}" target="_blank">{{red.thread}}</a>
     </div>
     <div class="text-center red-champions">
         {% for c in red.champions_data %}

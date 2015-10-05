@@ -62,12 +62,12 @@ class RiotAPI:
         """Retrieves the latest Red Posts and puts them into the database."""
         if realms is None:
             realms = self.realms
-        total = 0
+        count = {realm: 0 for realm in realms}
         for realm in realms:
             data = self.get_red_posts(realm, parameters=parameters).json()
-            total += len(data)
+            count[realm] = len(data)
             self.store_red_posts(data, realm)
-        return total
+        return count
 
     def flush(self):
         self.champion_collection.drop()

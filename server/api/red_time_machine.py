@@ -23,13 +23,16 @@ if __name__ == '__main__':
     log.info('End date : ' + args.end.isoformat())
     log.info('Check every %d minutes' % args.increment)
     api = RiotAPI()
+    realms = api.realms
     # stats
     loops = 0
     while True:
         loops += 1
         log.info("Loop %d, time is %s" %(loops, current.isoformat()))
-        res = api.get_red_posts_and_store(parameters={'created_to': current.isoformat()})
-        if res == 0 or current < args.end:
+        res = api.get_red_posts_and_store(realms=realms, parameters={'created_to': current.isoformat()})
+        realms = [realm for realm, count in res.items() if count != 0]
+        log.info("Pursuing for realms " + str(realms)+"...")
+        if len(realms) == 0 or current < args.end:
             break
         current -= timedelta(minutes=args.increment)
     print('Done. %d loops.' % loops)
