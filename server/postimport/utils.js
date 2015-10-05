@@ -1,6 +1,7 @@
 print('load:utils.js');
 
-var glorious_sections = ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes", "Champions & Gameplay Feedback"];
+var glorious_sections = ["Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",  "Live Gameplay Balance",
+                            "Champions & Gameplay Feedback"];
 var tags = ["rework", "buff", "nerf"];
 
 function contains(array, value) {
