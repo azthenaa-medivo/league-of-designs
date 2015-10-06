@@ -4,10 +4,10 @@ import string
 from django.forms import Form, CharField, ChoiceField, MultipleChoiceField, Textarea, HiddenInput, TextInput, \
                             DateTimeField, DateInput, BooleanField, CheckboxSelectMultiple, SelectMultiple
 from .models import STATUS, ARTICLE_TYPE, TAGS, ROLES, ALL_SECTIONS, REGIONS, DATE_FORMATS
-from app_database.consumer import Consumer
+from app_database.consumer import LoDConsumer
 from utilities.mixins import MongoSearchForm
 
-consumer = Consumer()
+consumer = LoDConsumer('lod')
 
 class ChampionForm(Form):
     _id = CharField(widget=HiddenInput)
@@ -26,7 +26,7 @@ class NewArticleForm(Form):
     url_id = CharField(required=False, widget=TextInput(attrs={'size': '60'}))
     author = CharField()
     champion = ChoiceField(choices=itertools.chain((('None', '--- None ---'),), ((c['name'], c['name']) for c in
-                                    list(consumer.get_champions(projection={'name': 1}))),))
+                                    list(consumer.get('mr_champions', projection={'name': 1}))),))
     type = ChoiceField(choices=ARTICLE_TYPE, required=True, initial='General')
     # We'll add 'created' and 'last_edited' fields alla mano.
     contents = CharField(required=True, widget=Textarea(attrs={'cols': '120', 'rows': 20}))
@@ -49,10 +49,10 @@ class MiniRedPostSearchForm(MongoSearchForm):
 
 class RedPostDetailedSearchForm(MongoSearchForm):
     champions = MultipleChoiceField(choices=((c['name'], c['name']) for c in
-                                    list(consumer.get_champions(projection={'name': 1}))),
+                                    list(consumer.get('mr_champions', projection={'name': 1}))),
                                     widget=CheckboxSelectMultiple, required=False, label="Champions")
     rioter = MultipleChoiceField(choices=itertools.chain(((item['name'], item['name']) for item in
-                                    list(consumer.get_rioters(projection={'name': 1}))),), required=False,
+                                    list(consumer.get('mr_rioters', projection={'name': 1}))),), required=False,
                                     widget=SelectMultiple(attrs={'class': 'form-control'}),
                                     help_text="Hold Ctrl to select multiple Rioters in the list or unselect one.",
                                     label="Rioters")

@@ -1,7 +1,7 @@
 import json
 from .forms import RedPostDetailedSearchForm
 from app_lod.models import GLORIOUS_SECTIONS
-from app_database.consumer import Consumer
+from app_database.consumer import MongoConsumer
 from django.http import HttpResponse
 from utilities.snippets import JSONObjectIdEncoder, to_markdown
 
@@ -19,7 +19,7 @@ class DataTablesRedPostsServer(object):
         self.dt_search = tmp_args['search']
         self.dt_sorting = tmp_args['order']
         self.dt_query = tmp_args['query'] if 'query' in tmp_args else {}
-        self.consumer = Consumer()
+        self.consumer = MongoConsumer('lod')
         # Returned values
         self.draw = tmp_args['draw']
         self.query = {}
@@ -33,10 +33,10 @@ class DataTablesRedPostsServer(object):
         if self.dt_query is not None:
             self.filter()
         self.sort()
-        self.result_data = self.consumer.get_red_posts(query=self.query, skip=self.dt_skip,
+        self.result_data = self.consumer.get(self.collection, query=self.query, skip=self.dt_skip,
                                                        limit=self.dt_length).sort(self.sorting)
         self.records_filtered = self.result_data.count()
-        self.records_total = self.consumer.get_red_posts().count()
+        self.records_total = self.consumer.get(self.collection).count()
         # We really need to make it more cool
         data = list(self.result_data)
         for d in data:

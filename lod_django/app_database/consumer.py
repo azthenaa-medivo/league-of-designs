@@ -6,42 +6,29 @@ from pymongo import MongoClient, DESCENDING, ASCENDING
 from bson.objectid import ObjectId
 from utilities.snippets import postimport
 
-class Consumer:
+class MongoConsumer:
     """We'll get everything using Python EVE later. I've got only
     one server, y'know."""
 
-    def __init__(self, address="127.0.0.1", port=27017):
+    def __init__(self, database, address="127.0.0.1", port=27017):
+        """Connect to a Database."""
         self.client = MongoClient(address, port)
-        self.champions_collection = self.client.lod.mr_champions
-        self.red_posts_collection = self.client.lod.mr_reds
-        self.articles_collection = self.client.lod.articles
-        self.rioters_collection = self.client.lod.mr_rioters
+        self.database = self.client[database]
 
-    def get_champions(self, query={}, projection=None, sort_field='name', sort_order=ASCENDING):
-        """Return a simple list of all Champions."""
-        return self.champions_collection.find(query, projection).sort(sort_field, sort_order)
+    def get_collection(self, collection):
+        return self.database[collection]
 
-    def get_champion(self, query, projection=None):
-        """Returns a single champion. If none is found, returns a random champion. (maybe)"""
-        # TODO : RANDOM CHAMPION GENERATOR
-        return self.champions_collection.find_one(query, projection)
+    def get(self, collection, query={}, projection=None, limit=0, sort_field='_id', sort_order=ASCENDING, *args, **kwargs):
+        return self.get_collection(collection).find(query, projection, *args, **kwargs).limit(limit).sort(sort_field, sort_order)
 
-    def get_red_posts(self, query={}, projection=None, limit=10, sort_field='date', sort_order=DESCENDING, *args, **kwargs):
-        """Returns the qty last Red Posts."""
-        return self.red_posts_collection.find(query, projection, *args, **kwargs).limit(limit).sort(sort_field, sort_order)
+    def get_one(self, collection, query={}, projection=None, *args, **kwargs):
+        return self.get_collection(collection).find_one(query, projection, *args, **kwargs)
 
-    def get_articles(self, query={}, limit=10, projection=None, sort_field='date_created', sort_order=DESCENDING):
-        """What could this method do ?"""
-        return self.articles_collection.find(query, projection).limit(limit).sort(sort_field, sort_order)
-
-    def get_article(self, query, projection=None):
-        """Return A Single Article."""
-        return self.articles_collection.find_one(query, projection)
-
+class LoDConsumer(MongoConsumer):
     def update_champion(self, data):
         """Update champion with Mongo id with $set: dict."""
         c_id = data.pop('_id', None)
-        return self.champions_collection.update_one({'_id': ObjectId(c_id)}, {'$set': data})
+        return self.database.mr_champions.update_one({'_id': ObjectId(c_id)}, {'$set': data})
 
     @postimport('articles_postimport.js')
     def update_article(self, data):
@@ -57,22 +44,18 @@ class Consumer:
         if article_id == "new":
             data['date_created'] = datetime.datetime.utcnow()
             res['op'] = 'i'
-            res['db'] = self.articles_collection.insert(data)
+            res['db'] = self.database.articles.insert(data)
         else:
             res['op'] = 'u'
-            res['db'] = self.articles_collection.update({'_id': ObjectId(article_id)}, {'$set': data}, upsert=True)
+            res['db'] = self.database.articles.update({'_id': ObjectId(article_id)}, {'$set': data}, upsert=True)
         return res
 
     @postimport('articles_postimport.js')
     def remove_article(self, query):
         """Remove whatever article is found by the Query. TO THE DEPTHS."""
-        res = self.articles_collection.remove(query)
+        res = self.database.articles.remove(query)
         return res
 
-    def get_rioters(self, query={}, projection=None, sort_field='name', sort_order=ASCENDING):
-        return self.rioters_collection.find(query, projection).sort(sort_field, sort_order)
-
 if __name__ == '__main__':
-    c = Consumer()
-    # t = [[c['_id'], c['name']] for c in list(c.get_champions(projection={'_id':1, 'name':1}))]
-    print(list(c.get_rioters()))
+    c = MongoConsumer('lod')
+    print(list(c.get('mr_champions')))

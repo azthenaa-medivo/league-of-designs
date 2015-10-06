@@ -50,9 +50,8 @@
                             <div class="input-group">
                                 <!--<input id="red-posts-navbar-search" name="search" type="text" class="form-control" placeholder="Search Red Post...">-->
                                 {{navbarsearch.search}}
-                                {{navbarsearch.all}}
                                 <div class="hidden">{{navbarsearch.is_and}}</div>
-                                <span class="input-group-addon btn btn-default" id="to-search-page">Detailed search</span>
+                                <a href="{% url "red-posts-search" %}" class="input-group-addon btn btn-default">Detailed search</a>
                             </div>
                         </div>
                     </form>
@@ -131,12 +130,6 @@
         },
         traditional: true,
     });
-    </script>
-    <script>
-        // To search page
-        $('#to-search-page').click(function() {
-            window.location = '{% url "red-posts-search" %}';
-        });
     </script>
     {% block js %}{% endblock %}
 

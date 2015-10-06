@@ -1,7 +1,7 @@
 __author__ = 'artemys'
 
 from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown
-from app_database.consumer import Consumer
+from app_database.consumer import LoDConsumer
 from .datatables_server import DataTablesRedPostsServer
 from .models import ARTICLE_TYPE, ROLES, REGIONS, GLORIOUS_SECTIONS
 from .forms import ChampionForm, ArticleForm, NewArticleForm, RedPostDetailedSearchForm
@@ -13,14 +13,15 @@ from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 
-consumer = Consumer()
+consumer = LoDConsumer('lod')
 
 @render_to('home.html')
 def view_home(request):
-    reds = consumer.get_red_posts(limit=5, query={'champions': {'$exists': True, '$ne': []},
+    reds = consumer.get('mr_reds', sort_field='date', sort_order=-1, limit=5,
+                        query={'champions': {'$exists': True, '$ne': []},
                                                   'region': 'NA',
                                                   'section' : {'$in': GLORIOUS_SECTIONS}})
-    articles = consumer.get_articles(limit=5, query={'type': 'News'})
+    articles = consumer.get('articles', limit=5, query={'type': 'News'})
     return {'reds': reds, 'articles': articles}
 
 @render_to('red_posts_main.html')
@@ -31,7 +32,7 @@ def view_red_posts(request):
         fields = ['rioter', 'date', 'thread', 'contents', 'champions', 'region', 'is_glorious', 'tags']
         results = DataTablesRedPostsServer(request, collection, fields).output_result()
         return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
-    rioters = consumer.get_rioters()
+    rioters = consumer.get('mr_rioters')
     param_is_and = True
     get_data = {}
     if len(request.GET) != 0:
@@ -50,7 +51,7 @@ def view_about(request):
 
 @render_to('champion.html')
 def view_champion(request, url_id):
-    champion = consumer.get_champion({'url_id':url_id})
+    champion = consumer.get_one('mr_champions', query={'url_id': url_id})
     if champion is None:
         return HttpResponseRedirect('/')
     return {'champion': champion, 'regions': zip(REGIONS, REGIONS)}
@@ -62,7 +63,7 @@ def view_champions_grid(request):
 @login_required
 @render_to('champion_edit.html')
 def edit_champion(request, url_id):
-    champion = consumer.get_champion({'url_id':url_id})
+    champion = consumer.get_one('mr_champions', query={'url_id':url_id})
     if champion is None:
         return {'champion': {'name':'Kappa'}}
     if request.method == 'POST':
@@ -80,17 +81,17 @@ def edit_champion(request, url_id):
 
 @render_to('rioters.html')
 def view_rioters(request):
-    rioters = consumer.get_rioters()
+    rioters = consumer.get('mr_rioters')
     return {'rioters': rioters}
 
 @render_to('article.html')
 def view_article(request, article_id):
-    article = consumer.get_article({'url_id': article_id})
+    article = consumer.get_one('articles', query={'url_id': article_id})
     return {'article': article}
 
 @render_to('articles_main.html')
 def view_articles_list(request):
-    articles = consumer.get_articles()
+    articles = consumer.get('articles')
     return {'articles': articles, 'types': ARTICLE_TYPE}
 
 @login_required
@@ -101,7 +102,7 @@ def edit_article(request, article_id):
     # If we're saving an article
     if request.method == 'POST':
         if request.POST.get('champion') is not None:
-            champion = consumer.get_champion({'url_id': request.GET.get('champion')})
+            champion = consumer.get_one('mr_champions', query={'url_id': request.GET.get('champion')})
         form = ArticleForm(request.POST)
         if form.is_valid():
             o = form.save()
@@ -117,10 +118,10 @@ def edit_article(request, article_id):
     else:
         if request.GET.get('champion') is not None:
             # Article about a champion
-            champion = consumer.get_champion({'url_id': request.GET.get('champion')})
+            champion = consumer.get_one('mr_champions', query={'url_id': request.GET.get('champion')})
         if request.GET.get('success') is not None:
             messages.add_message(request, messages.SUCCESS, 'Article was successfully created !', extra_tags='text-success')
-        article = consumer.get_article({'url_id': article_id})
+        article = consumer.get_one('articles', query={'url_id': article_id})
         if article is None:
             form = NewArticleForm({'champion': champion['_id'] if champion is not None else None, 'url_id': article_id,
                                    '_id': "new"})
@@ -131,7 +132,7 @@ def edit_article(request, article_id):
 @login_required
 @render_to('article_kill.html')
 def kill_article(request, article_id):
-    article = consumer.get_article(query={'url_id': article_id})
+    article = consumer.get_one('articles', query={'url_id': article_id})
     if article is not None:
         if request.method == 'GET':
             return {'next': request.GET.get('next'), 'article': article}
@@ -170,5 +171,5 @@ def view_login(request):
 @render_to('sitemap.html')
 def view_sitemap(request):
     """RENDER ALL THE DATA"""
-    articles = consumer.get_articles()
+    articles = consumer.get('articles')
     return {'articles': articles}
