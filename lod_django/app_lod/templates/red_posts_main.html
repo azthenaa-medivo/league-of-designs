@@ -70,7 +70,8 @@ Red Posts -
             var template_thread = Handlebars.compile($("#handlebars-thread").html());
             var template_tags = Handlebars.compile($("#handlebars-tags").html());
             // Then ready the Red Table !
-            var language = '<b><img src="{% static "images/loading.gif" %}" width="40px" alt="Loading" title="Loading"></img> Getting all them Red Posts... (If it takes forever it might mean there aren\'t any.)</b>';
+            var languageLoading = '<b><img src="{% static "images/lod/loading.gif" %}" width="40px" alt="Loading" title="Loading"></img> Getting all them Red Posts... (If it takes forever it might mean there aren\'t any.)</b>';
+            var languageNoRecords = '<b><img src="{% static "images/lod/ritopls.gif" %}" width="40px" alt="No Records" title="No Records"></img> No Red Post matched your criteria...</b>';
             var redTable = $('#red-table').DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -118,8 +119,9 @@ Red Posts -
                     }},
                 ],
                 "language": {
-                    "loadingRecords": language,
-                    "zeroRecords": language,
+                    "loadingRecords": languageLoading,
+                    "zeroRecords": languageNoRecords,
+                    "processing": languageLoading,
                 },
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
                 "order": [[ 1, "desc" ], [ 2, "desc" ]],
