@@ -46,5 +46,3 @@ db.reds.find().forEach(function(res) {
 });
 
 bulk.execute();
-print('gen:text-index');
-db.mr_reds.createIndex( { 'thread': "text", 'contents': "text" } )

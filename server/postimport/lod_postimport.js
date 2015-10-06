@@ -101,3 +101,6 @@ db.mr_champions.find().forEach(function(champion_res) {
                                                                  'total_posts': total,
                                                                  'glorious_posts': glorious}});
 });
+
+print('gen:text-index');
+db.mr_reds.createIndex( { 'thread': "text", 'contents': "text", 'rioter': "text", 'champions': "text", 'tags': "text" } );
