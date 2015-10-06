@@ -41,4 +41,4 @@ class MongoSearchForm(Form):
             if len(query) > 1:
                 query = {op: [{k: v} for k, v in query.items()]}
             return query
-        return None
+        return {}

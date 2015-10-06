@@ -2,6 +2,7 @@ __author__ = 'artemys'
 
 from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown
 from app_database.consumer import Consumer
+from .datatables_server import DataTablesRedPostsServer
 from .models import ARTICLE_TYPE, ROLES, REGIONS, GLORIOUS_SECTIONS
 from .forms import ChampionForm, ArticleForm, NewArticleForm, RedPostDetailedSearchForm
 from django.http import HttpResponseRedirect, HttpResponse
@@ -24,28 +25,20 @@ def view_home(request):
 
 @render_to('red_posts_main.html')
 def view_red_posts(request):
-    boards_sections = request.GET.get('all')
     if request.is_ajax():
-        the_query = {}
-        if boards_sections == 'S':
-            form = RedPostDetailedSearchForm(request.GET)
-            if form.is_valid():
-                the_query = form.get_search()
-        else:
-            if not boards_sections:
-                the_query['section'] = {'$in': GLORIOUS_SECTIONS}
-            else:
-                the_query['$or'] = [{'champions': {'$exists': 1}},
-                                    {'section': {'$in': GLORIOUS_SECTIONS}}]
-
-        reds = consumer.get_red_posts(query=the_query, limit=0)
-        data = list(reds)
-        for d in data:
-            d['contents'] = to_markdown(d['contents'])
-        return HttpResponse(JSONObjectIdEncoder().encode({'data': data}), content_type='application/json')
+        collection = 'mr_reds'
+        # We can get that from the data sent to the server ! to REWORK BOYZ
+        fields = ['rioter', 'date', 'thread', 'contents', 'champions', 'region', 'is_glorious', 'tags']
+        results = DataTablesRedPostsServer(request, collection, fields).output_result()
+        return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
     rioters = consumer.get_rioters()
-    form = RedPostDetailedSearchForm(request.GET)
-    return {'rioters': rioters, 'get_data': form.cleaned_data if form.is_valid() else None, 'all': not not boards_sections, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
+    param_is_and = True
+    get_data = {}
+    if len(request.GET) != 0:
+        param_is_and = False
+        form = RedPostDetailedSearchForm(request.GET)
+        get_data = form.cleaned_data if form.is_valid() else None
+    return {'rioters': rioters, 'get_data': get_data, 'param_is_and': param_is_and, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
 
 @render_to('red_posts_search.html')
 def view_red_posts_search(request):

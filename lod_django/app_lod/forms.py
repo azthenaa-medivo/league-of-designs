@@ -46,7 +46,6 @@ class ArticleForm(NewArticleForm):
 class MiniRedPostSearchForm(MongoSearchForm):
     search = CharField(required=False, max_length=20,
                        widget=TextInput(attrs={'class': 'form-control', 'placeholder': """Search Red Post..."""}))
-    all = CharField(widget=HiddenInput, initial='S')
 
 class RedPostDetailedSearchForm(MongoSearchForm):
     champions = MultipleChoiceField(choices=((c['name'], c['name']) for c in
@@ -71,4 +70,3 @@ class RedPostDetailedSearchForm(MongoSearchForm):
                             post contents or thread title. If "match all" is unchecked, those won't be processed.""",
                             widget=TextInput(attrs={'class': 'form-control',
                                                     'placeholder': """Search in post contents or thread title..."""}))
-    all = CharField(widget=HiddenInput, initial='S')

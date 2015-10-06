@@ -26,9 +26,9 @@ class Consumer:
         # TODO : RANDOM CHAMPION GENERATOR
         return self.champions_collection.find_one(query, projection)
 
-    def get_red_posts(self, query={}, projection=None, limit=10, sort_field='date', sort_order=DESCENDING):
+    def get_red_posts(self, query={}, projection=None, limit=10, sort_field='date', sort_order=DESCENDING, *args, **kwargs):
         """Returns the qty last Red Posts."""
-        return self.red_posts_collection.find(query, projection).limit(limit).sort(sort_field, sort_order)
+        return self.red_posts_collection.find(query, projection, *args, **kwargs).limit(limit).sort(sort_field, sort_order)
 
     def get_articles(self, query={}, limit=10, projection=None, sort_field='date_created', sort_order=DESCENDING):
         """What could this method do ?"""

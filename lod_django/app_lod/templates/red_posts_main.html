@@ -31,30 +31,22 @@ Red Posts -
                 {% include "utils/filters/filter_checkbox.html" with name="region-filter" types=regions colmd=3 %}
             </form>
         </div>
-        {% if all %}
         <div class="col-md-4">
             <h3 class="cursorHelp" title="Includes {{glorious_sections|join:', '}}">Show Design Boards only</h3>
             <form method="#" action="#" id="designFilter">
                 <div class="col-md-12 filterCheckbox">
                     <label class="checkbox-inline" for="design-only">
-                        <input class="design-only" value="design-only" type="checkbox" name="design-only"> Design Only
+                        <input id="designOnlyCheck" class="design-only" value="design-only" type="checkbox" name="design-only"> Design Only
                     </label>
                 </div>
             </form>
         </div>
-        {% endif %}
     </div>
     <div class="col-md-12">
         <a href="{% url "red-posts-search" %}">
             <button type="button" class="btn btn-default">More search options...</button>
         </a>
-        <br>
-        {% if not all %}
-            <a href="{% url 'red-posts' %}?all=1">Show all Red Posts regardless of their theme (including Art, dank memes, etc.).</a>
-        {% else %}
-            <a href="{% url 'red-posts' %}">Show Red Posts only from champion designs Boards
-                (Gameplay & Balance, Champions & Gameplay, Maps & Modes).</a>
-        {% endif %}
+        <hr>
     </div>
     <hr>
     {% csrf_token %}
@@ -80,14 +72,22 @@ Red Posts -
             // Then ready the Red Table !
             var language = '<b><img src="{% static "images/loading.gif" %}" width="40px" alt="Loading" title="Loading"></img> Getting all them Red Posts... (If it takes forever it might mean there aren\'t any.)</b>';
             var redTable = $('#red-table').DataTable({
+                "processing": true,
+                "serverSide": true,
                 "ajax": {
                     "url": "/red-posts",
                     "type": "GET",
-                    "data": {
-                        "all": "{{request.GET.all}}",
-                        {% for g in get_data %}{% if get_data|get:g %}"{{g}}": {{get_data|get:g|print_js | safe}},{% endif %}
-                        {% endfor %}
-                    },
+                    "data":
+                        function ( args ) {
+                            q = {'query': {
+                                    {% if param_is_and %}"is_and": true,
+                                    {% else %}{% endif %}
+                                    {% for g in get_data %}{% if get_data|get:g %}"{{g}}": {{get_data|get:g|print_js | safe}},
+                                    {% else %}{% endif %}{% endfor %}
+                                }
+                            };
+                            return {"args": JSON.stringify( $.extend(args, q))};
+                        },
                 },
                 "columns": [
                     { "render": function( data, type, full, meta ) {
@@ -117,18 +117,17 @@ Red Posts -
                         return template_tags(full);
                     }},
                 ],
-                "order": [[ 2, "desc" ]],
                 "language": {
                     "loadingRecords": language,
                     "zeroRecords": language,
                 },
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
-                "order": [[ 1, "desc" ]],
+                "order": [[ 1, "desc" ], [ 2, "desc" ]],
                 "columnDefs": [
-                {
-                    "targets": [ 5, 6, 7 ],
-                    "visible": false,
-                },
+                    {
+                        "targets": [ 5, 6, 7 ],
+                        "visible": false,
+                    },
                 ],
                 "searchHighlight": true,
             });
@@ -136,7 +135,6 @@ Red Posts -
             // Filter Rioter
             $('#rioter-select').change(function() {
                 redTable.column(0).search($(this).val()).draw();
-                console.log($(this).val())
             });
 
             // Filter out EUW
@@ -151,6 +149,9 @@ Red Posts -
             $('.design-only').change(function() {
                 redTable.column(6).search($(this).is(':checked') ? 'true':'').draw();
             });
+
+            // Auto Design Only
+            $('#designOnlyCheck').click();
 
             // Hey !
             $('#red-table_wrapper > .top').wrapInner('<div class="container"></div>');
