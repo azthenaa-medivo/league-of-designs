@@ -1,0 +1,1 @@
+db.mr_reds.update({'tags': {$exists: true, $not: {$size: 0}}}, {'$set': {'tags': []}}, {'multi':1});

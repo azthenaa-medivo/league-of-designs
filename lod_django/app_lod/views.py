@@ -2,7 +2,7 @@ __author__ = 'artemys'
 
 from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown
 from app_database.consumer import LoDConsumer
-from .datatables_server import DataTablesRedPostsServer
+from .lod_ssp import RedPostsSSP
 from .models import ARTICLE_TYPE, ROLES, REGIONS, GLORIOUS_SECTIONS
 from .forms import ChampionForm, ArticleForm, NewArticleForm, RedPostDetailedSearchForm
 from django.http import HttpResponseRedirect, HttpResponse
@@ -28,9 +28,10 @@ def view_home(request):
 def view_red_posts(request):
     if request.is_ajax():
         collection = 'mr_reds'
+        database = 'lod'
         # We can get that from the data sent to the server ! to REWORK BOYZ
         fields = ['rioter', 'date', 'thread', 'contents', 'champions', 'region', 'is_glorious', 'tags']
-        results = DataTablesRedPostsServer(request, collection, fields).output_result()
+        results = RedPostsSSP(request, database, collection, fields).output_result()
         return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
     rioters = consumer.get('mr_rioters')
     param_is_and = True

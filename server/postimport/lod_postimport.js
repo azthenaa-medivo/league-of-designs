@@ -30,7 +30,7 @@ db.mr_champions.find().forEach(function(champion_res) {
                             },};
                             for (var t=0;t<champion_res['tags'].length;t++)
                             {
-                                if (!(contains(new_tags, champion_res['tags'][t])))
+                                if (!(contains(new_tags, champion_res['tags'][t])) && !(contains(red['tags'], champion_res['tags'][t])))
                                 {
                                     new_tags.push(champion_res['tags'][t]);
                                 }

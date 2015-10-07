@@ -72,3 +72,4 @@ db.mr_rioters.find().forEach(function(rioter) {
 });
 
 rioters_bulk.execute();
+db.mr_rioters.createIndex( { 'name': "text", } );
