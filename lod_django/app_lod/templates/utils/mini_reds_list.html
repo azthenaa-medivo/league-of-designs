@@ -2,8 +2,8 @@
 {% load template_tags %}
 {% for red in reds %}
 <div class="red-post">
-    <div class="red-contents red-quote">
-        <div>{{red.contents|markdown | safe}}</div>
+    <div class="red-contents red-contents-120 red-quote" data-max-height="120px">
+        <div class="hoverMoreFetch bot5">{{red.contents|markdown | safe}}</div>
         <div class="read-more row">
             <div class="col-md-3"></div>
             <div class="col-md-6 msg">Hover for more...</div>
@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="red-rioter">
-        <span class="rioter">{{red.rioter}}</span>,
+        <a href="{% url "rioter" rioter_url_id=red.rioter_url_id %}" class="rioter">{{red.rioter}}</a>,
         {% include "utils/date_span.html" with date=red.date|isoformat %} in thread <a href="{{red.url}}" target="_blank">{{red.thread}}</a>
     </div>
     <div class="text-center red-champions">

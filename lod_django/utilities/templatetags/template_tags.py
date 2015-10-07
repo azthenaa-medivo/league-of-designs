@@ -44,6 +44,15 @@ def to_markdown_wrapper(string):
 def status(string):
     return STATUS_MESSAGES[string]
 
+@register.filter(name="favourite_champions")
+def favourite(rioter, number=1):
+    if 'champion_occurrences' not in rioter:
+        return None
+    if number == 1:
+        if len(rioter['champion_occurrences']) >= 1:
+            return sort(rioter['champion_occurrences'], 'count')[-1]
+    return sort(rioter['champion_occurrences'], 'count')[-number:]
+
 @register.filter(name="join")
 def status(a, j):
     return j.join(a) if type(a) == list else a

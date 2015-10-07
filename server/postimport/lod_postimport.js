@@ -41,6 +41,7 @@ db.mr_champions.find().forEach(function(champion_res) {
                             update = {
                                         'post_id': red['post_id'],
                                         'rioter': red['rioter'],
+                                        'rioter_url_id': red['rioter_url_id'],
                                         'url': red['url'],
                                         'contents': red['contents'],
                                         'date': red['date'],
@@ -74,6 +75,7 @@ db.mr_champions.find().forEach(function(champion_res) {
                                 rioter_counter[red['rioter']] = {};
                                 rioter_counter[red['rioter']]['count'] = 1;
                                 rioter_counter[red['rioter']]['name'] = red['rioter'];
+                                rioter_counter[red['rioter']]['name'] = red['rioter_url_id'];
                             }
 
                             // Update posts number ! wowsoLOD1.2

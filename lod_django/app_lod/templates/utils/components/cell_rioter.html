@@ -4,6 +4,6 @@
 
 {% block template %}
 {% verbatim %}
-<span class="rioter">{{rioter}}</span>
+<a href="{% endverbatim %}{% url "rioter" rioter_url_id='' %}{% verbatim %}{{rioter_url_id}}" class="rioter">{{rioter}}</a>
 {% endverbatim %}
 {% endblock %}

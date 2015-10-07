@@ -39,7 +39,8 @@ class DataTablesServerSideProcessor(object):
 
     def filter(self):
         """Basic filtering using the text input, override this in your subclass if you want to be more specific."""
-        self.query['$text'] = {'$search': self.dt_search}
+        if self.dt_search != '':
+            self.query['$text'] = {'$search': self.dt_search}
 
     def sort(self):
         self.sorting = list((self.fields[o['column']], order_dict[o['dir']]) for o in self.dt_sorting)

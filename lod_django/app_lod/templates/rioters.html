@@ -25,7 +25,7 @@ Rioters -
         <tbody>
             {% for r in rioters %}
             <tr>
-                <td><span class="rioter">{{r.name}}</span></td>
+                <td><a class="rioter" href="{% url "rioter" r.url_id %}">{{r.name}}</a></td>
                 <td data-order="{{r.glorious_posts|int}}">{% if r.glorious_posts == 0 %}{{r.posts|length|int}} Red Posts{% else %}{{r.posts|length|int}} Red Posts (<span class="rioter">{{r.glorious_posts|int}}</span> about Design){% endif %}</td>
                 <td>
                     {% with p=r.posts|last %}

@@ -21,7 +21,7 @@ def view_home(request):
                         query={'champions': {'$exists': True, '$ne': []},
                                                   'region': 'NA',
                                                   'section' : {'$in': GLORIOUS_SECTIONS}})
-    articles = consumer.get('articles', limit=5, query={'type': 'News'})
+    articles = consumer.get('articles', limit=5, query={'type': 'News'}, sort_field="date_created", sort_order=-1)
     return {'reds': reds, 'articles': articles}
 
 @render_to('red_posts_main.html')
@@ -84,6 +84,11 @@ def edit_champion(request, url_id):
 def view_rioters(request):
     rioters = consumer.get('mr_rioters')
     return {'rioters': rioters}
+
+@render_to('rioter.html')
+def view_rioter(request, rioter_url_id):
+    rioter = consumer.get_one('mr_rioters', query={'url_id': rioter_url_id})
+    return {'rioter': rioter}
 
 @render_to('article.html')
 def view_article(request, article_id):

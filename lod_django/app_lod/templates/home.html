@@ -120,6 +120,7 @@
 
 {% block js %}
     <script src="{% static "js/intro.min.js" %}"></script>
+    {% include "utils/scripts/hovermore.html" %}
     <script>
         $(document).ready(function() {
             var homeTable = $('#champions-home').DataTable({
@@ -154,32 +155,6 @@
                 homeTable.draw();
             });
         } );
-    </script>
-    <script>
-        // Read more !
-        $(".read-more").each(function() {
-            if ($(this).parent().outerHeight() >= 120) {
-                $(this).parent().addClass("hovermore");
-            } else {
-                $(this).addClass("hidden");
-            }
-        });
-        // Red Posts Gradient !
-        $(".hovermore").hover(function() {
-            totalHeight = 0;
-            $el = $(this);
-            $p  = $el.parent();
-            $up = $p.parent();
-            $ps = $up.find("p:not('.read-more')");
-            $ps.each(function() {
-                totalHeight += $(this).outerHeight();
-            });
-            $(this).animate({'max-height': totalHeight+'px'}, 500);
-            $(this).children('.read-more').animate({'opacity':0}, 250);
-        }, function() {
-            $(this).animate({'max-height':'120px'});
-            $(this).children('.read-more').animate({'opacity':1}, 500);
-        });
     </script>
     <!-- CLASSY EFFECTS ON COLUMNS maybe -->
     <script>

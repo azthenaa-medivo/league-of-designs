@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{rioter.name}} -
+{% endblock %}
+
+{% block header %}
+{% load staticfiles %}
+{% load template_tags %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="rioter">
+                        {{rioter.name}}
+                    </h1>
+                     Author of {{rioter.total_posts|int}} posts (<span class="rioter">{{rioter.glorious_posts|int}}</span> about Design)
+                </div>
+            </div>
+{% endblock %}
+
+{% block contents %}
+        {% load staticfiles %}
+        {% load template_tags %}
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>S/He <i>said</i> that !</h4>
+                    {% with red=rioter.posts|random %}
+                    <div class="red-contents red-quote red-contents-220" data-max-height="220px">
+                        <div class="hoverMoreFetch bot5">{{red.contents|markdown | safe}}</div>
+                        <div class="read-more row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6 msg">Hover for more...</div>
+                            <div class="col-md-3"></div>
+                        </div>
+                    </div>
+                    <div>{% include "utils/date_span.html" with date=red.date|isoformat %} in thread <a href="{{red.url}}">{{red.thread}}</a></div>
+                    {% endwith %}
+                </div>
+                <div class="col-md-4 text-center">
+                    <h4>S/He loves that dude !</h4>
+                    {% with fav=rioter|favourite_champions:1 %}
+                    <div>
+                        <a href="{% url "champion" fav.url_id %}">
+                            <img class="round-portrait cursor-pointer" title="{{fav.name}}" alt="{{fav.name}}" src="{% static "images/portraits/" %}{{fav.portrait}}"></img>
+                        </a>
+                    </div>
+                    <h3>{{fav.name}} (quoted <span class="rioter">{{fav.count|int}}</span> times)</h3>
+                    {% endwith %}
+                </div>
+                <div class="col-md-4 text-center">
+                    <h4>S/He has other tales !</h4>
+                    {% with fav=rioter|favourite_champions:11 %}
+                    {% for c in fav reversed %}
+                    {% if not forloop.first %}
+                        <div class="inline rioter-top-champions">
+                            <a class="rioter" href="{% url "champion" c.url_id %}">
+                                <img class="cursor-pointer round-portrait" title="{{c.name}}" alt="{{c.name}}" src="{% static "images/portraits/" %}{{c.portrait}}"></img>
+                                <span>
+                                    <span class="mdi">{{c.count|int}}</span>
+                                </span>
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h3>{{rioter.name}}'s Posts</h3>
+            {% include "utils/pre_templated_red_posts_datatable.html" with reds=rioter.posts %}
+        </div>
+{% endblock %}
+
+{% block js %}
+    {% include "utils/scripts/hovermore.html" %}
+    <!-- Pretty stuff ! -->
+    <script>
+        $('.rioter-top-champions a').hover(function() {
+            $(this).animate({'color': 'yellow'});
+        }, function() {
+            $(this).animate({'color': 'red'});
+        });
+    </script>
+    <!-- Chapter 45 : Generate the Red Posts Datatable !!!11one -->
+    <script>
+        $(document).ready(function() {
+            var redTable = $('#red-table').DataTable({
+                "order": [[ 1, "asc" ]],
+                "language": {
+                    "zeroRecords": 'No Posts found matching your query.',
+                },
+                "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
+                "columnDefs": [
+                {
+                    "targets": [ 0, 4, 5 ],
+                    "visible": false,
+                },],
+                "searchHighlight": true,
+            });
+
+            // Filter Rioter
+            $('#rioter-select').change(function() {
+                redTable.column(0).search($(this).val()).draw();
+            });
+
+            // Filter Regions
+            $('.region-filter').change(function() {
+                redTable.column(4).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
+            });
+
+            // Filter Glorious Sections (alright maybe I'll change that name)
+            $('.design-only').change(function() {
+                redTable.column(5).search($(this).is(':checked') ? 'true':'').draw();
+            });
+            {% if champion.glorious_posts != 0 %}
+            // Auto search NA
+            $('.region-filter[value=NA]').click();
+
+            // Auto filter Gloriou-- alright, relevant sections
+            $('.design-only').click();
+            {% endif %}
+        } );
+    </script>
+{% endblock %}

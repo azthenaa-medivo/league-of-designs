@@ -99,4 +99,11 @@
     }
     agoStuff();
     setInterval(agoStuff, 1000);
- });
+
+    // Pretty stuff below
+    $('img.round-portrait').hover(function() {
+            $(this).animate({'border-color': 'red'});
+        }, function() {
+            $(this).animate({'border-color': 'black'});
+    });
+});

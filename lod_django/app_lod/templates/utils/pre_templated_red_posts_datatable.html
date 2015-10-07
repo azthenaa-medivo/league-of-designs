@@ -25,7 +25,7 @@
     <tbody>
         {% for r in reds %}
         <tr>
-            <td><span class="rioter">{{r.rioter}}</span></td>
+            <td><a href="{% url "rioter" rioter_url_id=r.rioter_url_id %}" class="rioter">{{r.rioter}}</a></td>
             <td>{% include "utils/date_span.html" with date=r.date|isoformat %} ({{r.region}})</td>
             <td><a href="{{r.url}}" target="_blank">{{r.thread}}</a></td>
             <td><div class="red-quote">{{r.contents|markdown | safe}}</div></td>

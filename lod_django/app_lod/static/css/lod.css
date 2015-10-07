@@ -77,13 +77,32 @@ table.dataTable span.highlight {
     background-image: none;
 }
 
+.css-quotes {
+    quotes: "«" "»" "“" "”";
+}
+
+.css-quotes:before {
+    content: open-quote;
+}
+
+.css-quotes:after {
+    content: close-quote;
+}
+
 .red-contents {
     position: relative;
     overflow-y: hidden;
     text-overflow: ellipsis;
     border-bottom: 1px #aa0000 solid;
     padding-top: 0px;
+}
+
+.red-contents-120 {
     max-height: 120px;
+}
+
+.red-contents-220 {
+    max-height: 220px;
 }
 
 .red-contents .read-more {
@@ -92,7 +111,8 @@ table.dataTable span.highlight {
     bottom: 0;
     left: 0;
     text-align: center;
-    margin: 0; padding: 30px 0;
+    margin: 0;
+    padding: 30px 0;
     background-image: linear-gradient(to bottom, transparent, white);
 }
 
@@ -127,7 +147,11 @@ table.dataTable span.highlight {
 }
 
 .bot15 {
-    margin-bottom:15px;
+    margin-bottom: 15px;
+}
+
+.bot5 {
+    padding-bottom: 1px;
 }
 
 .pic-h1-margin {
@@ -210,9 +234,33 @@ a.no-underline:hover {
     margin-right: 10px;
 }
 
-#champions-grid img {
+.round-portrait {
     border-radius: 60px;
     border: 3px solid black;
+}
+
+.rioter-top-champions {
+    position:relative;
+    text-align:center;
+    margin: 3px;
+}
+
+.rioter-top-champions img {
+    width: 64px;
+}
+
+.rioter-top-champions span {
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    z-index: 100;
+    text-shadow: 2px 2px #000000;
+    font-size: 24px;
+    top: 5px;
+}
+
+.inline {
+    display: inline-block;
 }
 
 #search-row {
@@ -272,6 +320,7 @@ tr[data-href] {
     width: 40px;
     border-radius: 20px;
     border: 2px solid black;
+    margin: 2px;
 }
 
 .mini-icon:hover {

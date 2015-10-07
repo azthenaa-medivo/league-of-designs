@@ -33,7 +33,7 @@ Champions -
                 <li id="{{c.name}}" class="champion-block text-center" data-search="{{c.name}} {{c.search}} {% for tag in c.tags %}{{tag}} {% endfor %}">
                     <a href="{% url "champion" c.url_id %}" class="no-underline">
                         <div>
-                            <img src="{% static "images/portraits/" %}{{c.portrait}}"></img>
+                            <img class="round-portrait" title="{{c.name}}" alt="{{c.name}}" src="{% static "images/portraits/" %}{{c.portrait}}"></img>
                         </div>
                         <div>
                             <span>{{c.name}}</span>

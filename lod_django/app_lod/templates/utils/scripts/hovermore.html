@@ -1,0 +1,28 @@
+<script>
+    $(document).ready(function() {
+        // Read more !
+        $(".read-more").each(function() {
+            if ($(this).parent().outerHeight() >= parseInt($(this).parent().css('max-height'))) {
+                $(this).parent().parent().addClass("hovermore");
+            } else {
+                $(this).addClass("hidden");
+            }
+        });
+        // Red Posts Gradient !
+        $(".hovermore").hover(function() {
+            totalHeight = 0;
+            $el = $(this);
+            $c = $el.children(":first");
+            $ps = $el.find(".hoverMoreFetch");
+            $ps.each(function() {
+                totalHeight += $(this).outerHeight();
+            });
+            $c.animate({'max-height': totalHeight+'px'}, 300);
+            $c.children('.read-more').animate({'opacity':0}, 250);
+        }, function() {
+            $c = $(this).children(":first");
+            $c.animate({'max-height': $c.attr('data-max-height')}, 300);
+            $c.children('.read-more').animate({'opacity':1}, 300);
+        });
+    });
+</script>

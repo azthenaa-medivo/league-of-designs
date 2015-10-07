@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^red-posts$', views.view_red_posts, name="red-posts"),
     url(r'^red-posts/search$', views.view_red_posts_search, name="red-posts-search"),
     url(r'^rioters$', views.view_rioters, name="rioters"),
+    url(r'^rioter/(?P<rioter_url_id>[\w]*)$', views.view_rioter, name="rioter"),
     url(r'^champions$', views.view_champions_grid, name="champions-grid"),
     url(r'^champion/(?P<url_id>[\w]*)$', views.view_champion, name="champion"),
     url(r'^champion/(?P<url_id>[\w]+)/edit$', views.edit_champion, name="champion-edit"),
