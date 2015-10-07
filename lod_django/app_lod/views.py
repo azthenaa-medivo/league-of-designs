@@ -33,7 +33,7 @@ def view_red_posts(request):
         fields = ['rioter', 'date', 'thread', 'contents', 'champions', 'region', 'is_glorious', 'tags']
         results = RedPostsSSP(request, database, collection, fields).output_result()
         return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
-    rioters = consumer.get('mr_rioters')
+    rioters = consumer.get('mr_rioters', sort_field='name', sort_order=1)
     param_is_and = True
     get_data = {}
     if len(request.GET) != 0:
