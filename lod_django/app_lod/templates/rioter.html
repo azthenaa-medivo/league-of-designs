@@ -68,7 +68,7 @@
         </div>
         <div class="col-md-12">
             <h3>{{rioter.name}}'s Posts</h3>
-            {% include "utils/pre_templated_red_posts_datatable.html" with reds=rioter.posts %}
+            {% include "utils/pre_templated_red_posts_datatable.html" with reds=rioter.posts print_champions=True %}
         </div>
 {% endblock %}
 

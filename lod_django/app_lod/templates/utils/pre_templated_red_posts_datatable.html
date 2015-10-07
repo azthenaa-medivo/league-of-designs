@@ -10,6 +10,7 @@
             <th>Contents</th>
             <th>Region</th>
             <th>Gloriousness</th>
+            {% if print_champions %}<th>Champions</th>{% endif %}
         </tr>
     </thead>
     <tfoot>
@@ -20,6 +21,7 @@
             <th>Contents</th>
             <th>Region</th>
             <th>Gloriousness</th>
+            {% if print_champions %}<th>Champions</th>{% endif %}
         </tr>
     </tfoot>
     <tbody>
@@ -31,6 +33,20 @@
             <td><div class="red-quote">{{r.contents|markdown | safe}}</div></td>
             <td>{{r.region}}</td>
             <td>{{r.is_glorious}}</td>
+            {% if print_champions %}<td>
+                <div class="text-center">
+                {% if "champions_data" in r and r.champions_data|length > 0 %}
+                    {% for c in r.champions_data %}
+                        <a href="{% url "champion" c.url_id %}"><img class="mini-icon" alt="{{c.name}}" title="{{c.name}}" src="{% static "images/portraits/" %}{{c.portrait}}"></img></a>
+                        <span class="hidden">
+                            {{c.name}} {{c.search}}
+                        </span>
+                    {% endfor %}
+                {% else %}
+                    {{r.section}}
+                {% endif %}
+                </div>
+            </td>{% endif %}
         </tr>
         {% endfor %}
     </tbody>
