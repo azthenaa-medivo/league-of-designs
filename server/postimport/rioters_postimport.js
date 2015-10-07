@@ -9,7 +9,7 @@ print('postimport:rioters');
 db.mr_reds.find({'done': {'$ne': 1}}).forEach(function(red) {
     // Now we map that to Rioters <3
     // First we check if the Rioter exists, and if needed create it.
-    db.mr_rioters.update({'name': red['rioter']}, {'$set': {'name': red['rioter']}}, {upsert: true});
+    db.mr_rioters.update({'name': red['rioter']}, {'$set': {'name': red['rioter'], 'url_id': urlIDize(red['rioter'])}}, {upsert: true});
     op_rioters = db.mr_rioters.update(
         {'name': red['rioter'], 'posts.post_id': red['post_id']},
         {

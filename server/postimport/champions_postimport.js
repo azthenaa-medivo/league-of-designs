@@ -103,7 +103,7 @@ var bulk = db.mr_champions.initializeUnorderedBulkOp();
 print('postimport:champions');
 
 db.champions.find().forEach(function(res) {
-    var url_id = res['name'].replace(/\W/g, '');
+    var url_id = urlIDize(res['name']);
     var new_champion = {'$set': {
             'name': res['name'],
             'title': res['title'],

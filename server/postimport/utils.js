@@ -4,6 +4,10 @@ var glorious_sections = ["Gameplay & Balance", "Champions & Gameplay", "Maps & M
                             "Champions & Gameplay Feedback"];
 var tags = ["rework", "buff", "nerf"];
 
+function urlIDize(text) {
+    return text.replace(/\W/g, '');
+}
+
 function contains(array, value) {
     for (var p=0;p<array.length;p++)
     {
