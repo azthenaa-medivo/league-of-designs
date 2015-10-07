@@ -10,19 +10,20 @@
         });
         // Red Posts Gradient !
         $(".hovermore").hover(function() {
-            totalHeight = 0;
-            $el = $(this);
-            $c = $el.children(":first");
-            $ps = $el.find(".hoverMoreFetch");
-            $ps.each(function() {
-                totalHeight += $(this).outerHeight();
+            var redContents = $(this).children(".red-contents");
+            // Calculating height
+            var totalHeight = 0;
+            var stacks = redContents.find(".hoverMoreFetch").children();
+            stacks.each(function() {
+                totalHeight += $(this).outerHeight(true);
             });
-            $c.animate({'max-height': totalHeight+'px'}, 300);
-            $c.children('.read-more').animate({'opacity':0}, 250);
+            console.log(totalHeight);
+            redContents.animate({'max-height': totalHeight+'px'}, 300);
+            redContents.children('.read-more').animate({'opacity': 0}, 500);
         }, function() {
-            $c = $(this).children(":first");
-            $c.animate({'max-height': $c.attr('data-max-height')}, 300);
-            $c.children('.read-more').animate({'opacity':1}, 300);
+            redContents = $(this).find(".red-contents");
+            redContents.animate({'max-height': redContents.attr('data-max-height')}, 300);
+            redContents.children('.read-more').animate({'opacity': 1}, 500);
         });
     });
 </script>

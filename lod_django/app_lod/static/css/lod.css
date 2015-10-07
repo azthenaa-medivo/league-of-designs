@@ -116,11 +116,6 @@ table.dataTable span.highlight {
     background-image: linear-gradient(to bottom, transparent, white);
 }
 
-.red-contents:hover {
-    max-height: 100%;
-    height: 100%;
-}
-
 .red-rioter {
     padding-bottom: 3px;
 }
