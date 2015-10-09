@@ -51,6 +51,8 @@ def favourite(rioter, number=1):
     if number == 1:
         if len(rioter['champion_occurrences']) >= 1:
             return sort(rioter['champion_occurrences'], 'count')[-1]
+        else:
+            return None
     return sort(rioter['champion_occurrences'], 'count')[-number:]
 
 @register.filter(name="join")
