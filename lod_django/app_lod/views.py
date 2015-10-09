@@ -21,7 +21,7 @@ def view_home(request):
                         query={'champions': {'$exists': True, '$ne': []},
                                                   'region': 'NA',
                                                   'section' : {'$in': GLORIOUS_SECTIONS}})
-    articles = consumer.get('articles', limit=5, query={'type': 'News'}, sort_field="date_created", sort_order=-1)
+    articles = consumer.get('articles', limit=2, query={'type': 'News'}, sort_field="date_created", sort_order=-1)
     return {'reds': reds, 'articles': articles}
 
 @render_to('red_posts_main.html')
