@@ -18,9 +18,11 @@ class DataTablesServerSideProcessor(object):
         self.dt_search = tmp_args['search']
         self.dt_sorting = tmp_args['order']
         self.dt_query = tmp_args['query'] if 'query' in tmp_args else {}
+        self.dt_projection = tmp_args['projection'] if 'projection' in tmp_args else {}
         # Returned values
         self.draw = tmp_args['draw']
         self.query = {}
+        self.projection = {}
         self.sorting = {}
         self.records_filtered = 0
         self.records_total = 0
@@ -31,6 +33,7 @@ class DataTablesServerSideProcessor(object):
         if self.dt_query is not None:
             self.filter()
         self.sort()
+        self.project()
         self.result_data = self.consumer.get(self.collection, query=self.query, skip=self.dt_skip,
                                                        limit=self.dt_length).sort(self.sorting)
         self.records_filtered = self.result_data.count()
@@ -41,6 +44,10 @@ class DataTablesServerSideProcessor(object):
         """Basic filtering using the text input, override this in your subclass if you want to be more specific."""
         if self.dt_search != '':
             self.query['$text'] = {'$search': self.dt_search}
+
+    def project(self):
+        for p in self.dt_projection:
+            self.projection[p] = 1
 
     def sort(self):
         self.sorting = list((self.fields[o['column']], order_dict[o['dir']]) for o in self.dt_sorting)
