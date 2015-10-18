@@ -113,7 +113,7 @@
                     </a>
                 </h3>
                 <div>
-                    {% include "utils/champions_table.html" with champions=champions id="champions-home"%}
+                    {% include "utils/pre_templated_champions_table.html" with champions=champions id="champions-home"%}
                 </div>
             </div>
         </div>
@@ -156,6 +156,13 @@
                 homeTable.draw();
             });
         } );
+
+        // Binding table row links
+        $('#champions-home tr').addClass('cursorPointer');
+        $('#champions-home tr[data-href]').on("click", function() {
+            window.open($(this).data('href'), '_self');
+        });
+
     </script>
     <!-- CLASSY EFFECTS ON COLUMNS maybe -->
     <script>

@@ -1,5 +1,6 @@
 __author__ = 'artemys'
 
+import json
 from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown
 from app_database.consumer import LoDConsumer
 from .lod_ssp import RedPostsSSP
@@ -22,7 +23,9 @@ def view_home(request):
                                                   'region': 'NA',
                                                   'section' : {'$in': GLORIOUS_SECTIONS}})
     articles = consumer.get('articles', limit=2, query={'type': 'News'}, sort_field="date_created", sort_order=-1)
-    return {'reds': reds, 'articles': articles}
+    champions = consumer.get('mr_champions', projection={'name': 1, 'url_id': 1, 'total_posts': 1, 'glorious_posts': 1,
+                                                         'portrait': 1, 'search': 1})
+    return {'reds': reds, 'articles': articles, 'champions': champions}
 
 @render_to('red_posts_main.html')
 def view_red_posts(request):
@@ -33,7 +36,7 @@ def view_red_posts(request):
         fields = ['rioter', 'date', 'thread', 'contents', 'champions', 'region', 'is_glorious', 'tags']
         results = RedPostsSSP(request, database, collection, fields).output_result()
         return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
-    rioters = consumer.get('mr_rioters', sort_field='name', sort_order=1)
+    rioters = consumer.get('mr_rioters', projection={'name': 1, 'glorious_posts': 1, 'total_posts': 1}, sort_field='name', sort_order=1)
     param_is_and = True
     get_data = {}
     if len(request.GET) != 0:
@@ -59,6 +62,13 @@ def view_champion(request, url_id):
 
 @render_to('champions_grid.html')
 def view_champions_grid(request):
+    if request.is_ajax():
+        if request.GET.get('args'):
+            data = json.loads(request.GET.get('args'))
+            champions = list(consumer.get('mr_champions', projection=data['projection']))
+            for c in champions:
+                c['DT_RowAttr'] = {'data-href': reverse('champion', kwargs={'url_id': c['url_id']})}
+            return HttpResponse(JSONObjectIdEncoder().encode({'data': champions}), content_type='application/json')
     return {'roles': zip(ROLES, ROLES)}
 
 @login_required
@@ -82,7 +92,8 @@ def edit_champion(request, url_id):
 
 @render_to('rioters.html')
 def view_rioters(request):
-    rioters = consumer.get('mr_rioters')
+    rioters = consumer.get('mr_rioters', projection={'name': 1, 'last_post': 1, 'glorious_posts': 1, 'total_posts': 1,
+                                                     'url_id': 1})
     return {'rioters': rioters}
 
 @render_to('rioter.html')

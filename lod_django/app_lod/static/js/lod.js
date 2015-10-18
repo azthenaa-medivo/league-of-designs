@@ -13,24 +13,53 @@
     }
 
     // Navbar search tool
+    var template_champion_portrait = Handlebars.compile($("#handlebars-champion-portrait").html());
+    var template_champion_red_posts_count = Handlebars.compile($("#handlebars-champion-red-posts-count").html());
+    var template_champion_url = Handlebars.compile($("#handlebars-champion-url").html());
+    var template_champion_search = Handlebars.compile($("#handlebars-champion-search").html());
     $(document).ready(function() {
         var champNav = $('#champions-navbar').DataTable({
+            "ajax": {
+                "url": "/champions",
+                "type": "GET",
+                "data": function ( args ) {
+                            projection = {'projection': {'portrait':1, 'name':1, 'glorious_posts':1, 'total_posts':1, 'search':1, 'url_id':1}};
+                            return {"args": JSON.stringify( $.extend(args, projection))};
+                        },
+            },
             "order": [[ 2, "desc" ]],
-            "info": false,
             "lengthMenu": [[1], [1]],
             "dom": 'rt<"clear">',
-            "order": [[ 1, "asc" ]],
             "language": {
                 "search": "Search:",
                 "zeroRecords": "Wait, <i>WHO</i> ?"
             },
+            "columns": [
+                    { "render": function( data, type, full, meta ) {
+                        return template_champion_portrait(full);
+                    }},
+                    { "data": "name" },
+                    { "render": function( data, type, full, meta ) {
+                        return template_champion_red_posts_count(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_champion_url(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_champion_search(full);
+                    }},
+                ],
             "columnDefs": [
             {
                 "targets": [ 3, 4 ],
                 "visible": false,
-            },]
+            },],
         });
         // Search Enter Key
+        $('#css-nav-search').submit(function(e) {
+            e.preventDefault();
+            return false;
+        });
         $('#champion-navbar-search').unbind();
         $('#champion-navbar-search').bind('keyup', function(e) {
             if ($(this).val() === '')
@@ -40,29 +69,24 @@
             }
             if (e.keyCode == 13) {
                 rowData = champNav.row(0, {row: 'current', search: 'applied'}).data();
-                window.open(rowData[3], '_self');
+                window.open(rowData['DT_RowAttr']['data-href'], '_self');
             }
             $('#champions-navbar').removeClass('hidden');
             champNav.column(4).search($(this).val()).draw();
         });
         // Hide everything if out of focus.
-        $('#champion-navbar-search input').focusout(function() {
+        $('#champion-navbar-search').focusout(function() {
             // Minor timeout to allow redirection.
             setTimeout(function() {
                     $('#champions-navbar').addClass('hidden');
                 }, 100);
         });
-        $('#champion-navbar-search input').focus(function() {
-            if ($('#champion-navbar-search input').val() !== '')
+        $('#champion-navbar-search').focus(function() {
+            if ($('#champion-navbar-search').val() !== '')
             {
                 $('#champions-navbar').removeClass('hidden');
             }
         });
-    });
-
-    // Binding table row links
-    $('tr[data-href]').on("click", function() {
-        window.open($(this).data('href'), '_self');
     });
 
     // Filters options
@@ -74,13 +98,6 @@
 
     // Timeout messages
     setTimeout(function() { $('#messagesDiv').animate({'height':'0px'}, function() { $('#messagesDiv').hide() } );}, 5000);
-
-    // Pretty tables
-    $("tr").hover(function() {
-        $(this).animate({'background-color': 'rgba(230,255,230,1)'});
-    }, function() {
-        $(this).animate({'background-color': 'white'});
-    });
 
     $("th").hover(function() {
         $(this).animate({'background-color': 'rgba(128,0,0,1)', 'color':'white'});

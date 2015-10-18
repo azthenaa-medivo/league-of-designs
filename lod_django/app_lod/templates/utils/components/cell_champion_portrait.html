@@ -1,0 +1,12 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-champion-portrait{% endblock %}
+
+{% block template %}
+{% load staticfiles %}
+{% verbatim %}
+<div>
+    <a href="{{DT_RowAttr.data-href}}"><img class="medium-icon" src="{% endverbatim %}{% static "images/portraits/" %}{% verbatim %}{{portrait}}"></img></a>
+</div>
+{% endverbatim %}
+{% endblock %}

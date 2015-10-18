@@ -75,7 +75,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'utilities.context_processors.champions_list_data',
                 'utilities.context_processors.static_models_data',
                 'utilities.context_processors.navbar_search',
             ],

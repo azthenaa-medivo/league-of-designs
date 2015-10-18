@@ -1,0 +1,7 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-champion-url{% endblock %}
+
+{% block template %}
+{% url "champion" '' %}{% verbatim %}{{url_id}}{% endverbatim %}
+{% endblock %}

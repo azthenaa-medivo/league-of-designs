@@ -1,0 +1,11 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-champion-red-posts-count{% endblock %}
+
+{% block template %}
+{% verbatim %}
+<div>
+    {{#if glorious_posts}}<span class="rioter">{{glorious_posts}}</span> Red Posts ({{total_posts}} total){{ else }}{{total_posts}} Red Posts{{/if}}
+</div>
+{% endverbatim %}
+{% endblock %}

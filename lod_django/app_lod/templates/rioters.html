@@ -26,12 +26,10 @@ Rioters -
             {% for r in rioters %}
             <tr>
                 <td><a class="rioter" href="{% url "rioter" r.url_id %}">{{r.name}}</a></td>
-                <td data-order="{{r.glorious_posts|int}}">{% if r.glorious_posts == 0 %}{{r.posts|length|int}} Red Posts{% else %}{{r.posts|length|int}} Red Posts (<span class="rioter">{{r.glorious_posts|int}}</span> about Design){% endif %}</td>
+                <td data-order="{{r.glorious_posts|int}}">{% if r.glorious_posts == 0 %}{{r.total_posts|int}} Red Posts{% else %}{{r.total_posts|int}} Red Posts (<span class="rioter">{{r.glorious_posts|int}}</span> about Design){% endif %}</td>
                 <td>
-                    {% with p=r.posts|last %}
-                    In <a href="{{p.url}}">{{p.thread}}</a>
-                    ({% include "utils/date_span.html" with date=p.date|isoformat %})
-                    {% endwith%}
+                    In <a href="{{r.last_post.url}}">{{r.last_post.thread}}</a>
+                    ({% include "utils/date_span.html" with date=r.last_post.date|isoformat %})
                 </td>
             </tr>
             {% endfor %}

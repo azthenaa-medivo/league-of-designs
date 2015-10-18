@@ -17,7 +17,6 @@
             stacks.each(function() {
                 totalHeight += $(this).outerHeight(true);
             });
-            console.log(totalHeight);
             redContents.animate({'max-height': totalHeight+'px'}, 300);
             redContents.children('.read-more').animate({'opacity': 0}, 500);
         }, function() {

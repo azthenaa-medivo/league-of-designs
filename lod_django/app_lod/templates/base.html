@@ -56,11 +56,11 @@
                         </div>
                     </form>
                     <li id="li-champions" class="{% active_page request "champion" %}"><a href="{% url "champions-grid" %}"><i class="glyphicon glyphicon-queen"></i> Champions</a></li>
-                    <form class="navbar-form navbar-left" role="search">
+                    <form id="css-nav-search" class="navbar-form navbar-left" role="search">
                         <div class="form-group">
                             <input id="champion-navbar-search" type="text" class="form-control" placeholder="Search champion...">
                         </div>
-                        {% include "utils/champions_table.html" with champions=champions id="champions-navbar" class=" hidden " %}
+                        {% include "utils/champions_table.html" with id="champions-navbar" class=" hidden " %}
                     </form>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -105,6 +105,8 @@
         </a>
     </div>
 
+    <!-- Global Handlebars -->
+    {% include "utils/components/champions_table_handlebars.html" %}
     <!-- JS wait there are many... oh well. Just download them once. -->
     <script src="{% static "js/jquery.js" %}"></script>
     <script src="{% static "js/jquery-ui.min.js" %}"></script>
@@ -140,6 +142,7 @@
       ga('create', 'UA-68615567-1', 'auto');
       ga('send', 'pageview');
     </script>
+    <!-- Otherz -->
     {% block js %}{% endblock %}
 
     <footer>

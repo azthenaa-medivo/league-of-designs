@@ -50,6 +50,10 @@ table.dataTable span.highlight {
     cursor: help;
 }
 
+.cursorPointer {
+    cursor: pointer;
+}
+
 #homeHeaderCaret {
     cursor: pointer;
 }
@@ -285,10 +289,6 @@ a.no-underline:hover {
 
 .navbar > .container {
     margin-top: 13px;
-}
-
-tr[data-href] {
-    cursor: pointer;
 }
 
 .small-pencil {

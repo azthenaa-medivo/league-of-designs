@@ -31,7 +31,7 @@ db.mr_reds.find({'done': {'$ne': 1}}).forEach(function(red) {
 
 db.mr_reds.update({'done': {'$ne': 1}}, {'$set':{'done':1}}, {'multi': 1});
 
-// And now we check the different champions they talked about.
+// And now we check the different champions they talked about. Also ne note the latest post t
 
 var rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
 
@@ -39,8 +39,21 @@ db.mr_rioters.find().forEach(function(rioter) {
     var champ_occ = {}; // 8/8 would name a variable again
     var glorious_posts = 0;
     var total_posts = rioter['posts'].length;
+    if (rioter['posts'].length > 0)
+    {
+        var latest = rioter['posts'][0];
+    } else {
+        var latest = null;
+    }
     for (i=0;i<rioter['posts'].length;i++)
     {
+        if (latest != null)
+        {
+            if (rioter['posts'][i]['date'] > latest['date'])
+            {
+                latest = rioter['posts'][i];
+            }
+        }
         if ('champions' in rioter.posts[i])
         {
             for (j=0;j<rioter['posts'][i]['champions_data'].length;j++)
@@ -65,6 +78,7 @@ db.mr_rioters.find().forEach(function(rioter) {
         update.push(champ_occ[k]);
     }
     rioters_bulk.find({'_id': rioter['_id']}).update({$set: {
+                                                                'last_post': latest,
                                                                 'champion_occurrences': update,
                                                                 'glorious_posts': glorious_posts,
                                                                 'total_posts': total_posts,
@@ -72,4 +86,4 @@ db.mr_rioters.find().forEach(function(rioter) {
 });
 
 rioters_bulk.execute();
-db.mr_rioters.createIndex( { 'name': "text", 'posts': 1} );
+db.mr_rioters.createIndex( { 'name': "text", 'posts': "text"} );

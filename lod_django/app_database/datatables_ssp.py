@@ -33,7 +33,6 @@ class DataTablesServerSideProcessor(object):
         if self.dt_query is not None:
             self.filter()
         self.sort()
-        self.project()
         self.result_data = self.consumer.get(self.collection, query=self.query, skip=self.dt_skip,
                                                        limit=self.dt_length).sort(self.sorting)
         self.records_filtered = self.result_data.count()
