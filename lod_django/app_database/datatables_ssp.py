@@ -45,10 +45,6 @@ class DataTablesServerSideProcessor(object):
         if self.dt_search != '':
             self.query['$text'] = {'$search': self.dt_search}
 
-    def project(self):
-        for p in self.dt_projection:
-            self.projection[p] = 1
-
     def sort(self):
         self.sorting = list((self.fields[o['column']], order_dict[o['dir']]) for o in self.dt_sorting)
 
