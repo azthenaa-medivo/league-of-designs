@@ -77,7 +77,7 @@ db.mr_rioters.find().forEach(function(rioter) {
     {
         update.push(champ_occ[k]);
     }
-    rioters_bulk.find({'_id': rioter['_id']}).update({$set: {
+    rioters_bulk.find({'_id': rioter['_id']}).updateOne({$set: {
                                                                 'last_post': latest,
                                                                 'champion_occurrences': update,
                                                                 'glorious_posts': glorious_posts,

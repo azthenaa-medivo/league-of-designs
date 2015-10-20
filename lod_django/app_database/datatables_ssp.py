@@ -1,3 +1,4 @@
+import itertools
 import json
 from app_database.consumer import MongoConsumer
 
@@ -16,6 +17,7 @@ class DataTablesServerSideProcessor(object):
         self.dt_skip = tmp_args['start']
         self.dt_length = tmp_args['length']
         self.dt_search = tmp_args['search']
+        self.is_search = self.dt_search['value'] != ''
         self.dt_sorting = tmp_args['order']
         self.dt_query = tmp_args['query'] if 'query' in tmp_args else {}
         self.dt_projection = tmp_args['projection'] if 'projection' in tmp_args else {}
@@ -33,23 +35,24 @@ class DataTablesServerSideProcessor(object):
         if self.dt_query is not None:
             self.filter()
         self.sort()
-        self.result_data = self.consumer.get(self.collection, query=self.query, skip=self.dt_skip,
-                                                       limit=self.dt_length).sort(self.sorting)
+        self.result_data = self.consumer.get(self.collection, query=self.query, projection=self.projection if self.projection != {} else None,
+                                             skip=self.dt_skip, limit=self.dt_length).sort(list(self.sorting))
         self.records_filtered = self.result_data.count()
         self.records_total = self.consumer.get(self.collection).count()
         self.data_postprocess()
 
     def filter(self):
         """Basic filtering using the text input, override this in your subclass if you want to be more specific."""
-        if self.dt_search != '':
+        if self.is_search != '':
             self.query['$text'] = {'$search': self.dt_search}
+            self.projection['META_score'] = {'$meta': 'textScore'}
 
     def sort(self):
-        self.sorting = list((self.fields[o['column']], order_dict[o['dir']]) for o in self.dt_sorting)
+        self.sorting = ((self.fields[o['column']], order_dict[o['dir']]) for o in self.dt_sorting)
 
     def data_postprocess(self):
-        """Whatever to do with the data if needed."""
-        pass
+        """Whatever to do with self.result_data if needed."""
+        self.result_data = list(self.result_data)
 
     def output_result(self):
         output = {

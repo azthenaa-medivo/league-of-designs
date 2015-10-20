@@ -1,3 +1,4 @@
+import operator
 from .forms import RedPostDetailedSearchForm
 from app_lod.models import GLORIOUS_SECTIONS
 from app_database.datatables_ssp import DataTablesServerSideProcessor
@@ -35,18 +36,19 @@ class RedPostsSSP(DataTablesServerSideProcessor):
         if key in ['$or', '$and']:
             workon = {k: v for k, v in [list(t.items())[0] for t in mongo_query[key]]}
         # Text search
-        if self.dt_search is not None and self.dt_search['value'] != "":
+        if self.is_search:
             if '$text' in workon and '$search' in workon['$text']:
                 workon['$text']['$search'] = workon['$text']['$search'] + ' ' + self.dt_search['value']
             else:
                 workon['$text'] = {'$search': self.dt_search['value']}
+            # Add the score to the retrieved data
+            self.projection['META_score'] = {'$meta': 'textScore'}
         # Rebuild the query if necessary
         if key in ['$or', '$and']:
             workon = {key: [{k: v} for k, v in workon.items()]}
         self.query = workon
 
     def data_postprocess(self):
-        data = list(self.result_data)
-        for d in data:
+        super(RedPostsSSP, self).data_postprocess()
+        for d in self.result_data:
             d['contents'] = to_markdown(d['contents'])
-        self.result_data = data
