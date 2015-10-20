@@ -69,7 +69,8 @@ def view_champions_grid(request):
             for c in champions:
                 c['DT_RowAttr'] = {'data-href': reverse('champion', kwargs={'url_id': c['url_id']})}
             return HttpResponse(JSONObjectIdEncoder().encode({'data': champions}), content_type='application/json')
-    return {'roles': zip(ROLES, ROLES)}
+    champions = consumer.get('mr_champions')
+    return {'champions': champions, 'roles': zip(ROLES, ROLES)}
 
 @login_required
 @render_to('champion_edit.html')
