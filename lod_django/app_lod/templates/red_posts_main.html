@@ -145,17 +145,17 @@ Red Posts -
                 redTable.column(5).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
             });
 
-            // Auto search NA
-            $('.region-filter[value=NA]').click();
-
             // You know I should template them scripts...
             $('.design-only').change(function() {
                 redTable.column(6).search($(this).is(':checked') ? 'true':'').draw();
             });
 
+            {% if param_is_and %}// Auto search NA
+            $('.region-filter[value=NA]').click();
+
             // Auto Design Only
             $('#designOnlyCheck').click();
-
+            {% endif %}
             // Hey !
             $('#red-table_wrapper > .top').wrapInner('<div class="container"></div>');
         } );
