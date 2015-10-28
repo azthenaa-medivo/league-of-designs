@@ -43,7 +43,8 @@ def view_red_posts(request):
         param_is_and = False
         form = RedPostDetailedSearchForm(request.GET)
         get_data = form.cleaned_data if form.is_valid() else None
-    return {'rioters': rioters, 'get_data': get_data, 'param_is_and': param_is_and, 'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
+    return {'rioters': rioters, 'get_data': get_data, 'param_is_and': param_is_and, 'g_sections': GLORIOUS_SECTIONS,
+            'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
 
 @render_to('red_posts_search.html')
 def view_red_posts_search(request):
@@ -69,7 +70,7 @@ def view_champions_grid(request):
             for c in champions:
                 c['DT_RowAttr'] = {'data-href': reverse('champion', kwargs={'url_id': c['url_id']})}
             return HttpResponse(JSONObjectIdEncoder().encode({'data': champions}), content_type='application/json')
-    champions = consumer.get('mr_champions')
+    champions = consumer.get('mr_champions', sort_field="name")
     return {'champions': champions, 'roles': zip(ROLES, ROLES)}
 
 @login_required

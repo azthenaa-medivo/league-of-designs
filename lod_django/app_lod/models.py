@@ -19,11 +19,12 @@ ARTICLE_TYPE = (
     ('General', 'General'),
 )
 
-GLORIOUS_SECTIONS = ["Gameplay & Balance", "Champions & Gameplay", "Live Gameplay Balance",
-                     "Champions & Gameplay Feedback", "Maps & Modes"]
+GLORIOUS_SECTIONS = ["Gameplay", "Dev Corner", "Gameplay & Balance", "Champions & Gameplay", "Live Gameplay Balance",
+                     "Champions & Gameplay Feedback","Maps & Modes",]
 
-ALL_SECTIONS = ["Gameplay & Balance", "Champions & Gameplay", "Live Gameplay Balance", "Champions & Gameplay Feedback",
-                "Maps & Modes", "Announcements", "Boards Feedback", "Esports", "Community Creations", "Memes & Games",
+ALL_SECTIONS = ["Gameplay", "Dev Corner", "Gameplay & Balance", "Champions & Gameplay", "Live Gameplay Balance",
+                "Champions & Gameplay Feedback", "Maps & Modes",
+                "Announcements", "Boards Feedback", "Esports", "Community Creations", "Memes & Games",
                 "Miscellaneous", "Skins & Champion Concepts", "Story & Art", "Report a Bug", "Tips & Tricks",
                 "Team Recruitment", "Sound & Music", "League Videos", "Fantasy LCS", "General Discussion", "Bugs",
                 "Client & New Features Feedback", "Site Feedback", "General PBE Feedback"]

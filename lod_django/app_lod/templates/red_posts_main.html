@@ -72,6 +72,13 @@ Red Posts -
             // Then ready the Red Table !
             var languageLoading = '<b><img src="{% static "images/lod/loading.gif" %}" width="40px" alt="Loading" title="Loading"></img> Getting all them Red Posts... (If it takes forever it might mean there aren\'t any.)</b>';
             var languageNoRecords = '<b><img src="{% static "images/lod/ritopls.gif" %}" width="40px" alt="No Records" title="No Records"></img> No Red Post matches your criteria...</b>';
+            var canDraw = false;
+            // Special filter stuff
+            var gloriousRegions = ['NA'];
+            var onlyRegions = false;
+            var gloriousSections = {{g_sections | safe}};
+            var onlySections = false;
+            // Table
             var redTable = $('#red-table').DataTable({
                 "processing": true,
                 "serverSide": true,
@@ -88,6 +95,17 @@ Red Posts -
                                     {% else %}{% endif %}{% endfor %}
                                 }
                             };
+                            // Sections
+                            if (onlySections)
+                            {
+                                q.query.section = gloriousSections;
+                            }
+                            // Regions
+                            if (onlyRegions)
+                            {
+                                q.query.region = gloriousRegions;
+                            }
+                            // Rioters
                             return {"args": JSON.stringify( $.extend(args, q))};
                         },
                 },
@@ -133,29 +151,46 @@ Red Posts -
                     },
                 ],
                 "searchHighlight": true,
+                "deferLoading": true,
             });
 
-            // Filter Rioter
+            // Avoid sending 487985 requests when pre-filtering.
+            function safeDraw() {
+                if (canDraw) {
+                    redTable.draw();
+                }
+                return;
+            }
+
+            // Filter Rioter, don't mind me I have no idea why this is working ???
             $('#rioter-select').change(function() {
                 redTable.column(0).search($(this).val()).draw();
+
             });
 
-            // Filter out EUW
+            // Region filters
             $('.region-filter').change(function() {
-                redTable.column(5).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
+                gloriousRegions = $('.region-filter:checked').map(function() { return $(this).val(); }).get();
+                onlyRegions = true;
+                safeDraw();
             });
 
             // You know I should template them scripts...
             $('.design-only').change(function() {
-                redTable.column(6).search($(this).is(':checked') ? 'true':'').draw();
+                onlySections = $(this).is(':checked');
+                safeDraw();
             });
 
-            {% if param_is_and %}// Auto search NA
-            $('.region-filter[value=NA]').click();
-
+            {% if param_is_and %}
+            // Auto NA
+            $('input[value="NA"]').click();
             // Auto Design Only
             $('#designOnlyCheck').click();
             {% endif %}
+
+            // Allow draw now ! wwww
+            canDraw = true;
+            redTable.draw()
             // Hey !
             $('#red-table_wrapper > .top').wrapInner('<div class="container"></div>');
         } );
