@@ -191,7 +191,8 @@
             });
             {% if champion.glorious_posts != 0 %}
             // Auto search NA
-            $('.region-filter[value=NA]').click();
+            $('.region-filter[value="NA"]').click();
+            $('.region-filter[value="PBE"]').click();
 
             // Auto filter Gloriou-- alright, relevant sections
             $('.design-only').click();
