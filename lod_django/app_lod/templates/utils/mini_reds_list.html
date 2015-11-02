@@ -14,11 +14,13 @@
         <a href="{% url "rioter" rioter_url_id=red.rioter_url_id %}" class="rioter">{{red.rioter}}</a>,
         {% include "utils/date_span.html" with date=red.date|isoformat %} in thread <a href="{{red.url}}" target="_blank">{{red.thread}}</a>
     </div>
+    {% if red.champions_data|length != 0 %}
     <div class="text-center red-champions">
         {% for c in red.champions_data %}
             {% include "utils/mini_champion_icon.html" with champion=c %}
         {% endfor %}
     </div>
+    {% endif %}
 </div>
 <hr>
 {% endfor %}

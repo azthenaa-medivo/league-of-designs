@@ -19,9 +19,8 @@ consumer = LoDConsumer('lod')
 @render_to('home.html')
 def view_home(request):
     reds = consumer.get('mr_reds', sort_field='date', sort_order=-1, limit=5,
-                        query={'champions': {'$exists': True, '$ne': []},
-                                                  'region': 'NA',
-                                                  'section' : {'$in': GLORIOUS_SECTIONS}})
+                        query={'region': {'$in': ['NA', 'PBE']},
+                                'section' : {'$in': GLORIOUS_SECTIONS}})
     articles = consumer.get('articles', limit=2, query={'type': 'News'}, sort_field="date_created", sort_order=-1)
     champions = consumer.get('mr_champions', projection={'name': 1, 'url_id': 1, 'total_posts': 1, 'glorious_posts': 1,
                                                          'portrait': 1, 'search': 1})
