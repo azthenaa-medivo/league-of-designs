@@ -22,7 +22,8 @@ class ChampionForm(Form):
 
     def save(self):
         if hasattr(self, 'cleaned_data'):
-            return consumer.update_champion(self.cleaned_data)
+            c_id = self.cleaned_data.pop('_id', None)
+            return consumer.update('mr_champions', {'_id': ObjectId(c_id)}, {'$set': self.cleaned_data})
 
     def is_valid(self):
         return super(Form, self).is_valid() and objectid_re.match(self.cleaned_data['_id'])

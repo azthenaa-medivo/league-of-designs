@@ -35,10 +35,7 @@ class MongoConsumer:
             return self.get_collection(collection).update_one(query, data, *args, **kwargs)
 
 class LoDConsumer(MongoConsumer):
-    def update_champion(self, data):
-        """Update champion with Mongo id with $set: dict."""
-        c_id = data.pop('_id', None)
-        return self.database.mr_champions.update_one({'_id': ObjectId(c_id)}, {'$set': data})
+    """This subclass will simply provide wrapper for postimport operations."""
 
     @postimport('articles_postimport.js')
     def update_article(self, query, data, multi=False, *args, **kwargs):
