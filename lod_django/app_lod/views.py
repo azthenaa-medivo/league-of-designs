@@ -77,7 +77,7 @@ def view_champions_grid(request):
 def edit_champion(request, url_id):
     champion = consumer.get_one('mr_champions', query={'url_id':url_id})
     if champion is None:
-        return {'champion': {'name':'Kappa'}}
+        return {'champion': {'name': 'Kappa'}}
     if request.method == 'POST':
         form = ChampionForm(request.POST)
         if form.is_valid():
@@ -123,12 +123,17 @@ def edit_article(request, article_id):
             champion = consumer.get_one('mr_champions', query={'url_id': request.GET.get('champion')})
         form = ArticleForm(request.POST)
         if form.is_valid():
+            form.setup()
             o = form.save()
             # Check if we updated or inserted
-            if o['op'] == 'i':
-                r_url = reverse('article-edit', kwargs={'article_id': o['url_id']})
-                return HttpResponseRedirect(r_url + '?success=1')
+            if o.upserted_id is not None:
+                # For some reason it's never "upserted" (despite being)... I'll check on this issue later.
+                # TODO: See why data is never "upserted" (despite being upserted with ``upsert=True``).
+                messages.add_message(request, messages.SUCCESS, 'Article was successfully created !', extra_tags='text-success')
+                r_url = reverse('article-edit', kwargs={'article_id': form.cleaned_data['url_id']})
+                return HttpResponseRedirect(r_url)
             else:
+                article_id = form.cleaned_data['url_id']
                 form = ArticleForm(request.POST)
                 messages.add_message(request, messages.SUCCESS, 'Article was correctly updated !', extra_tags='text-success')
         else:
@@ -137,8 +142,6 @@ def edit_article(request, article_id):
         if request.GET.get('champion') is not None:
             # Article about a champion
             champion = consumer.get_one('mr_champions', query={'url_id': request.GET.get('champion')})
-        if request.GET.get('success') is not None:
-            messages.add_message(request, messages.SUCCESS, 'Article was successfully created !', extra_tags='text-success')
         article = consumer.get_one('articles', query={'url_id': article_id})
         if article is None:
             form = NewArticleForm({'champion': champion['_id'] if champion is not None else None, 'url_id': article_id,
@@ -157,7 +160,7 @@ def kill_article(request, article_id):
         if request.method == 'POST':
             consumer.remove_article(query={'url_id': article_id})
             messages.add_message(request, messages.SUCCESS, "Article " + article['title'] + " was successfully ANNIHILATED. Rejoice !",  extra_tags='text-success')
-            return HttpResponseRedirect(request.POST.get('next'))
+            return HttpResponseRedirect(reverse('articles-list'))
     else:
         return HttpResponseRedirect('/')
 

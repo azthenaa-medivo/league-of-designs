@@ -1,13 +1,19 @@
 import datetime
 import itertools
+import re
 import string
-from django.forms import Form, CharField, ChoiceField, MultipleChoiceField, Textarea, HiddenInput, TextInput, \
-                            DateTimeField, DateInput, BooleanField, CheckboxSelectMultiple, SelectMultiple
 from .models import STATUS, ARTICLE_TYPE, TAGS, ROLES, ALL_SECTIONS, REGIONS, DATE_FORMATS
 from app_database.consumer import LoDConsumer
+from bson import ObjectId
+from django.forms import Form, CharField, ChoiceField, MultipleChoiceField, Textarea, HiddenInput, TextInput, \
+                            DateTimeField, DateInput, BooleanField, CheckboxSelectMultiple, SelectMultiple
+from random import choice
 from utilities.mixins import MongoSearchForm
 
 consumer = LoDConsumer('lod')
+
+void_field = (('None', '--- None ---'),)
+objectid_re = re.compile(r'^[a-f\d]{24}$')
 
 class ChampionForm(Form):
     _id = CharField(widget=HiddenInput)
@@ -15,27 +21,45 @@ class ChampionForm(Form):
     status = ChoiceField(choices=STATUS)
 
     def save(self):
-        return consumer.update_champion(self.cleaned_data)
+        if hasattr(self, 'cleaned_data'):
+            return consumer.update_champion(self.cleaned_data)
 
     def is_valid(self):
-        return super(Form, self).is_valid() and len(self.cleaned_data['_id']) == 24
+        return super(Form, self).is_valid() and objectid_re.match(self.cleaned_data['_id'])
 
 class NewArticleForm(Form):
     _id = CharField(widget=HiddenInput)
     title = CharField(required=True, widget=TextInput(attrs={'size': '60'}))
     url_id = CharField(required=False, widget=TextInput(attrs={'size': '60'}))
     author = CharField()
-    champion = ChoiceField(choices=itertools.chain((('None', '--- None ---'),), ((c['name'], c['name']) for c in
-                                    list(consumer.get('mr_champions', projection={'name': 1}))),))
+    champion = ChoiceField(choices=itertools.chain(void_field, ((c['name'], c['name']) for c in
+                                    list(consumer.get('mr_champions', projection={'name': 1}, sort_field="name"))),))
     type = ChoiceField(choices=ARTICLE_TYPE, required=True, initial='General')
-    # We'll add 'created' and 'last_edited' fields alla mano.
     contents = CharField(required=True, widget=Textarea(attrs={'cols': '120', 'rows': 20}))
 
+    def setup(self):
+        if hasattr(self, 'cleaned_data'):
+            if self.cleaned_data['url_id'] in [None, '']:
+                self.cleaned_data['url_id'] = re.sub(' +', '-', re.sub(r'\W+-', '', self.cleaned_data['title']))
+            self.cleaned_data['date_modified'] = datetime.datetime.utcnow()
+            if self.cleaned_data['_id'] == "new":
+                self.cleaned_data['date_created'] = datetime.datetime.utcnow()
+
     def save(self):
-        return consumer.update_article(self.cleaned_data)
+        if hasattr(self, 'cleaned_data'):
+            article_id = self.cleaned_data.pop('_id', None)
+            if article_id == "new":
+                query = {}
+                self.cleaned_data['url_id'] = 'PLZ-CHANGE-URL-'+''.join(choice(string.ascii_lowercase+string.digits)
+                                                                    for k in range(1,15))
+            else:
+                query = {'_id': ObjectId(article_id)}
+            return consumer.update_article(query, {'$set': self.cleaned_data})
+        else:
+            return None
 
     def is_valid(self):
-        return super().is_valid() and len(self.cleaned_data['_id']) == 24 or self.cleaned_data['_id'] == "new"
+        return super().is_valid() and objectid_re.match(self.cleaned_data['_id']) or self.cleaned_data['_id'] == "new"
 
 class ArticleForm(NewArticleForm):
     _id = CharField(widget=HiddenInput)
@@ -70,3 +94,7 @@ class RedPostDetailedSearchForm(MongoSearchForm):
                             post contents or thread title. If "match all" is unchecked, those won't be processed.""",
                             widget=TextInput(attrs={'class': 'form-control',
                                                     'placeholder': """Search in post contents or thread title..."""}))
+    # post_id = CharField(required=False, label="Thread", widget=TextInput(attrs={'class': 'form-control',
+    #                                                 'placeholder': """Search a specific thread or post ID..."""}),
+    #                     help_text="""Look for a specific post or thread ID. It looks like 'XXXXXX' for threads, and
+    #                                 'XXXXXX,012345789' for a post inside a thread.""")

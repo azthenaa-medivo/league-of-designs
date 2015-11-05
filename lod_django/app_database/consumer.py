@@ -24,6 +24,16 @@ class MongoConsumer:
     def get_one(self, collection, query={}, projection=None, *args, **kwargs):
         return self.get_collection(collection).find_one(query, projection, *args, **kwargs)
 
+    def insert(self, collection, data, *args, **kwargs):
+        return self.get_collection(collection).insert(data, *args, **kwargs)
+
+    def update(self, collection, query, data, multi=False, *args, **kwargs):
+        """Updates in ``collection`` something that matches ``query`` with ``data``. One."""
+        if multi:
+            return self.get_collection(collection).update_many(query, data, *args, **kwargs)
+        else:
+            return self.get_collection(collection).update_one(query, data, *args, **kwargs)
+
 class LoDConsumer(MongoConsumer):
     def update_champion(self, data):
         """Update champion with Mongo id with $set: dict."""
@@ -31,31 +41,16 @@ class LoDConsumer(MongoConsumer):
         return self.database.mr_champions.update_one({'_id': ObjectId(c_id)}, {'$set': data})
 
     @postimport('articles_postimport.js')
-    def update_article(self, data):
-        """Update article with Mongo id with $set: data and map it to its related champion if specified.
-        Also generates a proper url_id if needed. If auto_pi is True, we will also execute the map/reduce
-        operations."""
-        article_id = data.pop('_id', None)
-        res = {}
-        if data['url_id'] in [None, '']:
-            data['url_id'] = re.sub(' +', '-', re.sub(r'\W+-', '', data['title']))
-        res['url_id'] = data['url_id']
-        data['date_modified'] = datetime.datetime.utcnow()
-        if article_id == "new":
-            data['date_created'] = datetime.datetime.utcnow()
-            res['op'] = 'i'
-            res['db'] = self.database.articles.insert(data)
-        else:
-            res['op'] = 'u'
-            res['db'] = self.database.articles.update({'_id': ObjectId(article_id)}, {'$set': data}, upsert=True)
-        return res
+    def update_article(self, query, data, multi=False, *args, **kwargs):
+        """Update article, wrapper for the @postimport."""
+        return self.update('articles', query, data, multi=multi, upsert=True, *args, **kwargs)
 
     @postimport('articles_postimport.js')
     def remove_article(self, query):
         """Remove whatever article is found by the Query. TO THE DEPTHS."""
-        res = self.database.articles.remove(query)
-        return res
+        return self.database.articles.remove(query)
 
 if __name__ == '__main__':
-    c = MongoConsumer('lod')
-    print(list(c.get('mr_champions')))
+    from random import random
+    c = LoDConsumer('test')
+    print(c.update_one('test', {'name': 'CRONTABED'}, {'$set': {'kappa': 'PRIDE' + str(int(random()*45))}}))
