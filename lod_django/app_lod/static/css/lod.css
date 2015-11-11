@@ -205,6 +205,14 @@ table.dataTable span.highlight {
     font-weight: bold;
 }
 
+.championTable tr > td:nth-child(1) {
+    width: 10%;
+}
+
+.championTable tr > td:nth-child(2) {
+    width: 10%;
+}
+
 #home-button {
     position: fixed;
     top: 25px;
