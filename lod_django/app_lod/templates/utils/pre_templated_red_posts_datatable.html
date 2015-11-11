@@ -29,7 +29,8 @@
         <tr>
             <td><a href="{% url "rioter" rioter_url_id=r.rioter_url_id %}" class="rioter">{{r.rioter}}</a></td>
             <td>{% include "utils/date_span.html" with date=r.date|isoformat %} ({{r.region}})</td>
-            <td><a href="{{r.url}}" target="_blank">{{r.thread}}</a></td>
+            <td><a href="{% url "red-posts" %}?thread_id={{r.thread_id}}"><i title="Rundown for thread « {{r.thread}} »" class="glyphicon glyphicon glyphicon-list rioter"></i></a>
+                &nbsp;<a href="{{r.url}}" target="_blank">{{r.thread}}</a></td>
             <td><div class="red-quote">{{r.contents|markdown | safe}}</div></td>
             <td>{{r.region}}</td>
             <td>{{r.is_glorious}}</td>

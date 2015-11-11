@@ -57,6 +57,7 @@ def view_about(request):
 def view_champion(request, url_id):
     champion = consumer.get_one('mr_champions', query={'url_id': url_id})
     if champion is None:
+        messages.add_message(request, messages.INFO, "Looks like champion %s hasn't been released yet." % url_id)
         return HttpResponseRedirect('/')
     return {'champion': champion, 'regions': zip(REGIONS, REGIONS)}
 

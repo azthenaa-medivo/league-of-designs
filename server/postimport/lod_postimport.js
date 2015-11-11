@@ -49,6 +49,7 @@ db.mr_champions.find().forEach(function(champion_res) {
                                         'section': red['section'],
                                         'region': red['region'],
                                         'is_glorious': red['is_glorious'],
+                                        'thread_id': red['thread_id'],
                             };
                             op_c = db.mr_champions.update(
                             {'_id': champion_res['_id'], 'red_posts.post_id': red['post_id']},

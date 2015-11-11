@@ -13,6 +13,7 @@
     <div class="red-rioter">
         <a href="{% url "rioter" rioter_url_id=red.rioter_url_id %}" class="rioter">{{red.rioter}}</a>,
         {% include "utils/date_span.html" with date=red.date|isoformat %} in thread <a href="{{red.url}}" target="_blank">{{red.thread}}</a>
+        &nbsp;<a href="{% url "red-posts" %}?thread_id={{red.thread_id}}"><i title="Rundown for thread « {{red.thread}} »" class="glyphicon glyphicon glyphicon-list rioter"></i></a>
     </div>
     {% if red.champions_data|length != 0 %}
     <div class="text-center red-champions">
