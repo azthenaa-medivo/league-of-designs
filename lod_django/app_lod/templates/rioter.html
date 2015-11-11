@@ -83,7 +83,7 @@
         </div>
         <div class="col-md-12">
             <h3>{{rioter.name}}'s Posts</h3>
-            {% include "utils/pre_templated_red_posts_datatable.html" with reds=rioter.posts print_champions=True %}
+            {% include "utils/red_posts_datatable.html" with table_id="red-table" %}
         </div>
 {% endblock %}
 
@@ -100,41 +100,70 @@
     <!-- Chapter 45 : Generate the Red Posts Datatable !!!11one -->
     <script>
         $(document).ready(function() {
+            {% include "utils/scripts/red_table_handlebars.html" %}
+            {% include "utils/scripts/datatable_language.html" %}
+            // Table
             var redTable = $('#red-table').DataTable({
-                "order": [[ 1, "asc" ]],
+                "ajax": {
+                    "url": "{% url 'red-posts' %}",
+                    "type": "GET",
+                    "data":
+                        function ( args ) {
+                            q = {'query': {
+                                    "is_and": true,
+                                    "rioter": ['{{rioter.name}}'],
+                                }
+                            };
+                            return {"args": JSON.stringify( $.extend(args, q))};
+                        },
+                },
+                "processing": true,
+                "serverSide": true,
+                "searchDelay": 250,
+                "columns": [
+                    { "render": function( data, type, full, meta ) {
+                        return template_rioter(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        if (type === 'display' || type === 'filter') {
+                            // If displaying
+                            return template_date(full);
+                        } else {
+                            // If sorting
+                            return full['date'];
+                        }
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_thread(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_contents(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_champions(full);
+                    }},
+                    { "data": "region" },
+                    { "data": "is_glorious" },
+                    { "render": function( data, type, full, meta ) {
+                        return template_tags(full);
+                    }},
+                ],
                 "language": {
-                    "zeroRecords": 'No Posts found matching your query.',
+                    "loadingRecords": languageLoading,
+                    "zeroRecords": languageNoRecords,
+                    "processing": languageLoading,
                 },
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
+                "order": [[ 1, "desc" ], [ 2, "desc" ]],
                 "columnDefs": [
-                {
-                    "targets": [ 0, 4, 5 ],
-                    "visible": false,
-                },],
+                    {
+                        "targets": [ 0, 5, 6, 7 ],
+                        "visible": false,
+                    },
+                ],
                 "searchHighlight": true,
             });
-
-            // Filter Rioter
-            $('#rioter-select').change(function() {
-                redTable.column(0).search($(this).val()).draw();
-            });
-
-            // Filter Regions
-            $('.region-filter').change(function() {
-                redTable.column(4).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
-            });
-
-            // Filter Glorious Sections (alright maybe I'll change that name)
-            $('.design-only').change(function() {
-                redTable.column(5).search($(this).is(':checked') ? 'true':'').draw();
-            });
-            {% if champion.glorious_posts != 0 %}
-            // Auto search NA
-            $('.region-filter[value=NA]').click();
-
-            // Auto filter Gloriou-- alright, relevant sections
-            $('.design-only').click();
-            {% endif %}
-        } );
+            $('#{{table_id}}_wrapper > .top').wrapInner('<div class="container"></div>');
+        });
     </script>
 {% endblock %}

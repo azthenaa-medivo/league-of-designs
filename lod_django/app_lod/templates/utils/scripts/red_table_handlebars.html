@@ -1,0 +1,12 @@
+            Handlebars.registerHelper('agoHB', function(date) {
+                var now = new Date();
+                var then = new Date(date);
+                return now - then;
+            });
+            var template_champions = Handlebars.compile($("#handlebars-champions").html());
+            var template_date = Handlebars.compile($("#handlebars-date").html());
+            var template_contents = Handlebars.compile($("#handlebars-contents").html());
+            var template_region = Handlebars.compile($("#handlebars-region").html());
+            var template_rioter = Handlebars.compile($("#handlebars-rioter").html());
+            var template_thread = Handlebars.compile($("#handlebars-thread").html());
+            var template_tags = Handlebars.compile($("#handlebars-tags").html());

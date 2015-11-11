@@ -271,6 +271,15 @@ a.no-underline:hover {
     font-size: 20px;
 }
 
+
+.rundown-link {
+    color: red;
+}
+
+.rundown-link:hover {
+    color: darkred;
+}
+
 #search-row {
     background-color: #ffffff;
     padding-bottom: 15px;

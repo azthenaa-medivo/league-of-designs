@@ -49,7 +49,7 @@
                         </form>
                     </div>
                 </div>
-                {% include "utils/pre_templated_red_posts_datatable.html" with reds=champion.red_posts print_champions=False %}
+                {% include "utils/red_posts_datatable.html" with table_id="red-table" %}
             </div>
             <div id="tab-discussion" class="hidden col-md-12">
                 <h2>Discussions and Articles about {{champion.name}}</h2>
@@ -161,42 +161,27 @@
     <!-- Chapter 5 : Generate the Red Posts Datatable !!!11one -->
     <script>
         $(document).ready(function() {
+            {% include "utils/scripts/red_table_handlebars.html" %}
+            {% include "utils/scripts/datatable_language.html" %}
+            // Table
             var redTable = $('#red-table').DataTable({
-                "order": [[ 1, "asc" ]],
-                "language": {
-                    "zeroRecords": 'Ain\'t nobody got time for {{champion.name}}. <a href="http://shamenun.com/" target="_blank">Shame</a>.',
+                "ajax": {
+                    "url": "{% url 'red-posts' %}",
+                    "type": "GET",
+                    "data":
+                        function ( args ) {
+                            q = {'query': {
+                                    'is_and': true,
+                                    'champions': ['{{champion.name}}'],
+                                }
+                            };
+                            {% include "utils/scripts/datatable_red_posts_default_auto_filter.html" %}
+                            return {"args": JSON.stringify( $.extend(args, q))};
+                        },
                 },
-                "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
-                "columnDefs": [
-                {
-                    "targets": [ 4, 5,],
-                    "visible": false,
-                },],
-                "searchHighlight": true,
+                {% include "utils/scripts/datatable_red_posts_default_config.html" %}
             });
-
-            // Filter Rioter
-            $('#rioter-select').change(function() {
-                redTable.column(0).search($(this).val()).draw();
-            });
-
-            // Filter Regions
-            $('.region-filter').change(function() {
-                redTable.column(4).search($('.region-filter:checked').map(function() { return $(this).val(); }).get().join('|'), true).draw();
-            });
-
-            // Filter Glorious Sections (alright maybe I'll change that name)
-            $('.design-only').change(function() {
-                redTable.column(5).search($(this).is(':checked') ? 'true':'').draw();
-            });
-            {% if champion.glorious_posts != 0 %}
-            // Auto search NA
-            $('.region-filter[value="NA"]').click();
-            $('.region-filter[value="PBE"]').click();
-
-            // Auto filter Gloriou-- alright, relevant sections
-            $('.design-only').click();
-            {% endif %}
-        } );
+            {% include "utils/scripts/datatable_red_posts_init.html" %}
+        });
     </script>
 {% endblock %}

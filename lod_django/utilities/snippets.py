@@ -89,5 +89,5 @@ def build_red_title(request, consumer):
                            else request[k].strftime("%x") if type(request[k]) == datetime.datetime
                            else ', '.join(request[k])) for k in n]
             title += '... <span class="cursorHelp among-bonus" title="'+' / '.join(title_title)+\
-                     '" markdown="1">among other things</span>.'
+                     '" markdown="1">among other things.</span>'
     return to_markdown(title)

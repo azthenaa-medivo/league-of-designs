@@ -1,0 +1,46 @@
+"processing": true,
+                "serverSide": true,
+                "searchDelay": 250,
+                "columns": [
+                    { "render": function( data, type, full, meta ) {
+                        return template_rioter(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        if (type === 'display' || type === 'filter') {
+                            // If displaying
+                            return template_date(full);
+                        } else {
+                            // If sorting
+                            return full['date'];
+                        }
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_thread(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_contents(full);
+                    }},
+                    { "render": function( data, type, full, meta ) {
+                        return template_champions(full);
+                    }},
+                    { "data": "region" },
+                    { "data": "is_glorious" },
+                    { "render": function( data, type, full, meta ) {
+                        return template_tags(full);
+                    }},
+                ],
+                "language": {
+                    "loadingRecords": languageLoading,
+                    "zeroRecords": languageNoRecords,
+                    "processing": languageLoading,
+                },
+                "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
+                "order": [[ 1, "desc" ], [ 2, "desc" ]],
+                "columnDefs": [
+                    {
+                        "targets": [ 5, 6, 7 ],
+                        "visible": false,
+                    },
+                ],
+                "searchHighlight": true,
+                "deferLoading": true,

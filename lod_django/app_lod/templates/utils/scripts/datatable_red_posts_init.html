@@ -1,0 +1,48 @@
+            // Then ready the Red Table !
+            var canDraw = false;
+            // Special filter stuff
+            var gloriousRegions = ['NA'];
+            var onlyRegions = false;
+            var gloriousSections = {{g_sections | safe}};
+            var onlySections = false;
+
+            // Avoid sending 487985 requests when pre-filtering.
+            function safeDraw() {
+                if (canDraw) {
+                    redTable.draw();
+                }
+                return;
+            }
+
+            // Filter Rioter, don't mind me I have no idea why this is working ???
+            $('#rioter-select').change(function() {
+                redTable.column(0).search($(this).val());
+                safeDraw();
+            });
+
+            // Region filters
+            $('.region-filter').change(function() {
+                gloriousRegions = $('.region-filter:checked').map(function() { return $(this).val(); }).get();
+                onlyRegions = true;
+                safeDraw();
+            });
+
+            // You know I should template them scripts...
+            $('.design-only').change(function() {
+                onlySections = $(this).is(':checked');
+                safeDraw();
+            });
+
+            {% if param_is_and %}
+            // Auto NA
+            $('input[value="NA"]').click();
+            $('input[value="PBE"]').click();
+            // Auto Design Only
+            $('#designOnlyCheck').click();
+            {% endif %}
+
+            // Allow draw now ! wwww
+            canDraw = true;
+            redTable.draw()
+            // Hey !
+            $('#{{table_id}}_wrapper > .top').wrapInner('<div class="container"></div>');

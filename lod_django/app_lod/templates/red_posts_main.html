@@ -50,39 +50,16 @@ Red Posts -
     </div>
     <hr>
     {% csrf_token %}
-    {% include "utils/red_posts_datatable.html" %}
+    {% include "utils/red_posts_datatable.html" with table_id="red-table" %}
 {% endblock %}
 
 {% block js %}
     <script>
         $(document).ready(function() {
-            // Ready the Handlebars !
-            Handlebars.registerHelper('agoHB', function(date) {
-                var now = new Date();
-                var then = new Date(date);
-                return now - then;
-            });
-            var template_champions = Handlebars.compile($("#handlebars-champions").html());
-            var template_date = Handlebars.compile($("#handlebars-date").html());
-            var template_contents = Handlebars.compile($("#handlebars-contents").html());
-            var template_region = Handlebars.compile($("#handlebars-region").html());
-            var template_rioter = Handlebars.compile($("#handlebars-rioter").html());
-            var template_thread = Handlebars.compile($("#handlebars-thread").html());
-            var template_tags = Handlebars.compile($("#handlebars-tags").html());
-            // Then ready the Red Table !
-            var languageLoading = '<b><img src="{% static "images/lod/loading.gif" %}" width="40px" alt="Loading" title="Loading"></img> Getting all them Red Posts... (If it takes forever it might mean there aren\'t any.)</b>';
-            var languageNoRecords = '<b><img src="{% static "images/lod/ritopls.gif" %}" width="40px" alt="No Records" title="No Records"></img> No Red Post matches your criteria...</b>';
-            var canDraw = false;
-            // Special filter stuff
-            var gloriousRegions = ['NA'];
-            var onlyRegions = false;
-            var gloriousSections = {{g_sections | safe}};
-            var onlySections = false;
+            {% include "utils/scripts/red_table_handlebars.html" %}
+            {% include "utils/scripts/datatable_language.html" %}
             // Table
             var redTable = $('#red-table').DataTable({
-                "processing": true,
-                "serverSide": true,
-                "searchDelay": 250,
                 "ajax": {
                     "url": "{% url 'red-posts' %}",
                     "type": "GET",
@@ -95,106 +72,14 @@ Red Posts -
                                     {% else %}{% endif %}{% endfor %}
                                 }
                             };
-                            // Sections
-                            if (onlySections)
-                            {
-                                q.query.section = gloriousSections;
-                            }
-                            // Regions
-                            if (onlyRegions)
-                            {
-                                q.query.region = gloriousRegions;
-                            }
-                            // Rioters
+                            {% include "utils/scripts/datatable_red_posts_default_auto_filter.html" %}
                             return {"args": JSON.stringify( $.extend(args, q))};
                         },
                 },
-                "columns": [
-                    { "render": function( data, type, full, meta ) {
-                        return template_rioter(full);
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        if (type === 'display' || type === 'filter') {
-                            // If displaying
-                            return template_date(full);
-                        } else {
-                            // If sorting
-                            return full['date'];
-                        }
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        return template_thread(full);
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        return template_contents(full);
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        return template_champions(full);
-                    }},
-                    { "data": "region" },
-                    { "data": "is_glorious" },
-                    { "render": function( data, type, full, meta ) {
-                        return template_tags(full);
-                    }},
-                ],
-                "language": {
-                    "loadingRecords": languageLoading,
-                    "zeroRecords": languageNoRecords,
-                    "processing": languageLoading,
-                },
-                "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
-                "order": [[ 1, "desc" ], [ 2, "desc" ]],
-                "columnDefs": [
-                    {
-                        "targets": [ 5, 6, 7 ],
-                        "visible": false,
-                    },
-                ],
-                "searchHighlight": true,
-                "deferLoading": true,
+                {% include "utils/scripts/datatable_red_posts_default_config.html" %}
             });
-
-            // Avoid sending 487985 requests when pre-filtering.
-            function safeDraw() {
-                if (canDraw) {
-                    redTable.draw();
-                }
-                return;
-            }
-
-            // Filter Rioter, don't mind me I have no idea why this is working ???
-            $('#rioter-select').change(function() {
-                redTable.column(0).search($(this).val()).draw();
-
-            });
-
-            // Region filters
-            $('.region-filter').change(function() {
-                gloriousRegions = $('.region-filter:checked').map(function() { return $(this).val(); }).get();
-                onlyRegions = true;
-                safeDraw();
-            });
-
-            // You know I should template them scripts...
-            $('.design-only').change(function() {
-                onlySections = $(this).is(':checked');
-                safeDraw();
-            });
-
-            {% if param_is_and %}
-            // Auto NA
-            $('input[value="NA"]').click();
-            $('input[value="PBE"]').click();
-            // Auto Design Only
-            $('#designOnlyCheck').click();
-            {% endif %}
-
-            // Allow draw now ! wwww
-            canDraw = true;
-            redTable.draw()
-            // Hey !
-            $('#red-table_wrapper > .top').wrapInner('<div class="container"></div>');
-        } );
+            {% include "utils/scripts/datatable_red_posts_init.html" with table_id="red-table" %}
+        });
     </script>
     <!-- Lock the search bar when scrolling -->
     <script>
