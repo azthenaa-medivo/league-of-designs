@@ -8,22 +8,19 @@ p, div, body {
 
 body { padding-top: 30px; }
 
-h1 a {
-    color: black;
-}
-
-h3 a {
-    color: black;
-}
-
-h3 i.glyphicon {
+h1 a, h3 a {
     color: darkred;
 }
 
-h1 a:hover {
+h1 a:hover, h3 a:hover {
     text-decoration: none;
-    color: black;
+    color: red;
     cursor: pointer;
+}
+
+
+h3 i.glyphicon {
+    color: darkred;
 }
 
 textarea {
@@ -268,6 +265,10 @@ a.no-underline:hover {
 
 .inline {
     display: inline-block;
+}
+
+.among-bonus {
+    font-size: 20px;
 }
 
 #search-row {

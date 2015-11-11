@@ -5,7 +5,7 @@ Red Posts -
 {% endblock %}
 
 {% block header %}
-    <h1>The Red Posts{% if request.GET.search %} - Search : « {{request.GET.search}} »{% endif %}</h1>
+    <h1>{{red_title | safe}}</h1>
 {% endblock %}
 
 {% block css %}

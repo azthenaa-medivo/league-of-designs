@@ -95,7 +95,6 @@ class RedPostDetailedSearchForm(MongoSearchForm):
                             post contents or thread title. If "match all" is unchecked, those won't be processed.""",
                             widget=TextInput(attrs={'class': 'form-control',
                                                     'placeholder': """Search in post contents or thread title..."""}))
-    # post_id = CharField(required=False, label="Thread", widget=TextInput(attrs={'class': 'form-control',
-    #                                                 'placeholder': """Search a specific thread or post ID..."""}),
-    #                     help_text="""Look for a specific post or thread ID. It looks like 'XXXXXX' for threads, and
-    #                                 'XXXXXX,012345789' for a post inside a thread.""")
+    thread_id = CharField(required=False, label="Thread", widget=TextInput(attrs={'class': 'form-control',
+                                                    'placeholder': """Search a specific thread or post ID..."""}),
+                        help_text="""Look for a specific thread ID using its ID. It looks like '3Evd2LfW'.""")

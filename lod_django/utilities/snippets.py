@@ -1,6 +1,8 @@
 import datetime
+import re
 from bson import ObjectId
 from json import JSONEncoder
+from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from app_database.postimport import postimport as pi
@@ -61,3 +63,31 @@ def to_markdown(string):
         return markdown("**Click on the thread link to view this post !**")
     else:
         return markdown(string, extensions=[QuoteExtension()])
+
+def url_idize(str, regex):
+    return regex.sub('', str)
+
+def build_red_title(request, consumer):
+    """Build at title for the Red Posts page. Just to avoid clogging the view, I'll put the mess here."""
+    title = 'The Red Posts'
+    n = [k for k, v in request.items() if bool(v) and k != 'is_and']
+    if len(n) > 0:
+        if 'thread_id' in request and request['thread_id'] != '':
+            thread = consumer.get_one('mr_reds', {'thread_id': {'$regex': '^'+request['thread_id']+'$'}},
+                                      {'thread': 1, 'url': 1, 'thread_id': 1})
+            if thread:
+                title = 'Rundown for thread [« %s »](%s)&nbsp;<span class="among-bonus" markdown="1">(ID : %s)</span>'\
+                        % (thread['thread'], thread['url'], thread['thread_id'])
+        elif 'search' in request and request['search'] != '':
+            title = 'Results for search « **%s** » in Red Posts' % request['search']
+        elif 'champions' in request and len(request['champions']) > 0:
+            r = re.compile('\W')
+            title = 'Looking for ' + ', '.join('['+c+']('+reverse('champion', kwargs={'url_id': url_idize(c, r)})+')'
+                                               for c in request['champions']) + ' in the Red Posts'
+        if len(n) > 1:
+            title_title = [k.capitalize() + ' : ' + (str(request[k]) if type(request[k]) in [str, int, bool]
+                           else request[k].strftime("%x") if type(request[k]) == datetime.datetime
+                           else ', '.join(request[k])) for k in n]
+            title += '... <span class="cursorHelp among-bonus" title="'+' / '.join(title_title)+\
+                     '" markdown="1">among other things</span>.'
+    return to_markdown(title)

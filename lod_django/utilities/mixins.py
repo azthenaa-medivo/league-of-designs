@@ -32,6 +32,10 @@ class MongoSearchForm(Form):
                         query['$text'] = {'$search': value}
                 elif field == 'is_and':
                     is_and = value
+                else:
+                    # Default case. If the data is empty ('', None), except for integers (0), don't include it.
+                    if bool(value) or (type(value) == int and value != 0):
+                        query[field] = value
             if is_and:
                 op = '$and'
             else:

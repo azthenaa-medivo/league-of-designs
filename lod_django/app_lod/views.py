@@ -1,7 +1,7 @@
 __author__ = 'artemys'
 
 import json
-from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown
+from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown, build_red_title
 from app_database.consumer import LoDConsumer
 from .lod_ssp import RedPostsSSP
 from .models import ARTICLE_TYPE, ROLES, REGIONS, GLORIOUS_SECTIONS
@@ -32,7 +32,7 @@ def view_red_posts(request):
         collection = 'mr_reds'
         database = 'lod'
         # We can get that from the data sent to the server ! to REWORK BOYZ
-        fields = ['rioter', 'date', 'thread', 'contents', 'champions', 'region', 'is_glorious', 'tags']
+        fields = ['rioter', 'date', 'thread', 'contents', 'champions', 'region', 'is_glorious', 'tags', 'thread_id']
         results = RedPostsSSP(request, database, collection, fields).output_result()
         return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
     rioters = consumer.get('mr_rioters', projection={'name': 1, 'glorious_posts': 1, 'total_posts': 1}, sort_field='name', sort_order=1)
@@ -43,7 +43,7 @@ def view_red_posts(request):
         form = RedPostDetailedSearchForm(request.GET)
         get_data = form.cleaned_data if form.is_valid() else None
     return {'rioters': rioters, 'get_data': get_data, 'param_is_and': param_is_and, 'g_sections': GLORIOUS_SECTIONS,
-            'regions': zip(REGIONS, REGIONS)} # TRICK SHOT
+            'regions': zip(REGIONS, REGIONS), 'red_title': build_red_title(get_data, consumer)} # TRICK SHOT
 
 @render_to('red_posts_search.html')
 def view_red_posts_search(request):

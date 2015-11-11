@@ -5,7 +5,8 @@
 {% block template %}
 {% verbatim %}
 <p>
-    <a href="{{url}}" target="_blank">{{thread}}</a>
+    <a href="{% endverbatim %}{% url "red-posts" %}{% verbatim %}?thread_id={{thread_id}}"><i title="Rundown for thread « {{thread}} »" class="glyphicon glyphicon glyphicon-list rioter"></i></a>
+    &nbsp;<a href="{{url}}" target="_blank">{{thread}}</a>
 </p>
 {% endverbatim %}
 {% endblock %}
