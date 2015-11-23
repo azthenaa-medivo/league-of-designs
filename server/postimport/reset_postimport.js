@@ -19,8 +19,14 @@ print('reset:mr_champions[red_posts,rioter_counter,glorious_posts,total_posts,]'
 db.mr_champions.update({},
                         {'$set': {
                                     'rioter_counter': [],
-                                    'red_posts': [],
                                     'glorious_posts': 0,
                                     'total_posts': 0,
+                        }},
+                        {'multi':1});
+
+db.mr_rioters.update({},
+                        {'$set': {
+                                    'posts': [],
+                                    'last_post': null,
                         }},
                         {'multi':1});

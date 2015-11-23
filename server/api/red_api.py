@@ -20,7 +20,10 @@ class RiotAPI:
     database = mongo_client.lod
     champion_collection = database.champions
     red_posts_collection = database.reds
+    red_posts_tmp_collection = database.reds_tmp
+    config_collection = database.config
 
+    CONF_MAX_BATCH = 150
     realms = ['na', 'euw', 'pbe']
 
     def get_champions(self):
@@ -38,27 +41,49 @@ class RiotAPI:
         """Retrieves the latest Red Posts."""
         return requests.get('http://boards.'+realm+'.leagueoflegends.com/en/redtracker.json', params=parameters)
 
-    def store_red_posts(self, data, realm):
+    def store_red_posts(self, data, realm, mega_bulk=False):
         """Stores Red Posts. Currently broken for main thread contents (waiting for Riot's fix)."""
         if len(data) == 0:
             print('Nothing to insert for realm "%s" !' % realm)
             return 0
+        self.red_posts_tmp_collection.remove({})
         bulk = self.red_posts_collection.initialize_ordered_bulk_op()
-        for d in data:
-            d.update({'region': realm})
+        # Check config 'last_batch' and include those that miss.
+        # For the moment we don't care about posts edits. We will. Worry not.
+        conf = self.config_collection.find_one({'name': 'last_batch'})
+        rioters = set()
+        flag_update_conf = False
+        if conf is None:
+            conf = {'name': 'last_batch', 'post_ids': []}
+        for d in reversed(data):
             if d.get('comment') is None:
                 post_id = d['discussion']['id']
             else:
                 post_id = d['comment']['discussion']['id'] + ',' + d['comment']['id']
-            d['post_id'] = post_id
-            bulk.find({'post_id': post_id}).upsert().update({'$set': d})
+            if post_id not in conf['post_ids']:
+                d['post_id'] = post_id
+                d['region'] = realm
+                bulk.insert(d)
+                # Update conf
+                flag_update_conf = True
+                conf['post_ids'].append(post_id)
+                if 'comment' in d:
+                    rioters.add(d['comment']['user']['name'])
+                else:
+                    rioters.add(d['discussion']['user']['name'])
+        if len(conf['post_ids']) > self.CONF_MAX_BATCH:
+            # Now we remove the last n elements from the bottom of the array (they're sorted by date descending).
+            conf['post_ids'] = conf['post_ids'][len(conf['post_ids']) - self.CONF_MAX_BATCH:]
+        conf['has_work'] = flag_update_conf
+        conf['rioters'] = list(rioters)
+        self.config_collection.update_one({'name': 'last_batch'}, {'$set': conf}, upsert=True)
         try:
             return bulk.execute()
         except InvalidOperation:
             print('Nothing to insert for realm "%s" !' % realm)
             return 0
 
-    def get_red_posts_and_store(self, realms=None, parameters=None):
+    def get_red_posts_and_store(self, realms=None, parameters=None, mega_bulk=False):
         """Retrieves the latest Red Posts and puts them into the database."""
         if realms is None:
             realms = self.realms
@@ -66,7 +91,7 @@ class RiotAPI:
         for realm in realms:
             data = self.get_red_posts(realm, parameters=parameters).json()
             count[realm] = len(data)
-            self.store_red_posts(data, realm)
+            self.store_red_posts(data, realm, mega_bulk=False)
         return count
 
     def flush(self):

@@ -1,88 +1,47 @@
 /*
- *  Version 1.2 : Now adds the number of posts to stuff
+ *  Version 1.6 : R E W O R K
  */
+
+// Load config : red posts to treat.
+var ids = db.config.findOne({'name': 'last_batch'});
+print('postimport:rioters');
+if (!(ids.has_work))
+{
+    print('No new Red Post to treat !');
+    quit();
+}
 
 load('utils.js');
 
-print('postimport:rioters');
-
-db.mr_reds.find({'done': {'$ne': 1}}).forEach(function(red) {
-    // Now we map that to Rioters <3
-    // First we check if the Rioter exists, and if needed create it.
-    db.mr_rioters.update({'name': red['rioter']}, {'$set': {'name': red['rioter'], 'url_id': urlIDize(red['rioter'])}}, {upsert: true});
-    op_rioters = db.mr_rioters.update(
-        {'name': red['rioter'], 'posts.post_id': red['post_id']},
-        {
-            '$set': {
-                'posts.$': red
-            }
-    });
-    // If no rioter's red posts was modified then we can safely push.
-    if (op_rioters.nMatched === 0) {
-        db.mr_rioters.update({'name': red['rioter']},
-            {
-                '$push': {
-                    'posts': red
-                }
-            }
-        );
-    }
-});
-
-db.mr_reds.update({'done': {'$ne': 1}}, {'$set':{'done':1}}, {'multi': 1});
-
-// And now we check the different champions they talked about. Also ne note the latest post t
-
 var rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
+var query = ids.cleanse ? {}:{'name': {'$in': ids.rioters}};
 
-db.mr_rioters.find().forEach(function(rioter) {
-    var champ_occ = {}; // 8/8 would name a variable again
-    var glorious_posts = 0;
-    var total_posts = rioter['posts'].length;
-    if (rioter['posts'].length > 0)
-    {
-        var latest = rioter['posts'][0];
-    } else {
-        var latest = null;
-    }
-    for (i=0;i<rioter['posts'].length;i++)
-    {
-        if (latest != null)
+db.mr_rioters.find(query).forEach(function(rioter) {
+    // Just count() stuff !
+    var glorious_posts = db.mr_reds.find({'rioter': rioter['name'], 'is_glorious': true}).count();
+    var total_posts = db.mr_reds.find({'rioter': rioter['name']}).count();
+    // We are sure to have at least 1 so index 0 always exists.
+    var latest = db.mr_reds.find({'rioter': rioter['name']}).sort({'date':-1})[0];
+    // Now let's count champions !
+    var champion_occurrences = [];
+    db.mr_champions.find().forEach(function(champ) {
+        // Could be faster by using an incremental way to do stuff but FOR NOW THIS WILL DO
+        var count = db.mr_reds.find({'champions': {'$in': [champ['name']]}, 'rioter': rioter['name']}).count();
+        if (count > 0)
         {
-            if (rioter['posts'][i]['date'] > latest['date'])
-            {
-                latest = rioter['posts'][i];
-            }
+            champion_occurrences.push({ 'count': count,
+                                        'name': champ['name'],
+                                        'url_id': champ['url_id'],
+                                        'portrait': champ['portrait'],
+                                        'search': champ['search']});
         }
-        if ('champions' in rioter.posts[i])
-        {
-            for (j=0;j<rioter['posts'][i]['champions_data'].length;j++)
-            {
-                if (!(rioter['posts'][i]['champions_data'][j]['name'] in champ_occ))
-                {
-                    champ_occ[rioter['posts'][i]['champions_data'][j]['name']] = rioter['posts'][i]['champions_data'][j];
-                    champ_occ[rioter['posts'][i]['champions_data'][j]['name']]['count'] = 1;
-                } else {
-                    champ_occ[rioter['posts'][i]['champions_data'][j]['name']]['count'] += 1;
-                }
-            }
-        }
-        if (contains(glorious_sections, rioter['posts'][i]['section']))
-        {
-            glorious_posts += 1;
-        }
-    }
-    update = [];
-    for (k in champ_occ)
-    {
-        update.push(champ_occ[k]);
-    }
+    });
     rioters_bulk.find({'_id': rioter['_id']}).updateOne({$set: {
-                                                                'last_post': latest,
-                                                                'champion_occurrences': update,
-                                                                'glorious_posts': glorious_posts,
-                                                                'total_posts': total_posts,
-                                                            }});
+                                                            'last_post': latest,
+                                                            'champion_occurrences': champion_occurrences,
+                                                            'glorious_posts': glorious_posts,
+                                                            'total_posts': total_posts,
+    }});
 });
 
 rioters_bulk.execute();

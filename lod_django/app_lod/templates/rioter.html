@@ -23,23 +23,10 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-4">
-                    {% with red=rioter.posts|random %}
-                    {% if red == None %}
-                    <h4>SwiftRage Never said anything SwiftRage</h4>
-                    <div>Rock solid database there m8 EleGiggle</div>
-                    {% else %}
-                    <h4>Said that {% include "utils/date_span.html" with date=red.date|isoformat %} !</h4>
-                    <div class="red-contents red-quote red-contents-220" data-max-height="220px">
-                        <div class="hoverMoreFetch bot5">{{red.contents|markdown | safe}}</div>
-                        <div class="read-more row">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-6 msg">Hover for more...</div>
-                            <div class="col-md-3"></div>
-                        </div>
+                    <h4>Welcome to {{ rioter.name }}'s personal page !</h4>
+                    <div>
+                        Check out his favourite champions and all her/his posts !
                     </div>
-                    <div>In thread <a href="{{red.url}}">{{red.thread}}</a> ({{red.section}}).</div>
-                    {% endif %}
-                    {% endwith %}
                 </div>
                 <div class="col-md-4 text-center">
                     {% with fav=rioter|favourite_champions:1 %}

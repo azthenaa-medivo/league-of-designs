@@ -1,9 +1,18 @@
+// Load config : red posts to treat.
+var ids = db.config.findOne({'name': 'last_batch'});
+print('postimport:red-posts');
+if (!(ids.has_work))
+{
+    print('No new Red Post to treat !');
+    quit();
+}
+
 load('utils.js');
 
 var bulk = db.mr_reds.initializeUnorderedBulkOp();
-print('postimport:red-posts');
+var query = ids.cleanse ? {}:{'post_id': {'$in': ids.post_ids}};
 
-db.reds.find().forEach(function(res) {
+db.reds.find(query).forEach(function(res) {
     // If it's a self-post (not a reply), there's no 'comment' field.
     var post_id, post_url, post_section, post_thread, digInto;
     if (res['comment'] === undefined)

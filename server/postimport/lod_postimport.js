@@ -1,74 +1,54 @@
 /*
- *  League of Designs Postimport v1.1.
- *  Now checks if we haven't filled the Champions field (hue) beforehand to save us some time (up to thrice as fast !).
+ *  League of Designs Postimport v1.6.
+ *  ---
+ *  Now does only required Red Posts (could even go faster, but later) and use $addToSet because it's A W E S O M E
+ *  Also no longer stores Red Posts in Champions documents. Who cares we're using this MY WAY.
+ *  ---
  *  By Artemys, m'lord humble butler.
  *  Looks for the champion's name in the Thread title and Post contents. It's that simple !
  */
 
-load('utils.js');
-
+// Load config : red posts to treat.
+var ids = db.config.findOne({'name': 'last_batch'});
 print('postimport:lod');
+if (!(ids.has_work))
+{
+    print('No new Red Post to treat !');
+    quit();
+}
+
+load('utils.js');
+var mr_reds_bulk = db.mr_reds.initializeUnorderedBulkOp();
+var mr_champions_bulk = db.mr_champions.initializeUnorderedBulkOp();
+var mr_rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
 
 db.mr_champions.find().forEach(function(champion_res) {
     var rioter_counter = {};
     var glorious = champion_res['glorious_posts'];
     var total = champion_res['total_posts'];
-    db.mr_reds.find({'$text': {'$search': champion_res['search']},
-                        'champions': {'$not': {'$in': [champion_res['name']]}}}).forEach(
+    var query = ids.cleanse ? {
+                        '$text': {'$search': champion_res['search']},
+                        'champions': {'$not': {'$in': [champion_res['name']]}}}:{'post_id': {'$in': ids.post_ids},
+                        '$text': {'$search': champion_res['search']},
+                        'champions': {'$not': {'$in': [champion_res['name']]}}};
+    db.mr_reds.find(query).forEach(
                         function(red){
-                            // Update champion data if it's not already done.
-                            // Check the tags
                             var new_tags = [];
-                            var up_op_r = {'$push': {
-                                            'champions_data': {
-                                                'name': champion_res['name'],
-                                                'url_id': champion_res['url_id'],
-                                                'portrait': champion_res['portrait'],
-                                                'search': champion_res['search'],
-                                            },
-                                            'champions': champion_res['name'],
-                            },};
-                            for (var t=0;t<champion_res['tags'].length;t++)
-                            {
-                                if (!(contains(new_tags, champion_res['tags'][t])) && !(contains(red['tags'], champion_res['tags'][t])))
-                                {
-                                    new_tags.push(champion_res['tags'][t]);
-                                }
-                            }
-                            up_op_r['$push']['tags'] = {'$each': new_tags};
-                            op_r = db.mr_reds.update({'_id': red['_id'],}, up_op_r);
-                            // Taking care of the champions now.
-                            update = {
-                                        'post_id': red['post_id'],
-                                        'rioter': red['rioter'],
-                                        'rioter_url_id': red['rioter_url_id'],
-                                        'url': red['url'],
-                                        'contents': red['contents'],
-                                        'date': red['date'],
-                                        'thread': red['thread'],
-                                        'section': red['section'],
-                                        'region': red['region'],
-                                        'is_glorious': red['is_glorious'],
-                                        'thread_id': red['thread_id'],
-                            };
-                            op_c = db.mr_champions.update(
-                            {'_id': champion_res['_id'], 'red_posts.post_id': red['post_id']},
-                            {
-                                '$set': {
-                                    'red_posts.$': update
-                                }
-                            });
-                            // If no champion was modified then we can safely push.
-                            if (op_c.nMatched === 0) {
-                                db.mr_champions.update({'_id': champion_res['_id']},
-                                    {
-                                        '$push': {
-                                            'red_posts': update
-                                        }
-                                    }
-                                );
-                            }
+                            var red_update = {'$push': {
+                                                'champions_data': {
+                                                    'name': champion_res['name'],
+                                                    'url_id': champion_res['url_id'],
+                                                    'portrait': champion_res['portrait'],
+                                                    'search': champion_res['search'],
+                                                },
+                                                'champions': champion_res['name'],
+                            }, '$addToSet': {}};
+                            red_update['$addToSet']['tags'] = {'$each': champion_res['tags']};
+                            mr_reds_bulk.find({'_id': red['_id'],}).update(red_update);
                             // Update Rioter Counters DOTA2 SPECIALIZATION ZOMG GC YOU ARE BAD wowsoTILT
+                            mr_rioters_bulk.find({'name': red['rioter']}).update({'$set': {'name': red['rioter'],
+                                                                                'url_id': urlIDize(red['rioter'])}},
+                                                                                {upsert: true});
                             if (red['rioter'] in rioter_counter)
                             {
                                 rioter_counter[red['rioter']]['count'] += 1;
@@ -76,9 +56,8 @@ db.mr_champions.find().forEach(function(champion_res) {
                                 rioter_counter[red['rioter']] = {};
                                 rioter_counter[red['rioter']]['count'] = 1;
                                 rioter_counter[red['rioter']]['name'] = red['rioter'];
-                                rioter_counter[red['rioter']]['name'] = red['rioter_url_id'];
+                                rioter_counter[red['rioter']]['url_id'] = red['rioter_url_id'];
                             }
-
                             // Update posts number ! wowsoLOD1.2
                             if (contains(glorious_sections, red['section']))
                             {
@@ -96,14 +75,17 @@ db.mr_champions.find().forEach(function(champion_res) {
             current['count'] += rioter_counter['count'];
             update_rioter_counter.push(current);
         } else {
-            // If it doesn't exist it's the start of a new journey
+            // If it doesn't exist it's the start of a new journey EVERY STEP
             update_rioter_counter.push(rioter_counter[r]);
         }
     }
-    db.mr_champions.update({'_id': champion_res['_id']}, {$set: {'rioter_counter': update_rioter_counter,
-                                                                 'total_posts': total,
-                                                                 'glorious_posts': glorious}});
+    mr_champions_bulk.find({'_id': champion_res['_id']}).update({'$set': {
+                                                                         'rioter_counter': update_rioter_counter,
+                                                                         'total_posts': total,
+                                                                         'glorious_posts': glorious}});
 });
 
+mr_reds_bulk.execute();
+mr_champions_bulk.execute();
 print('gen:text-index');
 db.mr_reds.createIndex( { 'thread': "text", 'contents': "text", 'rioter': "text", 'champions': "text", 'tags': "text" } );

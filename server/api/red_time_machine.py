@@ -29,7 +29,7 @@ if __name__ == '__main__':
     while True:
         loops += 1
         log.info("Loop %d, time is %s" %(loops, current.isoformat()))
-        res = api.get_red_posts_and_store(realms=realms, parameters={'created_to': current.isoformat()})
+        res = api.get_red_posts_and_store(realms=realms, parameters={'created_to': current.isoformat()}, mega_bulk=True)
         realms = [realm for realm, count in res.items() if count != 0]
         log.info("Pursuing for realms " + str(realms)+"...")
         if len(realms) == 0 or current < args.end:
