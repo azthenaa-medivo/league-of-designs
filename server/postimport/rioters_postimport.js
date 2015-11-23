@@ -21,21 +21,22 @@ db.mr_rioters.find(query).forEach(function(rioter) {
     var glorious_posts = db.mr_reds.find({'rioter': rioter['name'], 'is_glorious': true}).count();
     var total_posts = db.mr_reds.find({'rioter': rioter['name']}).count();
     // We are sure to have at least 1 so index 0 always exists.
-    var latest = db.mr_reds.find({'rioter': rioter['name']}).sort({'date': -1}).limit(1);
+    var latest = db.mr_reds.find({'rioter': rioter['name']}).sort({'date': -1}).limit(1)[0];
     // Now let's count champions !
     var champion_occurrences = [];
-    db.mr_champions.find().forEach(function(champ) {
-        // Could be faster by using an incremental way to do stuff but FOR NOW THIS WILL DO
-        var count = db.mr_reds.find({'champions': {'$in': [champ['name']]}, 'rioter': rioter['name']}).count();
-        if (count > 0)
-        {
-            champion_occurrences.push({ 'count': count,
-                                        'name': champ['name'],
-                                        'url_id': champ['url_id'],
-                                        'portrait': champ['portrait'],
-                                        'search': champ['search']});
-        }
-    });
+//    db.mr_champions.find().forEach(function(champ) {
+//        // Could be faster by using an incremental way to do stuff but FOR NOW THIS WILL DO
+//        // LOL NOPE
+//        var count = db.mr_reds.find({'champions': {'$in': [champ['name']]}, 'rioter': rioter['name']}).count();
+//        if (count > 0)
+//        {
+//            champion_occurrences.push({ 'count': count,
+//                                        'name': champ['name'],
+//                                        'url_id': champ['url_id'],
+//                                        'portrait': champ['portrait'],
+//                                        'search': champ['search']});
+//        }
+//    });
     rioters_bulk.find({'_id': rioter['_id']}).updateOne({$set: {
                                                             'last_post': latest,
                                                             'champion_occurrences': champion_occurrences,
