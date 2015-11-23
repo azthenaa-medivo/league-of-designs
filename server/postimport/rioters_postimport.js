@@ -21,7 +21,7 @@ db.mr_rioters.find(query).forEach(function(rioter) {
     var glorious_posts = db.mr_reds.find({'rioter': rioter['name'], 'is_glorious': true}).count();
     var total_posts = db.mr_reds.find({'rioter': rioter['name']}).count();
     // We are sure to have at least 1 so index 0 always exists.
-    var latest = db.mr_reds.find({'rioter': rioter['name']}).sort({'date':-1})[0];
+    var latest = db.mr_reds.find({'rioter': rioter['name']}).sort({'date':-1}).next();
     // Now let's count champions !
     var champion_occurrences = [];
     db.mr_champions.find().forEach(function(champ) {
