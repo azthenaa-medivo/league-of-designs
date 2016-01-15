@@ -50,7 +50,8 @@
         $('input[name=url_id]').parent().before($('.autoGenButtonWrapper').detach());
 
         function autoGen() {
-            $('input[name=url_id]').val($('input[name=title]').val().removeStopWords().replace(/[^a-zA-Z\d\s-]|\s+$/g, '').replace(/ +/g, '-').replace(/-+$/g, ""));
+            var auto_val = $('input[name=title]').val().removeStopWords().replace(/[^a-zA-Z\d\s-]|\s+$/g, '').replace(/ +/g, '-').replace(/-+$/g, "");
+            $('input[name=url_id]').val(auto_val);
         }
 
         /*

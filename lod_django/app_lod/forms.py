@@ -41,7 +41,11 @@ class NewArticleForm(Form):
     def setup(self):
         if hasattr(self, 'cleaned_data'):
             if self.cleaned_data['url_id'] in [None, '', 'new']:
-                self.cleaned_data['url_id'] = re.sub(' +', '-', re.sub(r'\W+-', '', self.cleaned_data['title']))
+                new_url = re.sub(' +', '-', re.sub(r'[^a-zA-Z0-9: ]', '', self.cleaned_data['title'])).strip('-')
+                if new_url == 'new':
+                    new_url = 'PLZ-CHANGE-URL-'+''.join(choice(string.ascii_lowercase+string.digits)
+                                                        for _ in range(1, 15))
+                self.cleaned_data['url_id'] = new_url
             self.cleaned_data['date_modified'] = datetime.datetime.utcnow()
             if self.cleaned_data['_id'] == "new":
                 self.cleaned_data['date_created'] = datetime.datetime.utcnow()
