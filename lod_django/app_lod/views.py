@@ -118,6 +118,7 @@ def view_articles_list(request):
 def edit_article(request, article_id):
     # Okay *maybe* a bit of cleanup would be <good>... <GOOD VERY GOOD ONE MORE!!!!> ahaha.wav
     champion = None
+    article = None
     # If we're saving an article
     if request.method == 'POST':
         if request.POST.get('champion') is not None:
@@ -145,11 +146,11 @@ def edit_article(request, article_id):
             champion = consumer.get_one('mr_champions', query={'url_id': request.GET.get('champion')})
         article = consumer.get_one('articles', query={'url_id': article_id})
         if article is None:
-            form = NewArticleForm({'champion': champion['_id'] if champion is not None else None, 'url_id': article_id,
+            form = NewArticleForm({'champion': champion['name'] if champion is not None else None, 'url_id': article_id,
                                    '_id': "new"})
         else:
             form = ArticleForm(article)
-    return {'champion': champion, 'form': form, 'article_id': article_id}
+    return {'champion': champion, 'form': form, 'article_id': article_id, 'article': article}
 
 @login_required
 @render_to('article_kill.html')

@@ -7,31 +7,27 @@
 {% block header %}
 {% load staticfiles %}
 {% load template_tags %}
-        {% if champion == None %}
         <div class="row">
             <div class="col-md-8">
                 <h1>
+                    {# Articles should be Champion agnostic, we'll remove/change that sometime in the future I think #}
+                    {% if champion %}
+                    <a href="{% url "champion" champion.url_id %}">
+                        <img src="{% static "images/portraits/" %}{{champion.portrait}}"></img>
+                    </a>
+                    {% endif %}
                     {% if article %}
-                        <a href="{% url "article-view" article_id=article_id %}">View article.</a>
+                    <a href="{% url "article-view" article_id=article_id %}">{{article.title}}</a>
+                    {% include "utils/article_admin.html" with article=article %}
                     {% else %}
-                        Article edition about nobody
+                    New Article{% if champion %} about {{champion.name}}{% endif %}
                     {% endif %}
                 </h1>
+                {% if article %}
+                <a href="{% url "article-view" article_id=article_id %}">View article.</a>
+                {% endif %}
             </div>
         </div>
-        {% else %}
-        <div class="row">
-            <div class="col-md-8">
-                <h1>
-                    <a href="{% url "champion" champion|get:"url_id" %}">
-                        <img src="{% static "images/portraits/" %}{{champion.portrait}}"></img>
-                        <span class="pic-h1-margin">{{champion.name}}, {{champion.title}}</span>
-                    </a>
-                </h1>
-            </div>
-        </div>
-        {% endif %}
-        <a href="{% url "article-view" article_id=article_id %}">View article.</a>
 {% endblock %}
 
 {% block contents %}

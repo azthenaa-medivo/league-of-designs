@@ -16,7 +16,7 @@
         {% else %}
             <div class="row">
                 <h1>
-                    <img src="{% static "images/portraits/" %}{{article.champion_data.portrait}}"></img>
+                    <a href="{% url "champion" article.champion_data.url_id %}"><img src="{% static "images/portraits/" %}{{article.champion_data.portrait}}"></img></a>
                     <span class="pic-h1-margin">{{article.title}}</span>
                 </h1>
             </div>
