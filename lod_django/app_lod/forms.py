@@ -30,7 +30,7 @@ class ChampionForm(Form):
 
 class NewArticleForm(Form):
     _id = CharField(widget=HiddenInput)
-    title = CharField(required=True, widget=TextInput(attrs={'size': '60'}))
+    title = CharField(required=True, min_length=9, widget=TextInput(attrs={'size': '60'}))
     url_id = CharField(required=False, widget=TextInput(attrs={'size': '60'}))
     author = CharField()
     champion = ChoiceField(choices=itertools.chain(void_field, ((c['name'], c['name']) for c in
@@ -40,7 +40,7 @@ class NewArticleForm(Form):
 
     def setup(self):
         if hasattr(self, 'cleaned_data'):
-            if self.cleaned_data['url_id'] in [None, '']:
+            if self.cleaned_data['url_id'] in [None, '', 'new']:
                 self.cleaned_data['url_id'] = re.sub(' +', '-', re.sub(r'\W+-', '', self.cleaned_data['title']))
             self.cleaned_data['date_modified'] = datetime.datetime.utcnow()
             if self.cleaned_data['_id'] == "new":
@@ -50,9 +50,7 @@ class NewArticleForm(Form):
         if hasattr(self, 'cleaned_data'):
             article_id = self.cleaned_data.pop('_id', None)
             if article_id == "new":
-                query = {}
-                self.cleaned_data['url_id'] = 'PLZ-CHANGE-URL-'+''.join(choice(string.ascii_lowercase+string.digits)
-                                                                    for k in range(1,15))
+                query = {'url_id': self.cleaned_data['url_id']}
             else:
                 query = {'_id': ObjectId(article_id)}
             return consumer.update_article(query, {'$set': self.cleaned_data})

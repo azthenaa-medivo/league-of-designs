@@ -126,17 +126,17 @@ def edit_article(request, article_id):
         if form.is_valid():
             form.setup()
             o = form.save()
+            article_id = ''
             # Check if we updated or inserted
             if o.upserted_id is not None:
                 # For some reason it's never "upserted" (despite being)... I'll check on this issue later.
                 # TODO: See why data is never "upserted" (despite being upserted with ``upsert=True``).
                 messages.add_message(request, messages.SUCCESS, 'Article was successfully created !', extra_tags='text-success')
-                r_url = reverse('article-edit', kwargs={'article_id': form.cleaned_data['url_id']})
-                return HttpResponseRedirect(r_url)
+                article_id = reverse('article-edit', kwargs={'article_id': form.cleaned_data['url_id']})
             else:
                 article_id = form.cleaned_data['url_id']
-                form = ArticleForm(request.POST)
                 messages.add_message(request, messages.SUCCESS, 'Article was correctly updated !', extra_tags='text-success')
+            return HttpResponseRedirect(article_id)
         else:
             messages.add_message(request, messages.ERROR, 'There was an issue with this article !', extra_tags='text-danger')
     else:
