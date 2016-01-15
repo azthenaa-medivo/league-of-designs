@@ -24,7 +24,7 @@ function buildInitials(textArray) {
     return initials;
 }
 
-var cleanse_words = ['my', 'miss', 'master'];
+var cleanse_words = ['my', 'miss', 'master', 'dr. '];
 var cleanse_regex = new RegExp('\\b('+cleanse_words.join('|')+')\\b', 'gi');
 
 var special_champion_names = {
