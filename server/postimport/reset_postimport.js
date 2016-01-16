@@ -24,9 +24,12 @@ db.mr_champions.update({},
                         }},
                         {'multi':1});
 
+print('reset:mr_rioters[posts,last_post,champions_occurrences,]');
+
 db.mr_rioters.update({},
                         {'$set': {
                                     'posts': [],
                                     'last_post': null,
+                                    'champions_occurrences': [],
                         }},
                         {'multi':1});

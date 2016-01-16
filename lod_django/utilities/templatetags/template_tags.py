@@ -46,14 +46,14 @@ def status(string):
 
 @register.filter(name="favourite_champions")
 def favourite(rioter, number=1):
-    if 'champion_occurrences' not in rioter:
+    if 'champions_occurrences' not in rioter:
         return None
     if number == 1:
-        if len(rioter['champion_occurrences']) >= 1:
-            return sort(rioter['champion_occurrences'], 'count')[-1]
+        if len(rioter['champions_occurrences']) >= 1:
+            return sort(rioter['champions_occurrences'], 'count')[-1]
         else:
             return None
-    return sort(rioter['champion_occurrences'], 'count')[-number:]
+    return sort(rioter['champions_occurrences'], 'count')[-number:]
 
 @register.filter(name="join")
 def status(a, j):
