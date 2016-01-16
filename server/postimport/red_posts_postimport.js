@@ -46,6 +46,17 @@ db.reds.find(query).forEach(function(res) {
         'is_glorious': contains(glorious_sections, post_section),
         'tags': [],
     }
+    var parent = digInto['parentComment'];
+    if (parent != undefined)
+    {
+        new_post['parent'] = {
+            'post_id': post_thread_id + ',' + parent['id'],
+            'post_url': post_url.split('?')[0] + '?comment='+parent['id'],
+            'contents': parent['message'],
+            'user': parent['user']['name'],
+            'date': new Date(parent['createdAt']),
+        };
+    }
     // Check for tags !
     for (i=0;i<tags.length;i++)
     {
