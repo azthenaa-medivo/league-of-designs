@@ -56,6 +56,7 @@ db.reds.find(query).forEach(function(res) {
             'user': parent['user']['name'],
             'date': new Date(parent['createdAt']),
         };
+        new_post['has_parent'] = true;
     }
     // Check for tags !
     for (i=0;i<tags.length;i++)
