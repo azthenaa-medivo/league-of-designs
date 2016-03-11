@@ -17,7 +17,7 @@ var rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
 var query = ids.cleanse ? {}:{'name': {'$in': ids.rioters}};
 var rioters_array = [];
 
-// So I male 3*N_rioters + N_champions queries here (no reading !). I can probably do better, though it'll do for now.
+// So I male 3*N_ids.rioters + N_champions queries here (no reading !). I can probably do better, though it'll do for now.
 db.mr_rioters.find(query).forEach(function(rioter) {
     // Just count() stuff !
     var glorious_posts = db.mr_reds.find({'rioter': rioter.name, 'is_glorious': true}).count();
