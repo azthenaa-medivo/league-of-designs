@@ -14,7 +14,7 @@ if (!(ids.has_work))
 load('utils.js');
 
 var rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
-var query = ids.cleanse ? {'name': {'$in': ids.rioters}}:{};
+var query = ids.cleanse ? {}:{'name': {'$in': ids.rioters}};
 
 var rioters_array = [];
 
@@ -25,7 +25,6 @@ db.mr_rioters.find(query).forEach(function(rioter) {
     var total_posts = db.mr_reds.find({'rioter': rioter.name}).count();
     // We are sure to have at least 1 so index 0 always exists.
     var latest = db.mr_reds.find({'rioter': rioter.name}).sort({'date': -1}).limit(1)[0];
-    print('Last post', latest)
     rioters_array.push({'_id': rioter._id, 'name': rioter.name, 'data': {
             'last_post': latest,
             'glorious_posts': glorious_posts,
