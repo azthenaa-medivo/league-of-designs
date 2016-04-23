@@ -28,8 +28,8 @@ db.mr_champions.find().forEach(function(champion_res) {
     var total = champion_res['total_posts'];
     var query = ids.cleanse ? {
                         '$text': {'$search': champion_res['search']},
-                        'champions': {'$not': {'$in': [champion_res['name']]}}}:{'post_id': {'$in': ids.post_ids},
-                        '$text': {'$search': champion_res['search']},
+                        'champions': {'$not': {'$in': [champion_res['name']]}}}:
+                        {'post_id': {'$in': ids.post_ids}, '$text': {'$search': champion_res['search']},
                         'champions': {'$not': {'$in': [champion_res['name']]}}};
     db.mr_reds.find(query).forEach(
                         function(red){
