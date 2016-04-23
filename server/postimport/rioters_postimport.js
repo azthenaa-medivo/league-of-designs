@@ -20,11 +20,24 @@ var rioters_array = [];
 
 // So I male 3*N_ids.rioters + N_champions queries here (no reading !). I can probably do better, though it'll do for now.
 db.mr_rioters.find(query).forEach(function(rioter) {
-    // Just count() stuff !
-    var glorious_posts = db.mr_reds.find({'rioter': rioter.name, 'is_glorious': true}).count();
-    var total_posts = db.mr_reds.find({'rioter': rioter.name}).count();
-    // We are sure to have at least 1 so index 0 always exists.
-    var latest = db.mr_reds.find({'rioter': rioter.name}).sort({'date': -1}).limit(1)[0];
+    var redPosts = db.mr_reds.find({'rioter': rioter.name}).sort({'date': -1});
+    var glorious_posts = 0;
+    var total_posts = 0;
+    var latest = null
+
+    if (redPosts.hasNext()) {
+        latest = redPosts.next();
+        glorious_posts = 1;
+        total_posts = 1;
+
+        redPosts.forEach(function(redPost) {
+            total_posts++;
+            if (redPost.is_glorious) {
+                glorious_posts++;
+            }
+        });
+    }
+
     rioters_array.push({'_id': rioter._id, 'name': rioter.name, 'data': {
             'last_post': latest,
             'glorious_posts': glorious_posts,
