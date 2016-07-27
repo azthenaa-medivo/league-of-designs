@@ -172,7 +172,7 @@
                         function ( args ) {
                             q = {'query': {
                                     'is_and': true,
-                                    'champions': ['{{champion.name}}'],
+                                    'champions': ["{% autoescape off %}{{champion.name}}{% endautoescape %}"],
                                 }
                             };
                             {% include "utils/scripts/datatable_red_posts_default_auto_filter.html" %}
