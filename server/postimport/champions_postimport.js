@@ -42,6 +42,7 @@ var special_champion_names = {
     'Katarina': 'kata',
     'Kindred': 'lamb wolf',
     'Kha\'Zix': 'kha zix kz',
+    'Kled': 'skaarl holyshit',
     'Kog\'Maw': 'kog maw',
     'LeBlanc': 'lb',
     'Leona': 'leo',
