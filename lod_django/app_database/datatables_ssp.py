@@ -8,18 +8,21 @@ order_dict = {'asc': 1, 'desc': -1}
 class DataTablesServerSideProcessor(object):
     """A basic class that handles most of whatever an SSP is supposed to handle. Subclass it.
     Expect json encapsulated in an "args" field."""
-    def __init__(self, request, database, collection, fields):
+    def __init__(self, request, database, collection, fields=None):
         tmp_args = json.loads(request.GET.get('args'))
         self.consumer = MongoConsumer(database)
-        self.fields = fields
         self.collection = collection
         self.columns = tmp_args['columns']
+        self.fields = [c["name"] for c in self.columns]
+        if len(self.fields) == 0:
+            self.fields = fields
         self.dt_skip = tmp_args['start']
         self.dt_length = tmp_args['length']
-        self.dt_search = tmp_args['search']
-        self.is_search = self.dt_search['value'] != ''
         self.dt_sorting = tmp_args['order']
+        # Query : we have to merge Datatable's "search" and my own.
         self.dt_query = tmp_args['query'] if 'query' in tmp_args else {}
+        self.dt_search = tmp_args['search']
+        self.is_search = self.dt_search['value'] != '' or "search" in self.dt_query
         self.dt_projection = tmp_args['projection'] if 'projection' in tmp_args else {}
         # Returned values
         self.draw = tmp_args['draw']
@@ -48,7 +51,9 @@ class DataTablesServerSideProcessor(object):
             self.projection['META_score'] = {'$meta': 'textScore'}
 
     def sort(self):
-        self.sorting = ((self.fields[o['column']], order_dict[o['dir']]) for o in self.dt_sorting)
+        # Handling META_score : we sort on META_score only if there was a text search.
+        self.sorting = (("META_score", {"$meta": "textScore"}) if self.is_search
+                        else (self.fields[o['column']], order_dict[o['dir']]) for o in self.dt_sorting)
 
     def data_postprocess(self):
         """Whatever to do with self.result_data if needed."""

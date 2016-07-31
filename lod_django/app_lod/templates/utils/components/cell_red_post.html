@@ -1,0 +1,13 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{# This is the new Red Post cell spanning over the whole table. #}
+
+{% block h_id %}handlebars-red-post{% endblock %}
+
+{% block template %}
+{% verbatim %}
+<div>
+    {{#if glorious_posts}}<span class="rioter">{{glorious_posts}}</span> Red Posts ({{total_posts}} total){{ else }}{{total_posts}} Red Posts{{/if}}
+</div>
+{% endverbatim %}
+{% endblock %}

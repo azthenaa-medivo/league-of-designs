@@ -35,14 +35,17 @@ class RedPostsSSP(DataTablesServerSideProcessor):
             key = list(mongo_query.keys())[0]
         if key in ['$or', '$and']:
             workon = {k: v for k, v in [list(t.items())[0] for t in mongo_query[key]]}
-        # Text search
+        # Additional text search
+        # In case you search in the little Datatable box during a more global search.
         if self.is_search:
+            the_value = self.dt_search['value'].strip().replace(" +", " ")
             if '$text' in workon and '$search' in workon['$text']:
-                workon['$text']['$search'] = workon['$text']['$search'] + ' ' + self.dt_search['value']
+                # Experimental : now looks for both terms exactly.
+                workon['$text']['$search'] = "\"" + workon['$text']['$search'].replace(" ", "\" \"") + "\" \"" + the_value + "\""
             else:
-                workon['$text'] = {'$search': self.dt_search['value']}
-            # Add the score to the retrieved data
-            self.projection['META_score'] = {'$meta': 'textScore'}
+                workon['$text'] = {'$search': the_value}
+        # Always add the score. It'll be 0 if there's no text search.
+        self.projection['META_score'] = {'$meta': 'textScore'}
         # Rebuild the query if necessary
         if key in ['$or', '$and']:
             workon = {key: [{k: v} for k, v in workon.items()]}

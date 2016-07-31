@@ -2,32 +2,63 @@
                 "serverSide": true,
                 "searchDelay": 250,
                 "columns": [
-                    { "render": function( data, type, full, meta ) {
-                        return template_rioter(full);
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        if (type === 'display' || type === 'filter') {
-                            // If displaying
-                            return template_date(full);
-                        } else {
-                            // If sorting
-                            return full['date'];
+                    {   "name": "rioter",
+                        "render": function( data, type, full, meta ) {
+                            return template_rioter(full);
                         }
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        return template_thread(full);
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        return template_contents(full);
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        return template_champions(full);
-                    }},
-                    { "data": "region" },
-                    { "data": "is_glorious" },
-                    { "render": function( data, type, full, meta ) {
-                        return template_tags(full);
-                    }},
+                    },
+                    {
+                        "name": "date",
+                        "render": function( data, type, full, meta ) {
+                            if (type === 'display' || type === 'filter') {
+                                // If displaying
+                                return template_date(full);
+                            } else {
+                                // If sorting
+                                return full['date'];
+                            }
+                        }
+                    },
+                    {
+                        "name": "thread",
+                        "render": function( data, type, full, meta ) {
+                            return template_thread(full);
+                        }
+                    },
+                    {
+                        "name": "contents",
+                        "render": function( data, type, full, meta ) {
+                            return template_contents(full);
+                        }
+                    },
+                    {
+                        "name": "champions",
+                        "render": function( data, type, full, meta ) {
+                            return template_champions(full);
+                        }
+                    },
+                    {
+                        "name": "region",
+                        "data": "region"
+                    },
+                    {
+                        "name": "is_glorious",
+                        "data": "is_glorious"
+                    },
+                    {
+                        "name": "tags",
+                        "render": function( data, type, full, meta ) {
+                            return template_tags(full);
+                        }
+                    },
+                    {
+                        "name": "thread_id",
+                        "data": "thread_id"
+                    },
+                    {
+                        "name": "META_score",
+                        "data": "META_score"
+                    },
                 ],
                 "language": {
                     "loadingRecords": languageLoading,
@@ -38,7 +69,7 @@
                 "order": [[ 1, "desc" ], [ 2, "desc" ]],
                 "columnDefs": [
                     {
-                        "targets": [ 5, 6, 7 ],
+                        "targets": [ 5, 6, 7, 8 ],
                         "visible": false,
                     },
                 ],

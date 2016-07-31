@@ -29,7 +29,7 @@ class MongoSearchForm(Form):
                         query[field_name][q] = value
                 elif field == 'search':
                     if value != '':
-                        query['$text'] = {'$search': value}
+                        query['$text'] = {'$search': value.strip().replace(" +", " ")}
                 elif field == 'is_and':
                     is_and = value
                 else:

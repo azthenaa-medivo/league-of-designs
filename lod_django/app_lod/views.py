@@ -31,9 +31,7 @@ def view_red_posts(request):
     if request.is_ajax():
         collection = 'mr_reds'
         database = 'lod'
-        # We can get that from the data sent to the server ! to REWORK BOYZ
-        fields = ['rioter', 'date', 'thread', 'contents', 'champions', 'region', 'is_glorious', 'tags', 'thread_id']
-        results = RedPostsSSP(request, database, collection, fields).output_result()
+        results = RedPostsSSP(request, database, collection).output_result()
         return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
     rioters = consumer.get('mr_rioters', projection={'name': 1, 'glorious_posts': 1, 'total_posts': 1}, sort_field='name', sort_order=1)
     param_is_and = True
