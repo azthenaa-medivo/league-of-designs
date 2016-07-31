@@ -331,6 +331,61 @@ a.no-underline:hover {
     color: purple;
 }
 
+/* Location styles */
+
+.base-bg {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.style-default {
+    background-image: url('/static/images/bg/bg-default.jpg');
+}
+
+.style-void {
+    background-image: url('/static/images/bg/bg-void.jpg');
+}
+
+.style-targon {
+    background-image: url('/static/images/bg/bg-targon.jpg');
+}
+
+.style-demacia {
+    background-image: url('/static/images/bg/bg-demacia.jpg');
+}
+
+.style-noxus {
+    background-image: url('/static/images/bg/bg-noxus.jpg');
+}
+
+.style-bilgewater {
+    background-image: url('/static/images/bg/bg-bilgewater.jpg');
+}
+
+.style-shurima {
+    background-image: url('/static/images/bg/bg-shurima.jpg');
+}
+
+.style-freljord {
+    background-image: url('/static/images/bg/bg-freljord.jpg');
+}
+
+.style-piltover {
+    background-image: url('/static/images/bg/bg-piltover.jpg');
+}
+
+.style-zaun {
+    background-image: url('/static/images/bg/bg-zaun.jpg');
+}
+
+.style-shadow-isles {
+    background-image: url('/static/images/bg/bg-shadow-isles.jpg');
+}
+
+.style-ionia {
+    background-image: url('/static/images/bg/bg-ionia.jpg');
+}
+
 /* Champions mini-portraits */
 
 .mini-icon {

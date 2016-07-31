@@ -4,6 +4,8 @@
 {{champion.name}} -
 {% endblock %}
 
+{% block bodyStyle %}{% if champion.home %}style-{{champion.home}}{% else %}style-default{% endif %}{% endblock %}
+
 {% block header %}
 {% load staticfiles %}
 {% load template_tags %}
