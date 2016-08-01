@@ -2,62 +2,104 @@
                 "serverSide": true,
                 "searchDelay": 250,
                 "columns": [
-                    {   "name": "rioter",
+                    {   "name": "red-post",
+                        "data": "rioter",
                         "render": function( data, type, full, meta ) {
-                            return template_rioter(full);
+                            return template_red_post(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("colspan", 5)
                         }
                     },
                     {
                         "name": "date",
+                        "data": "date",
                         "render": function( data, type, full, meta ) {
-                            if (type === 'display' || type === 'filter') {
-                                // If displaying
-                                return template_date(full);
-                            } else {
-                                // If sorting
-                                return full['date'];
-                            }
+                            return template_empty(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("colspan", 5)
                         }
                     },
                     {
                         "name": "thread",
+                        "data": "thread",
                         "render": function( data, type, full, meta ) {
-                            return template_thread(full);
+                            return template_empty(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("display", "none")
                         }
                     },
                     {
                         "name": "contents",
+                        "data": "contents",
                         "render": function( data, type, full, meta ) {
-                            return template_contents(full);
+                            return template_empty(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("display", "none")
                         }
                     },
                     {
                         "name": "champions",
+                        "data": "champions",
                         "render": function( data, type, full, meta ) {
-                            return template_champions(full);
+                            return template_empty(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("display", "none")
                         }
                     },
                     {
                         "name": "region",
-                        "data": "region"
+                        "data": "region",
+                        "render": function( data, type, full, meta ) {
+                            return template_empty(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("display", "none")
+                        }
                     },
                     {
                         "name": "is_glorious",
-                        "data": "is_glorious"
+                        "data": "is_glorious",
+                        "render": function( data, type, full, meta ) {
+                            return template_empty(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("display", "none")
+                        }
                     },
                     {
                         "name": "tags",
+                        "data": "tags",
                         "render": function( data, type, full, meta ) {
-                            return template_tags(full);
+                            return template_empty(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("display", "none")
                         }
                     },
                     {
                         "name": "thread_id",
-                        "data": "thread_id"
+                        "data": "thread_id",
+                        "render": function( data, type, full, meta ) {
+                            return template_empty(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("display", "none")
+                        }
                     },
                     {
                         "name": "META_score",
-                        "data": "META_score"
+                        "data": "META_score",
+                        "render": function( data, type, full, meta ) {
+                            return template_empty(full);
+                        },
+                        "createdCell": function (td, cellData, rowData, row, col) {
+                            $(td).attr("display", "none")
+                        }
                     },
                 ],
                 "language": {
@@ -66,11 +108,15 @@
                     "processing": languageLoading,
                 },
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
-                "order": [[ 1, "desc" ], [ 2, "desc" ]],
+                "order": [[ 1, "desc" ]],
                 "columnDefs": [
                     {
-                        "targets": [ 5, 6, 7, 8 ],
+                        "targets": [ 3, 5, 6, 7, 8 ],
                         "visible": false,
+                    },
+                    {
+                        "targets": [ 0, 1, 2, 4, 9 ],
+                        "width": "20%",
                     },
                 ],
                 "searchHighlight": true,

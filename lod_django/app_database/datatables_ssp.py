@@ -39,7 +39,9 @@ class DataTablesServerSideProcessor(object):
             self.filter()
         self.sort()
         self.result_data = self.consumer.get(self.collection, query=self.query, projection=self.projection if self.projection != {} else None,
-                                             skip=self.dt_skip, limit=self.dt_length).sort(list(self.sorting))
+                                             skip=self.dt_skip, limit=self.dt_length)
+        if len(self.sorting) > 0:
+            self.result_data = self.result_data.sort(self.sorting)
         self.records_filtered = self.result_data.count()
         self.records_total = self.consumer.get(self.collection).count()
         self.data_postprocess()
@@ -51,9 +53,16 @@ class DataTablesServerSideProcessor(object):
             self.projection['META_score'] = {'$meta': 'textScore'}
 
     def sort(self):
-        # Handling META_score : we sort on META_score only if there was a text search.
-        self.sorting = (("META_score", {"$meta": "textScore"}) if self.is_search
-                        else (self.fields[o['column']], order_dict[o['dir']]) for o in self.dt_sorting)
+        # Handling META_score : we sort on META_score only if there was a text search AND we want to sort by score.
+        sort_score = False
+        for o in self.dt_sorting:
+            if self.fields[o['column']] == "META_score":
+                sort_score = True
+                self.fields = [f for f in self.fields if f != "META_score"]
+                self.dt_sorting = [f for f in self.dt_sorting if f != o]
+                break
+        self.sorting = list((("META_score", {"$meta": "textScore"}) if self.is_search and sort_score
+                        else (self.fields[o['column']], order_dict[o['dir']]) for o in self.dt_sorting))
 
     def data_postprocess(self):
         """Whatever to do with self.result_data if needed."""

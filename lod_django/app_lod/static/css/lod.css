@@ -90,6 +90,14 @@ table.dataTable span.highlight {
     content: close-quote;
 }
 
+.red-posts-table {
+    table-layout: fixed;
+}
+
+.red-posts-table th {
+    text-align: center;
+}
+
 .red-contents {
     position: relative;
     overflow-y: hidden;
@@ -270,7 +278,6 @@ a.no-underline:hover {
 .among-bonus {
     font-size: 20px;
 }
-
 
 .rundown-link {
     color: red;
