@@ -11,6 +11,9 @@ Rioters -
 {% block contents %}
     {% load staticfiles %}
     {% load template_tags %}
+
+    {% include "utils/components/rioters_table_handlebars.html" %}
+
     <table id="rioters-table">
         <thead>
             <th>Name</th>
@@ -22,32 +25,69 @@ Rioters -
             <th>Posts</th>
             <th>Latest Red Post</th>
         </tfoot>
-        <tbody>
-            {% for r in rioters %}
-            <tr>
-                <td><a class="rioter" href="{% url "rioter" r.url_id %}">{{r.name}}</a></td>
-                <td data-order="{{r.glorious_posts|int}}">{% if r.glorious_posts == 0 %}{{r.total_posts|int}} Red Posts{% else %}{{r.total_posts|int}} Red Posts (<span class="rioter">{{r.glorious_posts|int}}</span> about Design){% endif %}</td>
-                <td>
-                    In <a href="{{r.last_post.url}}">{{r.last_post.thread}}</a>
-                    ({% include "utils/date_span.html" with date=r.last_post.date|isoformat %})
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
     </table>
 {% endblock %}
 
 {% block js %}
     <script>
-     $(document).ready(function() {
-        var rioterTable = $('#rioters-table').DataTable({
-                "order": [[ 1, "desc" ]],
-                "language": {
-                    "zeroRecords": 'Hm ? Ah come on, Rioters are pretty silent..'
+        // Get Handlebars ready
+        Handlebars.registerHelper('agoHB', function(date) {
+            var now = new Date();
+            var then = new Date(date);
+            return now - then;
+        });
+
+        var template_rioter = Handlebars.compile($("#handlebars-rioter").html());
+        var template_n_posts = Handlebars.compile($("#handlebars-n-posts").html());
+        var template_last_post = Handlebars.compile($("#handlebars-last-post").html());
+
+        $(document).ready(function() {
+            var rioterTable = $('#rioters-table').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "searchDelay": 250,
+
+                "ajax": {
+                    "url": "{% url 'rioters' %}",
+                    "type": "GET",
+                    "data": function ( args ) { return {"args": JSON.stringify( args )}; }
                 },
+
+                "order": [[ 1, "desc" ]],
+
+                "language": {
+                    //"loadingRecords": languageLoading,
+                    "zeroRecords": 'Hm ? Ah come on, Rioters are pretty silent..',
+                    //"processing": languageLoading,
+                },
+
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
                 "searchHighlight": true,
+
+                "columns": [
+                    {
+                        "name": "rioter",
+                        "data": "rioter",
+                        "render": function( data, type, full, meta ) {
+                            return template_rioter(full);
+                        },
+                    },
+                    {
+                        "name": "n-posts",
+                        "data": "total_posts",
+                        "render": function( data, type, full, meta ) {
+                            return template_n_posts(full);
+                        },
+                    },
+                    {
+                        "name": "last-post",
+                        "data": "last_post",
+                        "render": function( data, type, full, meta ) {
+                            return template_last_post(full);
+                        },
+                    },
+                ],
             });
-    });
+        });
     </script>
 {% endblock %}

@@ -13,64 +13,71 @@ if (!(ids.has_work))
 
 load('utils.js');
 
-var rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
 var query = ids.cleanse ? {}:{'name': {'$in': ids.rioters}};
 
-var rioters_array = [];
+var rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
 
-// So I male 3*N_ids.rioters + N_champions queries here (no reading !). I can probably do better, though it'll do for now.
-db.mr_rioters.find(query).forEach(function(rioter) {
-    var redPosts = db.mr_reds.find({'rioter': rioter.name}).sort({'date': -1});
-    var glorious_posts = 0;
-    var total_posts = 0;
-    var latest = null
+var rioters = db.mr_reds.aggregate([
+    { $match: query },
+	{ $group: { _id: "$rioter", count: {$sum: 1}, }}
+])
 
-    if (redPosts.hasNext()) {
-        latest = redPosts.next();
-        glorious_posts = 1;
-        total_posts = 1;
+var glorious_per_rioter = db.mr_reds.aggregate([
+    { $match: { section: { $in: glorious_sections }}},
+	{ $group: { _id: "$rioter", count: {$sum: 1}, }},
+	{ $out: "glorious_per_rioter" },
+])
 
-        redPosts.forEach(function(redPost) {
-            total_posts++;
-            if (redPost.is_glorious) {
-                glorious_posts++;
-            }
-        });
-    }
+var champ_per_rioter = db.mr_reds.aggregate([
+	{ $group: { _id: { champions: "$champions", rioter: "$rioter"}}},
+	{ $unwind: "$_id.champions" },
+	{ $group: { _id: { champion: "$_id.champions", rioter: "$_id.rioter"}, count: { $sum: 1} }},
+	{ $group: { _id: "$_id.rioter", champions: { $push: { name: "$_id.champion", count: "$count" }}}},
+	{ $out: "champ_per_rioter" },
+])
 
-    rioters_array.push({'_id': rioter._id, 'name': rioter.name, 'data': {
-            'last_post': latest,
-            'glorious_posts': glorious_posts,
-            'total_posts': total_posts,
-            'champions_occurrences': [],
-    }});
-});
+var section_per_rioter = db.mr_reds.aggregate([
+	{ $group: { _id: { section: "$section", rioter: "$rioter"}, count: { $sum: 1 }}},
+	{ $group: { _id: "$_id.rioter", sections: { $push: { section: "$_id.section", count: "$count"}}}},
+	{ $out: "section_per_rioter" },
+])
 
-db.mr_champions.find().forEach(function(champ) {
-    if ('rioter_counter' in champ)
+rioters.forEach(function(r) {
+    var champ = db.champ_per_rioter.findOne({ "_id": r._id })
+    if (champ !== null)
     {
-        for (var i=0;i<champ.rioter_counter.length;i++)
+        for (i=0;i<champ.champions.length;i++)
         {
-            for (var j=0;j<rioters_array.length;j++)
-            {
-                if (rioters_array[j].name === champ.rioter_counter[i].name)
-                {
-                    rioters_array[j].data.champions_occurrences.push({
-                        'count': champ.rioter_counter[i].count,
-                        'name': champ.name,
-                        'url_id': champ.url_id,
-                        'portrait': champ.portrait,
-                        'search': champ.search,
-                    });
-                }
-            }
+            var url_id = urlIDize(champ.champions[i].name)
+            champ.champions[i].url_id = url_id
+            champ.champions[i].portrait = url_id + ".png"
         }
     }
+    var section = db.section_per_rioter.findOne({ "_id": r._id })
+    var glorious = db.glorious_per_rioter.findOne({ "_id": r._id })
+    var last_post
+    var reds = db.mr_reds.find({'rioter': r._id}).sort({'date':-1}).limit(1)
+    if (reds.hasNext())
+    {
+        last_post = reds.next();
+    }
+    var update = { $set: {
+        "name": r._id,
+        "total_posts": r.count,
+        "glorious_posts": glorious === null ? 0:glorious.count,
+        "url_id": urlIDize(r._id),
+        "last_post": last_post,
+        "champions_occurrences": champ === null ? []:champ.champions,
+        "sections_occurrences": section.sections,
+    }}
+    rioters_bulk.find({ "name": r._id }).upsert().updateOne( update )
 });
 
-for (var k=0;k<rioters_array.length;k++)
-{
-    rioters_bulk.find({'_id': rioters_array[k]['_id']}).updateOne({$set: rioters_array[k]['data']});
-}
+db.champ_per_rioter.drop()
+db.section_per_rioter.drop()
+db.glorious_per_rioter.drop()
+
 rioters_bulk.execute();
+
+print("gen:index")
 db.mr_rioters.createIndex( { 'name': "text", 'posts': "text"} );

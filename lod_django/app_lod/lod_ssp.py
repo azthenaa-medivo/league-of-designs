@@ -55,3 +55,9 @@ class RedPostsSSP(DataTablesServerSideProcessor):
         super(RedPostsSSP, self).data_postprocess()
         for d in self.result_data:
             d['contents'] = to_markdown(d['contents'])
+
+class RioterSSP(DataTablesServerSideProcessor):
+    def filter(self):
+        """Custom filter method to use the text search as a regex on the name field of Rioters."""
+        if self.is_search:
+            self.query["name"] = {"$regex": self.dt_search["value"], "$options": "i" }

@@ -1,0 +1,9 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-rioter{% endblock %}
+
+{% block template %}
+{% verbatim %}
+<a href="{% endverbatim %}{% url "rioter" rioter_url_id='' %}{% verbatim %}{{url_id}}" class="rioter">{{name}}</a>
+{% endverbatim %}
+{% endblock %}

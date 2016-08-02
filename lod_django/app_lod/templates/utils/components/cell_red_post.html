@@ -7,7 +7,7 @@
 {% block template %}
 {% verbatim %}
 <div class="red-post-cell">
-    What a red post cell {{post_id}}
+    <a href="{% endverbatim %}{% url "rioter" rioter_url_id='' %}{% verbatim %}{{rioter_url_id}}" class="rioter">{{rioter}}</a> : What a red post cell {{post_id}}
 </div>
 {% endverbatim %}
 {% endblock %}

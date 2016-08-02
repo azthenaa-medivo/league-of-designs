@@ -10,6 +10,10 @@ from datetime import datetime
 
 register = template.Library()
 
+@register.filter(name="portrait")
+def get_portrait(champ):
+    return champ["url_id"] + ".png"
+
 @register.filter(name="get")
 def get_filter(d, k):
     return d.get(k, None)

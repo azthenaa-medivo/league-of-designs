@@ -42,7 +42,7 @@
                     <h4>Loves that dude so much !</h4>
                     <div>
                         <a href="{% url "champion" fav.url_id %}">
-                            <img class="round-portrait cursor-pointer" title="{{fav.name}}" alt="{{fav.name}}" src="{% static "images/portraits/" %}{{fav.portrait}}"></img>
+                            <img class="round-portrait cursor-pointer" title="{{fav.name}}" alt="{{fav.name}}" src="{% static "images/portraits/" %}{{fav|portrait}}"></img>
                         </a>
                     </div>
                     <h3>{{fav.name}} (quoted <span class="rioter">{{fav.count|int}}</span> times)</h3>
@@ -56,7 +56,7 @@
                     {% if not forloop.first %}
                         <div class="inline rioter-top-champions">
                             <a class="rioter" href="{% url "champion" c.url_id %}">
-                                <img class="cursor-pointer round-portrait" title="{{c.name}}" alt="{{c.name}}" src="{% static "images/portraits/" %}{{c.portrait}}"></img>
+                                <img class="cursor-pointer round-portrait" title="{{c.name}}" alt="{{c.name}}" src="{% static "images/portraits/" %}{{c|portrait}}"></img>
                                 <span>
                                     <span class="mdi">{{c.count|int}}</span>
                                 </span>
@@ -91,6 +91,9 @@
             {% include "utils/scripts/datatable_language.html" %}
             // Table
             var redTable = $('#red-table').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "searchDelay": 250,
                 "ajax": {
                     "url": "{% url 'red-posts' %}",
                     "type": "GET",
@@ -104,36 +107,8 @@
                             return {"args": JSON.stringify( $.extend(args, q))};
                         },
                 },
-                "processing": true,
-                "serverSide": true,
-                "searchDelay": 250,
                 "columns": [
-                    { "render": function( data, type, full, meta ) {
-                        return template_rioter(full);
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        if (type === 'display' || type === 'filter') {
-                            // If displaying
-                            return template_date(full);
-                        } else {
-                            // If sorting
-                            return full['date'];
-                        }
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        return template_thread(full);
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        return template_contents(full);
-                    }},
-                    { "render": function( data, type, full, meta ) {
-                        return template_champions(full);
-                    }},
-                    { "data": "region" },
-                    { "data": "is_glorious" },
-                    { "render": function( data, type, full, meta ) {
-                        return template_tags(full);
-                    }},
+{% include "utils/scripts/red_posts_table_columns.html" %}
                 ],
                 "language": {
                     "loadingRecords": languageLoading,
@@ -141,11 +116,15 @@
                     "processing": languageLoading,
                 },
                 "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
-                "order": [[ 1, "desc" ], [ 2, "desc" ]],
+                "order": [[ 1, "desc" ]],
                 "columnDefs": [
                     {
-                        "targets": [ 0, 5, 6, 7 ],
+                        "targets": [ 3, 5, 6, 7, 8 ],
                         "visible": false,
+                    },
+                    {
+                        "targets": [ 0, 1, 2, 4, 9 ],
+                        "width": "20%",
                     },
                 ],
                 "searchHighlight": true,

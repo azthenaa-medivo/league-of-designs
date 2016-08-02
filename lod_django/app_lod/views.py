@@ -3,7 +3,7 @@ __author__ = 'artemys'
 import json
 from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown, build_red_title
 from app_database.consumer import LoDConsumer
-from .lod_ssp import RedPostsSSP
+from .lod_ssp import RedPostsSSP, RioterSSP
 from .models import ARTICLE_TYPE, ROLES, REGIONS, GLORIOUS_SECTIONS
 from .forms import ChampionForm, ArticleForm, NewArticleForm, RedPostDetailedSearchForm
 from django.http import HttpResponseRedirect, HttpResponse
@@ -92,9 +92,14 @@ def edit_champion(request, url_id):
 
 @render_to('rioters.html')
 def view_rioters(request):
-    rioters = consumer.get('mr_rioters', projection={'name': 1, 'last_post': 1, 'glorious_posts': 1, 'total_posts': 1,
-                                                     'url_id': 1})
-    return {'rioters': rioters}
+    if request.is_ajax():
+        collection = 'mr_rioters'
+        database = 'lod'
+        results = RioterSSP(request, database, collection).output_result()
+        return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
+        # rioters = consumer.get('mr_rioters', projection={'name': 1, 'last_post': 1, 'glorious_posts': 1, 'total_posts': 1,
+        #                                              'url_id': 1})
+    return {}
 
 @render_to('rioter.html')
 def view_rioter(request, rioter_url_id):

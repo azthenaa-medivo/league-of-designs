@@ -1,0 +1,9 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-last-post{% endblock %}
+
+{% block template %}
+{% verbatim %}
+{{last_post.post_id}}
+{% endverbatim %}
+{% endblock %}

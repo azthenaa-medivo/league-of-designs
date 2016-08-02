@@ -48,9 +48,11 @@ class DataTablesServerSideProcessor(object):
 
     def filter(self):
         """Basic filtering using the text input, override this in your subclass if you want to be more specific."""
-        if self.is_search != '':
-            self.query['$text'] = {'$search': self.dt_search}
-            self.projection['META_score'] = {'$meta': 'textScore'}
+        if self.is_search:
+            if "regex" in self.dt_search:
+                if not self.dt_search["regex"]:
+                    self.query['$text'] = {'$search': self.dt_search["value"]}
+                    self.projection['META_score'] = {'$meta': 'textScore'}
 
     def sort(self):
         # Handling META_score : we sort on META_score only if there was a text search AND we want to sort by score.
