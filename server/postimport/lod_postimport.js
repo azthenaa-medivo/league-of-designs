@@ -20,7 +20,6 @@ if (!(ids.has_work))
 load('utils.js');
 var mr_reds_bulk = db.mr_reds.initializeUnorderedBulkOp();
 var mr_champions_bulk = db.mr_champions.initializeUnorderedBulkOp();
-var mr_rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
 
 db.mr_champions.find().forEach(function(champion_res) {
     var rioter_counter = {};
@@ -46,9 +45,6 @@ db.mr_champions.find().forEach(function(champion_res) {
                             red_update['$addToSet']['tags'] = {'$each': champion_res['tags']};
                             mr_reds_bulk.find({'_id': red['_id'],}).update(red_update);
                             // Update Rioter Counters DOTA2 SPECIALIZATION ZOMG GC YOU ARE BAD wowsoTILT
-                            mr_rioters_bulk.find({'name': red['rioter']}).update({'$set': {'name': red['rioter'],
-                                                                                'url_id': urlIDize(red['rioter'])}},
-                                                                                {upsert: true});
                             if (red['rioter'] in rioter_counter)
                             {
                                 rioter_counter[red['rioter']]['count'] += 1;

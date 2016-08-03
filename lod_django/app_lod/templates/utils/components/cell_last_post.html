@@ -4,6 +4,6 @@
 
 {% block template %}
 {% verbatim %}
-{{last_post.post_id}}
+<span data-date="{{last_post.date}}" class="computed-date"></span>, in <a href="{{last_post.url}}" target="_blank">{{last_post.thread}}</a>
 {% endverbatim %}
 {% endblock %}
