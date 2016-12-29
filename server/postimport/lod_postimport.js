@@ -84,4 +84,4 @@ db.mr_champions.find().forEach(function(champion_res) {
 mr_reds_bulk.execute();
 mr_champions_bulk.execute();
 print('gen:text-index');
-db.mr_reds.createIndex( { 'thread': "text", 'contents': "text", 'rioter': "text", 'champions': "text", 'tags': "text" } );
+db.mr_reds.createIndex( { 'thread': "text", 'contents': "text", 'rioter': "text", 'champions_data.search': "text", 'tags': "text" } );

@@ -132,6 +132,12 @@
         },
         traditional: true,
     });
+
+    Handlebars.registerHelper("moreThanOne", function(array, options) {
+        var fnTrue = options.fn,
+            fnFalse = options.inverse;
+        return array.length > 1 ? fnTrue(this) : fnFalse(this);
+    });
     </script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -141,7 +147,6 @@
 
       ga('create', 'UA-69433620-1', 'auto');
       ga('send', 'pageview');
-
     </script>
     <!-- Otherz -->
     {% block js %}{% endblock %}

@@ -5,9 +5,61 @@
 {% block h_id %}handlebars-red-post{% endblock %}
 
 {% block template %}
+{% load staticfiles %}
 {% verbatim %}
-<div class="red-post-cell">
-    <a href="{% endverbatim %}{% url "rioter" rioter_url_id='' %}{% verbatim %}{{rioter_url_id}}" class="rioter">{{rioter}}</a> : What a red post cell {{post_id}}
+<div class="row">
+    <div class="col-md-7 col-md-offset-1 red-post-message-cell">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="red-header red-post-message-header">
+                    <a href="{% endverbatim %}{% url "rioter" rioter_url_id='' %}{% verbatim %}{{rioter_url_id}}" class="rioter">{{rioter}}</a>,
+                    <span data-date="{{date}}" class="computed-date"></span>
+                    <br>
+                    In <a href="{% endverbatim %}{% url "red-posts" %}{% verbatim %}?thread_id={{thread_id}}&is_and=true">
+                    <i title="Rundown for thread « {{thread}} »" class="glyphicon glyphicon glyphicon-list rundown-link"></i></a>
+                    &nbsp;<a href="{{url}}" target="_blank">{{thread}}</a>
+                </div>
+            </div>
+            <div class="col-md-1 red-post-message-details-button">
+                <button class="details-button" onclick="showDetails()">
+                    <i class="glyphicon glyphicon-fullscreen"></i>
+                </button>
+            </div>
+        </div>
+        <div class="red-quote red-post-message-core">
+            {{{this.contents}}}
+        </div>
+    </div>
+    <div class="col-md-3 red-post-champions hidden-xs red-post-champions-cell">
+{{#if champions_data }}
+        <div class="red-post-champions-cell-container">
+            {{#each champions_data}}
+            <p class="champion-sneak-wrapper">
+                <a href="{% endverbatim %}{% url "champion" '' %}{% verbatim %}{{this.url_id}}">
+                    <img class="sneak-view" alt="{{this.name}}" title="{{this.name}}" src="{% endverbatim %}{% static "images/sneak/" %}{% verbatim %}{{{this.url_id}}}_sneak.png" />
+                </a>
+            </p>
+            {{/each}}
+        </div>
+        <div class="champions-label">
+            {{champions_data.length}} champion{{#moreThanOne champions_data}}s{{/moreThanOne}} quoted
+        </div>
+{{else}}
+    {{section}}
+{{/if}}
+    </div>
+    <div class="col-md-1 red-post-champions visible-xs">
+{{#if champions_data }}
+    {{#each champions_data}}
+        <a href="{% endverbatim %}{% url "champion" '' %}{% verbatim %}{{this.url_id}}"><img class="mini-icon" alt="{{this.name}}" title="{{this.name}}" src="{% endverbatim %}{% static "images/portraits/" %}{% verbatim %}{{this.portrait}}"></img></a>
+        <span class="hidden">
+            {{this.name}} {{this.search}}
+        </span>
+    {{/each}}
+{{else}}
+    {{section}}
+{{/if}}
+    </div>
 </div>
 {% endverbatim %}
 {% endblock %}
