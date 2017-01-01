@@ -95,10 +95,14 @@
                 </div>
                 <h4>About</h4>
                 <div>
-                    {{#if tags}}
-                    <h5>Tags</h5>
+                    <h5>Section : {{section}}</h5>
                     <div>
-                        {{#each tags}}{{this}} {{/each}}
+
+                    </div>
+                    {{#if tags}}
+                    <h5 >Tags</h5>
+                    <div>
+                        {{#each tags}}{{this}}{{#unless @last}},{{/unless}}{{/each}}
                     </div>
                     {{/if}}
                 </div>

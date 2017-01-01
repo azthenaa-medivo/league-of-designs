@@ -1,126 +1,231 @@
 {% extends "base.html" %}
 
 {% block css %}
-    {% load staticfiles %}
-    <link href="{% static "css/introjs.min.css" %}" rel="stylesheet">
+{% load staticfiles %}
+<link href="{% static "css/introjs.min.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block header %}
-    {% load staticfiles %}
-            <h1 id="intro-header">
-                <span id="homeLODWrapper">
-                    <img src="{% static "images/lod/lod.png" %}" alt="League of Designs" title="MWAAHAHAHHAAH" class="homeLOD cursorHelp"></img>
-                </span>
-                <audio preload="auto" id="singed1">
-                    <source src="{% static "audio/singed1.ogg" %}"></source>
-                </audio>
-                <audio preload="auto" id="singed2">
-                    <source src="{% static "audio/singed2.ogg" %}"></source>
-                </audio>
-                <audio preload="auto" id="singed3">
-                    <source src="{% static "audio/singed3.ogg" %}"></source>
-                </audio>
-                League of Designs
-            </h1>
+{% load staticfiles %}
+<h1 id="intro-header">
+    <span id="homeLODWrapper">
+        <img src="{% static "images/lod/lod.png" %}" alt="League of Designs" title="MWAAHAHAHHAAH" class="homeLOD cursorHelp"></img>
+    </span>
+    <audio preload="auto" id="singed1">
+        <source src="{% static "audio/singed1.ogg" %}"></source>
+    </audio>
+    <audio preload="auto" id="singed2">
+        <source src="{% static "audio/singed2.ogg" %}"></source>
+    </audio>
+    <audio preload="auto" id="singed3">
+        <source src="{% static "audio/singed3.ogg" %}"></source>
+    </audio>
+    <span id="title">League of Designs</span>
+</h1>
 {% endblock %}
 
 {% block contents %}
-    {% load staticfiles %}
-    {% load template_tags %}
-        <div class="col-md-12">
-            <h2>
-                <div class="row">
-                        <div class="col-md-11">
-                            Welcome~
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <i id="homeHeaderCaret" class="hideButton glyphicon glyphicon-menu-up" title="┌(▀Ĺ̯▀)┐" data-toggle="collapse" data-target="#homeSubHeader"></i>
-                        </div>
+{% load staticfiles %}
+{% load template_tags %}
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-5 col-md-offset-1">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Welcome to League of Designs !</h3>
+                    <div>Ever wondered what Riot has in store for <a href="{% url "champion" "Irelia" %}">Irelia</a> ?
+                        If they considered shipping <a href="{% url "red-posts" %}?is_and=on&champions=Illaoi&champions=Teemo">Teemo with Illaoi</a> ?
+                        What about them <a href="{% url "red-posts" %}?tags=Marksman&is_and=on">class updates</a> ?
+                        <b>League of Designs</b> looks for those fascinating topics on League of Legends' Boards. Check them out !</div>
                 </div>
-            </h2>
-            <p>Please enjoy your stay on <b>L</b>eague <b>O</b>f <b>D</b>esigns, where the masterminds behind League of Legends unveil the
-            truth on Irelia nerf immunity and the very trending <a href="{% url "red-posts" %}?tags=Marksman">ADC overhaul</a>. All of that, soon™.</p>
+                <div class="col-md-12 top15">
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <a href="{% url "red-posts" %}" class="btn btn-primary btn-block">Dive into the Red Posts !</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="homeSubHeader" class="col-md-12 collapse in">
-            <p><b>How to use ?</b> On League of Designs, you can check out what Rioters have to say about your
-            <a href="{% url "champion" url_id="Singed" %}">favourite champion</a> ! Will they get nerfed ? Reworked ? What are Riot's plans for the future ? Rioters
-            speak a lot on Riot's Boards, and League of Designs conveniently gathers every thus-called <b>Red Post</b> here !</p>
-            <p><button type="button" id="tourButton" class="btn btn-success">Show me around !</button> <button type="button" id="hideButton" class="btn btn-default hideButton" data-toggle="collapse" data-target="#homeSubHeader">Sounds good, let's go !</button></p>
+        <div class="col-md-5">
+            <h3>Browse Red Posts !</h3>
+            <form method="GET" action="{% url "red-posts" %}">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-1">
+                    <input class="form-control" id="text-search" name="search" placeholder="Champions, reworks, memes..."></input>
+                    <div class="hidden"><input checked="checked" id="id_is_and" name="is_and" type="checkbox"></div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-block">Go !</button>
+                </div>
+                <div class="col-md-6 suggestions">
+                    <div>
+                        <h4>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    Pick a champion...
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="{% url "champions-grid" %}">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </h4>
+                    </div>
+                    <div>
+                        {% for c in champions %}
+                        <a href="{% url "champion" c.url_id %}"><img  class="mini-icon" title="{{c.name}}, {{c.total_posts|int}} posts" src="{% static "images/portraits" %}/{{c.portrait}}"></img></a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-6 suggestions suggestions-rioters">
+                    <div>
+                        <h4>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    Or a Rioter...
+                                </div>
+                                <div class="col-md-2">
+                                    <a href="{% url "rioters" %}">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </h4>
+                    </div>
+                    <div>
+                        <ul class="medium-block-grid-2">
+                            {% for r in rioters %}
+                            <a href="{% url "rioter" r.url_id %}" class="btn btn-default">{{r.name}}</button>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </form>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3 home-col hidden-xs" id="news">
-            <h3>
-                <a href="{% url "articles-list" %}">
-                    <div class="row">
-                            <div class="col-md-8">
-                                News & Articles
+    <hr>
+    <div id="carousel-example-generic" class="carousel slide home-carousel" data-ride="carousel">
+        <!--&lt;!&ndash; Indicators &ndash;&gt;-->
+        <!--<ol class="carousel-indicators">-->
+            <!-- Heh do I need that ? -->
+            <!--<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>-->
+            <!--<li data-target="#carousel-example-generic" data-slide-to="1"></li>-->
+            <!--<li data-target="#carousel-example-generic" data-slide-to="2"></li>-->
+        <!--</ol>-->
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <div class="row bot15">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8" id="news">
+                        <h3>
+                            <a href="{% url "articles-list" %}">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    What's new ?
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    <i class="grid-link glyphicon glyphicon-book"></i>
+                                </div>
                             </div>
-                            <div class="col-md-4 text-right">
-                                <i class="grid-link glyphicon glyphicon-book"></i>
+                            </a>
+                        </h3>
+                        <div>
+                            {% for a in articles %}
+                            <div><h4>{% if a.champion != "None" %}<a href="{% url "champion" url_id=a.champion_data.url_id %}"><img class="mini-icon" src="{% static "images/portraits/" %}{{a.champion_data.portrait}}"></a>{% endif %}{{a.title}} {% include "utils/article_admin.html" with article=a %}</h4></div>
+                            <div class="text-right"><small>{{a.date_created}} ({% include "utils/date_span.html" with date=a.date_created|isoformat %})</small></div>
+                            <div class="newsHomeContent">{{a.contents|markdown | safe}}</div>
+                            <hr>
+                            {% empty %}
+                            How comes, no NEWS ?
+                            {% endfor %}
+                            <div>
+                                <a href="{% url "articles-list" %}"><i class="grid-link glyphicon glyphicon-book"></i> View more News and Articles..</a>
                             </div>
+                        </div>
                     </div>
-                </a>
-            </h3>
-            <div>
-            {% for a in articles %}
-                <div><h4>{% if a.champion != "None" %}<a href="{% url "champion" url_id=a.champion_data.url_id %}"><img class="mini-icon" src="{% static "images/portraits/" %}{{a.champion_data.portrait}}"></a>{% endif %}{{a.title}} {% include "utils/article_admin.html" with article=a %}</h4></div>
-                <div class="text-right"><small>{{a.date_created}} ({% include "utils/date_span.html" with date=a.date_created|isoformat %})</small></div>
-                <div class="newsHomeContent">{{a.contents|markdown | safe}}</div>
-                <hr>
-            {% empty %}
-                How comes, no NEWS ? HELL.
-            {% endfor %}
-                <div>
-                    <a href="{% url "articles-list" %}"><i class="grid-link glyphicon glyphicon-book"></i> View more News and Articles..</a>
+                    <div class="col-md-2"></div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-md-6 home-col" id="latest-red-posts">
-            <h3>
-                <a href="{% url "red-posts" %}">
-                    <div class="row">
-                        <div class="col-md-8">
-                            Latest Red Posts
+            {% for r in reds %}
+            <div class="item">
+                <div class="row bot15 top15">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8 red-post-message-cell">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="red-header red-post-message-header">
+                                    <a href="{% url "rioter" r.rioter_url_id %}" class="rioter">{{r.rioter}}</a>,
+                                    {% include "utils/date_span.html" with date=r.date|isoformat %}
+                                    <br>
+                                    In <a href="{% url "red-posts" %}?thread_id={{r.thread_id}}&is_and=true">
+                                    <i title="Rundown for thread « {{r.thread}} »" class="glyphicon glyphicon glyphicon-list rundown-link"></i></a>
+                                    &nbsp;<a href="{{r.url}}" target="_blank">{{r.thread}}</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-4 text-right">
-                            <i class="grid-link glyphicon glyphicon-education"></i>
-                        </div>
-                    </div>
-                </a>
-            </h3>
-            <div>
-                {% include "utils/mini_reds_list.html" with reds=reds %}
-            </div>
-            <div>
-                <a href="{% url "red-posts" %}"><i class="grid-link glyphicon glyphicon-education"></i> View more Red Posts...</a>
-            </div>
-        </div>
-
-        <div class="col-md-3 home-col hidden-xs" id="champions-list">
-            <h3>
-                <a href="{% url "champions-grid" %}">
-                    <div class="row">
-                        <div class="col-md-8">
-                            Champions
-                        </div>
-                        <div class="col-md-4 text-right">
-                            <i class="grid-link glyphicon glyphicon-queen"></i>
+                        <div class="red-quote red-post-message-core">
+                            {{r.contents|markdown | safe}}
                         </div>
                     </div>
-                </a>
-            </h3>
-            <div>
-                {% include "utils/pre_templated_champions_table.html" with champions=champions id="champions-home"%}
+                    <div class="col-md-2"></div>
+                </div>
+                <div class="row bot15">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8 red-post-champions home-red hidden-xs red-post-champions-cell">
+                    {% if r.champions_data|length > 0 %}
+                        <div class="red-post-champions-cell-container">
+                            {% for c in r.champions_data %}
+                            <div class="champion-sneak-wrapper home-red-portrait">
+                                <a href="{% url "champion" c.url_id %}">
+                                    <img class="" alt="{{c.name}}" title="{{c.name}}" src="{% static "images/portraits/" %}{{c.portrait}}" />
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="super-border"></div>
+                    {% else %}
+                        {{r.section}}
+                    {% endif %}
+                    </div>
+                    <div class="col-md-1 red-post-champions visible-xs">
+                    {% if r.champions_data|length > 0 %}
+                        {% for c in r.champions_data %}
+                        <a href="{% url "champion" c.url_id %}"><img class="mini-icon" alt="{{c.name}}" title="{{c.name}}" src="{% static "images/portraits/" %}{{c.portrait}}"></img></a>
+                        <span class="hidden">
+                            {{c.name}} {{c.search}}
+                        </span>
+                        {% endfor %}
+                    {% else %}
+                        {{r.section}}
+                    {% endif %}
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
             </div>
+            {% endfor %}
         </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
 {% endblock %}
 
 {% block js %}
-    <script src="{% static "js/intro.min.js" %}"></script>
-    {% include "utils/scripts/hovermore.html" %}
-    <script>
+{% include "utils/scripts/hovermore.html" %}
+<script>
         $(document).ready(function() {
             var homeTable = $('#champions-home').DataTable({
                 "order": [[ 2, "desc" ]],
@@ -162,27 +267,18 @@
         });
 
     </script>
-    <!-- CLASSY EFFECTS ON COLUMNS maybe -->
-    <script>
-        $(".home-col").hover(function() {
-            $(this).animate({'background-color': '#f9dbdb'});
-        }, function() {
-            $(this).animate({'background-color': 'white'});
-        });
-    </script>
-    <!-- wowsoSPOOKY -->
-    <script>
+<!-- wowsoSPOOKY -->
+<script>
         $(document).ready(function() {
             var trollCounter = 0;
             var trollArray = {
-                '3': 'Please stop making him laugh.',
-                '6': 'I am serious, stop it !',
-                '9': 'For the love of SATAN PLEASE STOOOOP MAKING HIM LAUGH',
+                '3': 'Please stop.',
+                '6': 'Stop it.',
+                '9': 'For the love of TEEMO please STOP that LAUGH',
                 '12': 'I DO NOT WANT TO TAKE EXTREME MEASURES',
                 '15': 'YOU HAVE BEEN WARNED',
                 '42': 'You dirty little cheater.',
             };
-            $('h1').after('<div id="wowsoSHUTUP"></div>');
             $('.homeLOD').click(function() {
                 $("#singed" + Math.ceil(Math.random() * 3))[0].play();
                 // SPOOKY ANIMATION
@@ -202,51 +298,10 @@
                             window.location = 'http://www.finalesfunkeln.com';
                         }
                         if (trollCounter in trollArray) {
-                            $('#wowsoSHUTUP').text(trollArray[trollCounter]);
+                            $('#title').text(trollArray[trollCounter]);
                         }
                     });
             });
-        });
-    </script>
-    <!-- INTRO !!!!! wowsoBAKED -->
-    <script>
-        $(document).ready(function() {
-            var intro = {
-                "latest-red-posts": {'intro': "Check the latest Red Posts here ! Links will send you directly to Riot's Boards. Click a Champion's portrait to check all Red Posts about that Champion. Alternatively, click the cap icon up there to view ALL the Red Posts.", 'position':'left'},
-                "champions-list": {'intro': "Looking for a particular champion ? Type his/her/its name there and press Enter !", 'position':'left'},
-                "lod-navbar-intro": {'intro': "Access Red Posts and Champions from anywhere on the website through this handy navigation bar !"},
-                "li-articles": {'intro': "If you enjoy the concept, there are some articles down there you can read."},
-                "li-about": {'intro': "Read more about League of Designs philosophy here. If you want to contribute, there's a link for that, too."},
-                "news": {'intro': "Keep track of new functionalities by reading the News there (or checking the GitHub depository, in the About section).", 'position':'right'},
-                "intro-header": {'intro': "Thank you for your time ! I hope League of Designs helps you understand Riot's (some may say uncanny) way of doing things ! Have a good day~ ", 'position': 'bottom'},
-            }
-
-            var step = 1;
-            for (var entry in intro)
-            {
-                $('#'+entry).attr('data-step', step).attr('data-intro', intro[entry]['intro']).attr('data-position', intro[entry]['position'] === undefined ? 'bottom':intro[entry]['position']);
-                step++;
-            }
-
-            introJs().setOption({'doneLabel': 'Awesomelycious !', 'exitOnOverlayClick': true});
-            $('#tourButton').click(function() { introJs().start(); });
-        });
-    </script>
-    <!-- Hide Header Button -->
-    <script>
-        if (Cookies.get('hideHeader') === '1')
-        {
-             $('#homeHeaderCaret').click().addClass('glyphicon-menu-down').removeClass('glyphicon-menu-up');
-        }
-        $('.hideButton').click(function() {
-            if ($('#homeSubHeader').hasClass('in'))
-            {
-                $('#homeHeaderCaret').addClass('glyphicon-menu-down').removeClass('glyphicon-menu-up');
-                Cookies.set('hideHeader', '1', { expires : 42 });
-            } else {
-                $('#homeHeaderCaret').addClass('glyphicon-menu-up').removeClass('glyphicon-menu-down');
-                Cookies.set('hideHeader', '0', { expires : 42 });
-            }
         });
     </script>
 {% endblock %}

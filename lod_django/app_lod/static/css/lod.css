@@ -90,7 +90,34 @@ footer {
     position: relative;
 }
 
-#messagesDiv {
+#intro-header {
+    margin-top: 30px;
+}
+
+#title {
+    margin-left: 15px;
+}
+
+.suggestions {
+    text-align: center;
+}
+
+.suggestions-rioters a {
+    margin: 3px;
+}
+
+.home-carousel {
+    box-shadow: 0 0 3px 2px #D3D3D3, 0 0 3px 1px rgb(129, 129, 129) inset;
+}
+
+.home-red .red-post-champions-cell-container {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.home-red-portrait img {
+    width: 64px;
 }
 
 .cursorHelp {
@@ -103,11 +130,6 @@ footer {
 
 #homeHeaderCaret {
     cursor: pointer;
-}
-
-.home-col {
-    background-color: white;
-    border-radius: 15px;
 }
 
 #tourButton {

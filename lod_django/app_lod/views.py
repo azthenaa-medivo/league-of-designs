@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
+from pymongo import DESCENDING
 
 consumer = LoDConsumer('lod')
 
@@ -20,11 +21,14 @@ consumer = LoDConsumer('lod')
 def view_home(request):
     reds = consumer.get('mr_reds', sort_field='date', sort_order=-1, limit=5,
                         query={'region': {'$in': ['NA', 'PBE']},
-                                'section' : {'$in': GLORIOUS_SECTIONS}})
-    articles = consumer.get('articles', limit=2, query={'type': 'News'}, sort_field="date_created", sort_order=-1)
+                                'section' : {'$in': GLORIOUS_SECTIONS},
+                                '$where': "this.champions.length > 3" })
+    articles = consumer.get('articles', limit=2, query={'type': 'News'}, sort_field="date_created", sort_order=DESCENDING)
+    rioters = consumer.get('mr_rioters', limit=4, sort_field="last_post.date", sort_order=DESCENDING)
     champions = consumer.get('mr_champions', projection={'name': 1, 'url_id': 1, 'total_posts': 1, 'glorious_posts': 1,
-                                                         'portrait': 1, 'search': 1})
-    return {'reds': reds, 'articles': articles, 'champions': champions}
+                                            'portrait': 1, 'search': 1}, sort_field="glorious_posts",
+                                            sort_order=DESCENDING, limit=8)
+    return {'reds': reds, 'articles': articles, 'champions': champions, "rioters": rioters}
 
 @render_to('red_posts_main.html')
 def view_red_posts(request):
