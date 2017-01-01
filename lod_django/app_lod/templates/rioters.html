@@ -5,7 +5,11 @@ Rioters -
 {% endblock %}
 
 {% block header %}
-    <h1>The Rioters</h1>
+<div class="row">
+    <div class="col-md-12">
+        <h1>The Rioters</h1>
+    </div>
+</div>
 {% endblock %}
 
 {% block contents %}
@@ -14,18 +18,20 @@ Rioters -
 
     {% include "utils/components/rioters_table_handlebars.html" %}
 
-    <table id="rioters-table">
-        <thead>
-            <th>Name</th>
-            <th>Posts</th>
-            <th>Latest Red Post</th>
-        </thead>
-        <tfoot>
-            <th>Name</th>
-            <th>Posts</th>
-            <th>Latest Red Post</th>
-        </tfoot>
-    </table>
+    <div class="col-md-12">
+        <table id="rioters-table">
+            <thead>
+                <th>Name</th>
+                <th>Posts</th>
+                <th>Latest Red Post</th>
+            </thead>
+            <tfoot>
+                <th>Name</th>
+                <th>Posts</th>
+                <th>Latest Red Post</th>
+            </tfoot>
+        </table>
+    </div>
 {% endblock %}
 
 {% block js %}

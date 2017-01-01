@@ -6,11 +6,14 @@
     // Back to top button
     // Only enable if the document has a long scroll bar
     // Note the window height + offset
-    if ( ($(window).height() + 100) < $(document).height() ) {
-        $('#top-link-block').removeClass('hidden').affix({
-            offset: {top:100}
-        });
-    }
+    $('#top-link-block').affix({
+        offset: {top:100}
+    });
+//    if ( ($(window).height() + 100) < $(document).height() ) {
+//        $('#top-link-block').removeClass('hidden').affix({
+//            offset: {top:100}
+//        });
+//    }
 
     // Navbar search tool
     var template_champion_portrait = Handlebars.compile($("#handlebars-champion-portrait").html());

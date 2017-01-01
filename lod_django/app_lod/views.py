@@ -198,4 +198,5 @@ def view_login(request):
 def view_sitemap(request):
     """RENDER ALL THE DATA"""
     articles = consumer.get('articles')
-    return {'articles': articles}
+    champions = consumer.get('mr_champions', projection={'name': 1, 'url_id': 1})
+    return {'articles': articles, 'champions': champions}

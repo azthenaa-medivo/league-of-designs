@@ -76,7 +76,7 @@ class MiniRedPostSearchForm(MongoSearchForm):
 
 class RedPostDetailedSearchForm(MongoSearchForm):
     champions = MultipleChoiceField(choices=((c['name'], c['name']) for c in
-                                    list(consumer.get('mr_champions', projection={'name': 1}, sort_field='name',))),
+                                    list(consumer.get('mr_champions', sort_field='name',))),
                                     widget=CheckboxSelectMultiple, required=False, label="Champions")
     rioter = MultipleChoiceField(choices=((item['name'], item['name']) for item in
                                     list(consumer.get('mr_rioters', projection={'name': 1}, sort_field='name',))), required=False,

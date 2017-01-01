@@ -5,79 +5,87 @@
 {% endblock %}
 
 {% block header %}
-    <h1>About League of Designs</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>About League of Designs</h1>
+        </div>
+    </div>
 {% endblock %}
 
 {% block contents %}
-    <blockquote>"All deeds are committed by Humans. Therefore, for every deed, there is a Heart." -- Willard H. Wright</blockquote>
-    <h3>What's League of Designs about ?</h3>
-    <p>
-        My name is Artemys, and I'm fascinated by League of Legends' (or rather, Riot's) take on design and balance.
-        Because a lot of answers to our
-        everyday questions (such as why Irelia hasn't been reworked in years) can be found on the
-        <a href="http://forums.na.leagueoflegends.com/board/">Official Boards</a>, I built this hub that gathers
-        those <span class="ressource-Health">Red Posts</span> for you to read more easily. Have a good day !
-        (That was a tl;dr.)
-    </p>
-    <h3>What can we expect from League of Designs ?</h3>
-    <p>
-        <ul>
-            <li>A hopefully comprehensive list of all <a href="{% url "red-posts" %}">Red Posts</a> from
-                <a href="http://forums.na.leagueoflegends.com/board/">Riot's North American and Public Beta Environment Boards</a>. It's a bit like The Red Tracker
-                you find on various websites (<a href="http://boards.na.leagueoflegends.com/en/redtracker">and the official
-                    one</a>), with the added benefit of being sorted by champions. So you can check what <a href="{% url "rioter" rioter_url_id="CertainlyT" %}">CertainlyT</a> is
-                secretly planning for <a href="{% url "champion" url_id="Teemo" %}">Teemo</a>. (That's a totally
-                innocent example.)</li>
-            <li>The goal is to help understand Riot's stances on champion design. League of Legends is only
-                at the dawn of its potential awesomefulness (don't forget 'esome' !!), it's a great time to learn why <a href="{% url "champion" url_id="Irelia" %}">Irelia</a> will be
-                reworked and why you couldn't just nerf/buff <a href="{% url "champion" url_id="Darius" %}">Darius</a>/<a href="{% url "champion" url_id="Garen" %}">Garen</a>/<a href="{% url "champion" url_id="Mordekaiser" %}">Mordekaiser</a>/<a href="{% url "champion" url_id="Skarner" %}">Skarner</a> and get away with it. (Another utterly unbiased
-                example.)</li>
-            <li>EASTER EGGS</li>
-            <li>In the future, I hope to add a section about items. They're equally important to the game, and
-                we are only starting to see more good iterations of them. I haven't studied the matter as much
-                as I have done with Champions though.</li>
-            <li>I also plan to find Red Posts on Reddit, but it's not a priority. Soon™.</li>
-            <li><strike>Broken CSS</strike> sshhhhhh</li>
-            <li>I will probably use this website as a blog and write some condensed Articles to streamline (I USED THAT
-                WORD YIISSSS) things, or expose my ideas for Champion reworks, or give you the best Cookie recipe out there.</li>
-        </ul>
-    </p>
-    <h3>Can I help ? I have a thing or two to say about <a href="{% url "champion" url_id="Riven" %}" title="OMGBROKENNERF">Riven</a>.</h3>
-    <p>
-        Sure ! You can send me a mail at <b>lolofdesigns (at) gmail (dot) com</b> for anything ranging to
-        feedback, wallpaper suggestion, CSS rage/protips or articles you might want to add.
-        <br>
-        Note that I haven't allowed people to register and do that themselves <i>yet</i>. The main reason is that I want
-        to ensure top quality among the articles. <b>This is not another LoLKing clone, you won't find any Champion Guide
-        here. Or eSports related stuff. Nope.</b>
-        <br>
-        Alternatively, you can donate a buck to support League of Designs ! I still have a lot of ideas to implement.
-        The total hosting costs are of about 3 € per month. Just so you know, heh.
-    </p>
-    <p>
-        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-            <input type="hidden" name="cmd" value="_s-xclick">
-            <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHPwYJKoZIhvcNAQcEoIIHMDCCBywCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYBB8HqMZnb96FyjJHMz6DzSV9L+c5apPBEbZi6T393DkxARucHP10kdeTi1uCuKmbuUuX0SZ9MFwEeXRPcIBqv71jbXWtKxQ2wQEreS0PI5jrp2gbixR/7rkk29l4dV+ZekWq6VaXRE5AZOfjJ+P7Nnr+4+/DVeFeOT7SfU9q8/8TELMAkGBSsOAwIaBQAwgbwGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIagVf7YhDEP2AgZgV4DgPXu9h2EXQRSxWY9qrRo/r03FltsCXcFkWHUk18nq9qf7QGBf/nFW0MvUyzkw6oM72Tc1OASGufi6CFEEVfMwPQ4112QQj3q04WkfJsd7I/L5yTvfYKFjL8BLNxgc+uwtKtpr7jLWJhd1KpkPXUX34M77LMk4kvEhU/57SmruGeXFkVxnWD7L9Hqtoqea8t1MKJUOU56CCA4cwggODMIIC7KADAgECAgEAMA0GCSqGSIb3DQEBBQUAMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbTAeFw0wNDAyMTMxMDEzMTVaFw0zNTAyMTMxMDEzMTVaMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwUdO3fxEzEtcnI7ZKZL412XvZPugoni7i7D7prCe0AtaHTc97CYgm7NsAtJyxNLixmhLV8pyIEaiHXWAh8fPKW+R017+EmXrr9EaquPmsVvTywAAE1PMNOKqo2kl4Gxiz9zZqIajOm1fZGWcGS0f5JQ2kBqNbvbg2/Za+GJ/qwUCAwEAAaOB7jCB6zAdBgNVHQ4EFgQUlp98u8ZvF71ZP1LXChvsENZklGswgbsGA1UdIwSBszCBsIAUlp98u8ZvF71ZP1LXChvsENZklGuhgZSkgZEwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tggEAMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAgV86VpqAWuXvX6Oro4qJ1tYVIT5DgWpE692Ag422H7yRIr/9j/iKG4Thia/Oflx4TdL+IFJBAyPK9v6zZNZtBgPBynXb048hsP16l2vi0k5Q2JKiPDsEfBhGI+HnxLXEaUWAcVfCsQFvd2A1sxRr67ip5y2wwBelUecP3AjJ+YcxggGaMIIBlgIBATCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE1MDkwODIwMDM1M1owIwYJKoZIhvcNAQkEMRYEFD0zxBLZonILA3HFwIe3DHdURhPMMA0GCSqGSIb3DQEBAQUABIGAGCu7k2GSPsoMGy5AjQ7qhGocmeyP592H66Em5pShn70qT6tJvcCe5x95/aCWGk1kjE+gWd6kpzEtp+Kq2jqw7hukSIr/AF4qdfX39RWdXDpbsIx3z9PV36hIMNZC0JROoByuySt+v6zJgMZsgIaS9C1rX9pEya+JljymzBb4KpI=-----END PKCS7-----
-            ">
-            <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-            <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
-        </form>
-    </p>
-    <h3>Source Code</h3>
-    <p>
-        You can check the source code for League of Designs on GitHub.
-        <a href="https://github.com/azthenaa-medivo/league-of-designs" target="_blank"><span title="wowsoHAX">It's right there</span></a>.
-    </p>
-    <h3>Glyphicons</h3>
-    <p>
-        LoD uses some slick Glyphicons, man !
-        <a href="http://glyphicons.com/" target="_blank">Check'em out there.</a>
-    </p>
-    <h3>Mandatory Legal Statement</h3>
-    <p>
-        League of Designs (LoD) isn't endorsed by Riot Games and doesn't reflect the views or opinions of
-        Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot
-        Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc. It's okay
-        though, I love you guys.
-    </p>
+    <div class="col-md-12">
+        <blockquote>"All deeds are committed by Humans. Therefore, for every deed, there is a Heart." -- Willard H. Wright</blockquote>
+        <h3>What's League of Designs about ?</h3>
+        <p>
+            My name is Artemys, and I'm fascinated by League of Legends' (or rather, Riot's) take on design and balance.
+            Because a lot of answers to our
+            everyday questions (such as why Irelia hasn't been reworked in years) can be found on the
+            <a href="http://forums.na.leagueoflegends.com/board/">Official Boards</a>, I built this hub that gathers
+            those <span class="ressource-Health">Red Posts</span> for you to read more easily. Have a good day !
+            (That was a tl;dr.)
+        </p>
+        <h3>What can we expect from League of Designs ?</h3>
+        <p>
+            <ul>
+                <li>A hopefully comprehensive list of all <a href="{% url "red-posts" %}">Red Posts</a> from
+                    <a href="http://forums.na.leagueoflegends.com/board/">Riot's North American and Public Beta Environment Boards</a>. It's a bit like The Red Tracker
+                    you find on various websites (<a href="http://boards.na.leagueoflegends.com/en/redtracker">and the official
+                        one</a>), with the added benefit of being sorted by champions. So you can check what <a href="{% url "rioter" rioter_url_id="CertainlyT" %}">CertainlyT</a> is
+                    secretly planning for <a href="{% url "champion" url_id="Teemo" %}">Teemo</a>. (That's a totally
+                    innocent example.)</li>
+                <li>The goal is to help understand Riot's stances on champion design. League of Legends is only
+                    at the dawn of its potential awesomefulness (don't forget 'esome' !!), it's a great time to learn why <a href="{% url "champion" url_id="Irelia" %}">Irelia</a> will be
+                    reworked and why you couldn't just nerf/buff <a href="{% url "champion" url_id="Darius" %}">Darius</a>/<a href="{% url "champion" url_id="Garen" %}">Garen</a>/<a href="{% url "champion" url_id="Mordekaiser" %}">Mordekaiser</a>/<a href="{% url "champion" url_id="Skarner" %}">Skarner</a> and get away with it. (Another utterly unbiased
+                    example.)</li>
+                <li>EASTER EGGS</li>
+                <li>In the future, I hope to add a section about items. They're equally important to the game, and
+                    we are only starting to see more good iterations of them. I haven't studied the matter as much
+                    as I have done with Champions though.</li>
+                <li>I also plan to find Red Posts on Reddit, but it's not a priority. Soon™.</li>
+                <li><strike>Broken CSS</strike> sshhhhhh</li>
+                <li>I will probably use this website as a blog and write some condensed Articles to streamline (I USED THAT
+                    WORD YIISSSS) things, or expose my ideas for Champion reworks, or give you the best Cookie recipe out there.</li>
+            </ul>
+        </p>
+        <h3>Can I help ? I have a thing or two to say about <a href="{% url "champion" url_id="Riven" %}" title="OMGBROKENNERF">Riven</a>.</h3>
+        <p>
+            Sure ! You can send me a mail at <b>lolofdesigns (at) gmail (dot) com</b> for anything ranging to
+            feedback, wallpaper suggestion, CSS rage/protips or articles you might want to add.
+            <br>
+            Note that I haven't allowed people to register and do that themselves <i>yet</i>. The main reason is that I want
+            to ensure top quality among the articles. <b>This is not another LoLKing clone, you won't find any Champion Guide
+            here. Or eSports related stuff. Nope.</b>
+            <br>
+            Alternatively, you can donate a buck to support League of Designs ! I still have a lot of ideas to implement.
+            The total hosting costs are of about 3 € per month. Just so you know, heh.
+        </p>
+        <p>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHPwYJKoZIhvcNAQcEoIIHMDCCBywCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYBB8HqMZnb96FyjJHMz6DzSV9L+c5apPBEbZi6T393DkxARucHP10kdeTi1uCuKmbuUuX0SZ9MFwEeXRPcIBqv71jbXWtKxQ2wQEreS0PI5jrp2gbixR/7rkk29l4dV+ZekWq6VaXRE5AZOfjJ+P7Nnr+4+/DVeFeOT7SfU9q8/8TELMAkGBSsOAwIaBQAwgbwGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIagVf7YhDEP2AgZgV4DgPXu9h2EXQRSxWY9qrRo/r03FltsCXcFkWHUk18nq9qf7QGBf/nFW0MvUyzkw6oM72Tc1OASGufi6CFEEVfMwPQ4112QQj3q04WkfJsd7I/L5yTvfYKFjL8BLNxgc+uwtKtpr7jLWJhd1KpkPXUX34M77LMk4kvEhU/57SmruGeXFkVxnWD7L9Hqtoqea8t1MKJUOU56CCA4cwggODMIIC7KADAgECAgEAMA0GCSqGSIb3DQEBBQUAMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbTAeFw0wNDAyMTMxMDEzMTVaFw0zNTAyMTMxMDEzMTVaMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwUdO3fxEzEtcnI7ZKZL412XvZPugoni7i7D7prCe0AtaHTc97CYgm7NsAtJyxNLixmhLV8pyIEaiHXWAh8fPKW+R017+EmXrr9EaquPmsVvTywAAE1PMNOKqo2kl4Gxiz9zZqIajOm1fZGWcGS0f5JQ2kBqNbvbg2/Za+GJ/qwUCAwEAAaOB7jCB6zAdBgNVHQ4EFgQUlp98u8ZvF71ZP1LXChvsENZklGswgbsGA1UdIwSBszCBsIAUlp98u8ZvF71ZP1LXChvsENZklGuhgZSkgZEwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tggEAMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAgV86VpqAWuXvX6Oro4qJ1tYVIT5DgWpE692Ag422H7yRIr/9j/iKG4Thia/Oflx4TdL+IFJBAyPK9v6zZNZtBgPBynXb048hsP16l2vi0k5Q2JKiPDsEfBhGI+HnxLXEaUWAcVfCsQFvd2A1sxRr67ip5y2wwBelUecP3AjJ+YcxggGaMIIBlgIBATCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwCQYFKw4DAhoFAKBdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE1MDkwODIwMDM1M1owIwYJKoZIhvcNAQkEMRYEFD0zxBLZonILA3HFwIe3DHdURhPMMA0GCSqGSIb3DQEBAQUABIGAGCu7k2GSPsoMGy5AjQ7qhGocmeyP592H66Em5pShn70qT6tJvcCe5x95/aCWGk1kjE+gWd6kpzEtp+Kq2jqw7hukSIr/AF4qdfX39RWdXDpbsIx3z9PV36hIMNZC0JROoByuySt+v6zJgMZsgIaS9C1rX9pEya+JljymzBb4KpI=-----END PKCS7-----
+                ">
+                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
+            </form>
+        </p>
+        <h3>Source Code</h3>
+        <p>
+            You can check the source code for League of Designs on GitHub.
+            <a href="https://github.com/azthenaa-medivo/league-of-designs" target="_blank"><span title="wowsoHAX">It's right there</span></a>.
+        </p>
+        <h3>Glyphicons</h3>
+        <p>
+            LoD uses some slick Glyphicons, man !
+            <a href="http://glyphicons.com/" target="_blank">Check'em out there.</a>
+        </p>
+        <h3>Special thanks</h3>
+        <p>Thanks to /u/ChimeClicker for the inspirational work that led to LoD's visual update !</p>
+        <h3>Mandatory Legal Statement</h3>
+        <p>
+            League of Designs (LoD) isn't endorsed by Riot Games and doesn't reflect the views or opinions of
+            Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot
+            Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc. It's okay
+            though, I love you guys.
+        </p>
+    </div>
 {% endblock %}

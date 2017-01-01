@@ -8,7 +8,7 @@
 {% load staticfiles %}
 {% verbatim %}
 <div class="row">
-    <div class="col-md-7 col-md-offset-1 red-post-message-cell">
+    <div class="col-md-8 red-post-message-cell">
         <div class="row">
             <div class="col-md-9">
                 <div class="red-header red-post-message-header">
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="col-md-1 red-post-message-details-button">
-                <button class="details-button" onclick="showDetails()">
+                <button class="details-button" data-toggle="modal" data-target="#modal-post-{{_id}}">
                     <i class="glyphicon glyphicon-fullscreen"></i>
                 </button>
             </div>
@@ -36,14 +36,17 @@
             {{#each champions_data}}
             <p class="champion-sneak-wrapper">
                 <a href="{% endverbatim %}{% url "champion" '' %}{% verbatim %}{{this.url_id}}">
-                    <img class="sneak-view" alt="{{this.name}}" title="{{this.name}}" src="{% endverbatim %}{% static "images/sneak/" %}{% verbatim %}{{{this.url_id}}}_sneak.png" />
+                    <img class="sneak-view" alt="{{this.name}}" title="{{this.name}}" src="{% endverbatim %}{% static "images/sneak/" %}{% verbatim %}{{{this.url_id}}}.png" />
                 </a>
             </p>
             {{/each}}
         </div>
+        {{#moreThanMin champions_data}}
         <div class="champions-label">
-            {{champions_data.length}} champion{{#moreThanOne champions_data}}s{{/moreThanOne}} quoted
+            {{champions_data.length}} champions quoted
         </div>
+        {{/moreThanMin}}
+        <div class="super-border"></div>
 {{else}}
     {{section}}
 {{/if}}
@@ -59,6 +62,65 @@
 {{else}}
     {{section}}
 {{/if}}
+    </div>
+</div>
+
+<!-- modal -->
+<div class="modal fade red-post-modal" id="modal-post-{{_id}}" tabindex="-1" role="dialog" aria-labelledby="modalPost-{{post_id}}">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title" id="myModalLabel">Post details (ID : {{post_id}})</h3>
+            </div>
+            <div class="modal-body">
+                <h4>Thread</h4>
+                <div>
+                    <a href="{% endverbatim %}{% url "red-posts" %}{% verbatim %}?thread_id={{thread_id}}&is_and=true">
+                    <i title="Rundown for thread « {{thread}} »" class="glyphicon glyphicon glyphicon-list rundown-link"></i></a>
+                    &nbsp;<a href="{{url}}" target="_blank">{{thread}}</a>
+                </div>
+                {{#if has_parent }}
+                <h4>In answer to <span class="standard-user">{{parent.user}}</span> (<span data-date="{{parent.date}}" class="computed-date"></span>)</h4>
+                <div>
+                    <div class="red-quote red-post-message-core">
+                        {{{parent.contents}}}
+                    </div>
+                </div>
+                <div>
+                {{/if}}
+                <h4><a href="{% endverbatim %}{% url "rioter" rioter_url_id='' %}{% verbatim %}{{rioter_url_id}}" class="rioter">{{rioter}}</a> said (<span data-date="{{date}}" class="computed-date"></span>)...</h4>
+                <div class="red-quote red-post-message-core">
+                    {{{this.contents}}}
+                </div>
+                <h4>About</h4>
+                <div>
+                    {{#if tags}}
+                    <h5>Tags</h5>
+                    <div>
+                        {{#each tags}}{{this}} {{/each}}
+                    </div>
+                    {{/if}}
+                </div>
+                    {{#if champions_data}}
+                <h4>{{champions_data.length}} Champions quoted</h4>
+                    <div class="row">
+                        <div class="col-md-12 champions-list">
+                            {{#each champions_data}}
+                            <p class="champion-sneak-wrapper">
+                                <a href="{% endverbatim %}{% url "champion" '' %}{% verbatim %}{{this.url_id}}">
+                                    <img class="sneak-view" alt="{{this.name}}" title="{{this.name}}" src="{% endverbatim %}{% static "images/sneak/" %}{% verbatim %}{{{this.url_id}}}.png" />
+                                </a>
+                            </p>
+                            {{/each}}
+                        </div>
+                    </div>
+                    {{/if}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 {% endverbatim %}

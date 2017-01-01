@@ -40,12 +40,10 @@
                     <h3>Except Draaaven of course.</h3>
                     {% else %}
                     <h4>Loves that dude so much !</h4>
-                    <div>
-                        <a href="{% url "champion" fav.url_id %}">
-                            <img class="round-portrait cursor-pointer" title="{{fav.name}}" alt="{{fav.name}}" src="{% static "images/portraits/" %}{{fav|portrait}}"></img>
-                        </a>
+                    <div class="rioter top-champion" data-name="{{fav.name}}">
+                        <img class="round-portrait cursor-pointer" title="{{fav.name}}" alt="{{fav.name}}" src="{% static "images/portraits/" %}{{fav|portrait}}"></img>
                     </div>
-                    <h3>{{fav.name}} (quoted <span class="rioter">{{fav.count|int}}</span> times)</h3>
+                    <h3><a href="{% url "champion" fav.url_id %}">{{fav.name}} (quoted <span class="rioter">{{fav.count|int}}</span> times)</a></h3>
                     {% endif %}
                     {% endwith %}
                 </div>
@@ -55,12 +53,12 @@
                     {% for c in fav reversed %}
                     {% if not forloop.first %}
                         <div class="inline rioter-top-champions">
-                            <a class="rioter" href="{% url "champion" c.url_id %}">
+                            <div class="rioter top-champion" data-name="{{c.name}}">
                                 <img class="cursor-pointer round-portrait" title="{{c.name}}" alt="{{c.name}}" src="{% static "images/portraits/" %}{{c|portrait}}"></img>
                                 <span>
                                     <span class="mdi">{{c.count|int}}</span>
                                 </span>
-                            </a>
+                            </div>
                         </div>
                     {% endif %}
                     {% endfor %}
@@ -70,30 +68,25 @@
         </div>
         <div class="col-md-12">
             <h3>{{rioter.name}}'s Posts</h3>
-            {% include "utils/red_posts_datatable.html" with table_id="red-table" %}
         </div>
+        {% include "utils/components/full_red_table.html" with table_id="red-table" %}
 {% endblock %}
 
 {% block js %}
     {% include "utils/scripts/hovermore.html" %}
-    <!-- Pretty stuff ! -->
-    <script>
-        $('.rioter-top-champions a').hover(function() {
-            $(this).animate({'color': 'yellow'});
-        }, function() {
-            $(this).animate({'color': 'red'});
-        });
-    </script>
     <!-- Chapter 45 : Generate the Red Posts Datatable !!!11one -->
     <script>
         $(document).ready(function() {
+            $('.rioter-top-champions .rioter').hover(function() {
+                $(this).animate({'color': 'yellow'});
+            }, function() {
+                $(this).animate({'color': 'red'});
+            });
+
             {% include "utils/scripts/red_table_handlebars.html" %}
             {% include "utils/scripts/datatable_language.html" %}
             // Table
             var redTable = $('#red-table').DataTable({
-                "processing": true,
-                "serverSide": true,
-                "searchDelay": 250,
                 "ajax": {
                     "url": "{% url 'red-posts' %}",
                     "type": "GET",
@@ -102,34 +95,24 @@
                             q = {'query': {
                                     "is_and": true,
                                     "rioter": ['{{rioter.name}}'],
+                                    "champions": $(".top-champion.selected").map(function() { return $(this).attr("data-name"); }).get(),
                                 }
                             };
+
+                            {% include "utils/scripts/datatable_red_posts_default_auto_filter.html" %}
                             return {"args": JSON.stringify( $.extend(args, q))};
                         },
                 },
-                "columns": [
-{% include "utils/scripts/red_posts_table_columns.html" %}
-                ],
-                "language": {
-                    "loadingRecords": languageLoading,
-                    "zeroRecords": languageNoRecords,
-                    "processing": languageLoading,
-                },
-                "dom": '<"top"flpi>rt<"bottom"flpi><"clear">',
-                "order": [[ 1, "desc" ]],
-                "columnDefs": [
-                    {
-                        "targets": [ 3, 5, 6, 7, 8 ],
-                        "visible": false,
-                    },
-                    {
-                        "targets": [ 0, 1, 2, 4, 9 ],
-                        "width": "20%",
-                    },
-                ],
-                "searchHighlight": true,
+                {% include "utils/scripts/datatable_red_posts_default_config.html" %}
             });
-            $('#{{table_id}}_wrapper > .top').wrapInner('<div class="container"></div>');
+
+            $(".top-champion").click(function(e) {
+                $(this).toggleClass("selected");
+                redTable.ajax.reload();
+            });
+
+            {% include "utils/scripts/datatable_red_posts_init.html" with table_id="red-table" %}
         });
     </script>
+    {% include "utils/scripts/filters_panel_setup.html" %}
 {% endblock %}

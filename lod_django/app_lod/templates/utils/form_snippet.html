@@ -1,12 +1,18 @@
+<div class="row">
 {% for field in form.visible_fields %}
-    <div class="row fieldWrapper">
-        <div class="col-md-1">{{ field.label_tag }}</div>
-        <div class="col-md-5">{{ field }}</div>
-    </div>
-    <div class="fieldErrors">
-        {{ field.errors }}
+    <div class="col-md-12">
+        <div class="row fieldWrapper">
+            <div class="col-md-1">{{ field.label_tag }}</div>
+            <div class="col-md-5">{{ field }}</div>
+        </div>
+        <div class="row fieldWrapper">
+            <div class="col-md-12 fieldErrors text-danger">
+                {{ field.errors }}
+            </div>
+        </div>
     </div>
 {% endfor %}
+</div>
 {% for hidden in form.hidden_fields %}
     {{ hidden }}
 {% endfor %}

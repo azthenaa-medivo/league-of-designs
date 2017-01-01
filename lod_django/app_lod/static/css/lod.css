@@ -36,11 +36,61 @@ table.dataTable span.highlight {
     background-color: #ffff00;
 }
 
+.body-wrapper {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-bottom: 60px;
+    min-height: 100%;
+}
+
+.container {
+    background-color: white;
+}
+
+.page-header {
+    margin: 20px 0px 5px;
+}
+
+.container-border {
+    border-radius: 20px;
+    box-shadow: 0 0 2px 2px white,
+         0 0 3px 4px rgb(25, 117, 66),
+         0 0 0px 5px rgb(37, 0, 0),
+         0 0 1px 8px #26381E,
+         0 0 2px 8px lightgrey,
+         0 0 1px 12px #26382E,
+         0 0 0px 15px #101010;
+}
+
+.container-detach {
+    width: 1140px;
+}
+
+footer {
+    padding-bottom: 20px;
+}
+
+.standard-vertical-margins {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.small-vertical-margins {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.dataTables_wrapper .container {
+    width: 1140px;
+}
+
 .homeLOD {
     width: 64px;
     height: 64px;
     z-index: 1;
     position: relative;
+}
+
+#messagesDiv {
 }
 
 .cursorHelp {
@@ -120,6 +170,7 @@ table.dataTable span.highlight {
 
 .red-post-message-header {
     height: 20%;
+    margin-left: 30px;
 }
 
 .red-post-message-core {
@@ -128,6 +179,21 @@ table.dataTable span.highlight {
     max-height: 260px;
     min-height: 60px;
     margin-top: 5px;
+    margin-left: 20px;
+}
+
+.red-post-modal .red-post-message-core {
+    overflow-y: scroll;
+    height: 80%;
+    max-height: 500px;
+    min-height: 60px;
+    margin-top: 5px;
+    margin-left: 20px;
+}
+
+.red-post-modal .champions-list {
+    text-align: center;
+    margin-left: -15px;
 }
 
 .red-post-champions-cell {
@@ -141,7 +207,24 @@ table.dataTable span.highlight {
 .red-post-champions-cell-container {
     margin-top: auto;
     margin-bottom: auto;
+    margin-left: -15px;
     text-align: left;
+}
+
+.red-post-champions {
+    text-align: center;
+    border-radius: 2px;
+    border: 1px solid black;
+}
+
+.super-border {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 5px 2px black inset;
+    top: 0;
+    left: 0;
+    pointer-events: none;
 }
 
 .champions-label {
@@ -155,8 +238,14 @@ table.dataTable span.highlight {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
+.champions-label p {
+    margin: 0px;
+}
+
 .champion-sneak-wrapper {
     display: inline-block;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .red-post-message-details-button {
@@ -168,6 +257,45 @@ table.dataTable span.highlight {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+}
+
+#red-posts-filters-panel {
+    position: fixed;
+    z-index: 1;
+    bottom: -165px;
+    width: 1170px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#toggle-filters {
+    display: flex;
+    align-items: center;
+    background-color: #26382E;
+    height: 35px;
+    margin-bottom: 5px;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#282828+0,26382e+100 */
+    background: #26382E; /* Old browsers */
+    background: -moz-linear-gradient(top, #000000 0%, #26382e 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #000000 0%,#26382e 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #000000 0%,#26382e 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#26382e',GradientType=0 ); /* IE6-9 */
+}
+
+#filters-containers {
+    background-color: white;
+}
+
+.toggle-filter-header {
+    color: white;
+}
+
+.filters-borders {
+    box-shadow: 0 0 2px 0px black, 0 0 1px 3px #26382E, 0 0 2px 5px black;
 }
 
 .red-contents .read-more {
@@ -235,6 +363,8 @@ table.dataTable span.highlight {
     -webkit-animation-name: brighten-reverse;
     -webkit-animation-duration: 0.5s;
     -webkit-animation-fill-mode: forwards;
+
+    box-shadow: 0 0 2px 2px black;
 }
 
 .sneak-view:hover {
@@ -243,14 +373,8 @@ table.dataTable span.highlight {
     -webkit-animation-fill-mode: forwards;
 }
 
-.red-post-champions {
-    text-align: right;
-}
-
-.red
-
 .fieldWrapper {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .msg {
@@ -280,6 +404,14 @@ table.dataTable span.highlight {
 
 .rioter {
     font-weight: bold;
+    color: red;
+}
+
+.standard-user {
+    color: #26382E;
+}
+
+.error {
     color: red;
 }
 
@@ -362,6 +494,25 @@ a.no-underline:hover {
     margin-right: 10px;
 }
 
+.champion-block {
+    height: 310px;
+    cursor: pointer;
+}
+
+.champion-block:hover {
+}
+
+.champion-block-description {
+    margin-left: -15px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+.champion-block-name {
+
+}
+
 .round-portrait {
     border-radius: 60px;
     border: 3px solid black;
@@ -385,6 +536,14 @@ a.no-underline:hover {
     text-shadow: 2px 2px #000000;
     font-size: 24px;
     top: 5px;
+}
+
+.top-champion {
+    cursor: pointer;
+}
+
+.top-champion.selected img {
+    box-shadow: 0 0 5px 3px red;
 }
 
 .inline {

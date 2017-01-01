@@ -2,6 +2,11 @@
 *   Some cool functions
 */
 
+// The same as in the postimport module.
+function urlIDize(text) {
+    return text.replace(/\W/g, '');
+}
+
 function ago(time) {
     /*
      *  Computes time and tells you how long ago it was. Months have 30 days because I decided so.

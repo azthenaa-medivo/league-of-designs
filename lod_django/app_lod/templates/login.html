@@ -9,8 +9,8 @@
 {% endblock %}
 
 {% block contents %}
-    <h3>Enter your credentials below, matey !</h3>
-    <div>
+    <div class="col-md-12">
+        <h3>Enter your credentials below, matey !</h3>
         <div>By the way, I don't want to break it to you, but as of now only an administrator may login. Soz boyz.</div>
         <div class="text-danger">{{ message }}</div>
         <form method="post" action="/login">

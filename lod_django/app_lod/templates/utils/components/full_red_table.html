@@ -1,0 +1,50 @@
+    {% load staticfiles %}
+    {% load template_tags %}
+    <div class="col-md-12 bot15">
+        {% csrf_token %}
+        {% include "utils/red_posts_datatable.html" with table_id="red-table" %}
+    </div>
+    <div id="red-posts-filters-panel" class="col-md-12">
+        <div class="row">
+            <div id="toggle-filters" class="col-md-12 filters-borders">
+                <span class="toggle-filter-header">
+                    <h4>Filters</h4>
+                </span>
+            </div>
+            <div id="filters-containers" class="col-md-12 filters-borders">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3>Filter by Rioter</h3>
+                        <form method="#" action="#" id="filterForm">
+                            {% if not all %}
+                                {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="glorious_posts" type="posts" id="rioter-select" %}
+                            {% else %}
+                                {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="total_posts" type="posts" id="rioter-select" %}
+                            {% endif %}
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>Filter by region</h3>
+                        <form method="#" action="#" id="regionFilter">
+                            {% include "utils/filters/filter_checkbox.html" with name="region-filter" types=regions colmd=3 %}
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="cursorHelp" title="Includes {{glorious_sections|join:', '}}">Show Design Boards only</h3>
+                        <form method="#" action="#" id="designFilter">
+                            <div class="col-md-12 filterCheckbox">
+                                <label class="checkbox-inline" for="design-only">
+                                    <input id="designOnlyCheck" class="design-only" value="design-only" type="checkbox" name="design-only"> Design Only
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12 standard-vertical-margins">
+                        <a href="{% url "red-posts-search" %}">
+                            <button type="button" class="btn btn-default">More search options...</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

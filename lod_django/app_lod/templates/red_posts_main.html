@@ -5,7 +5,11 @@ Red Posts -
 {% endblock %}
 
 {% block header %}
-    <h1>{{red_title | safe}}</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{red_title | safe}}</h1>
+        </div>
+    </div>
 {% endblock %}
 
 {% block css %}
@@ -14,43 +18,7 @@ Red Posts -
 {% block contents %}
     {% load staticfiles %}
     {% load template_tags %}
-    <div class="col-md-12 bot15">
-        <div class="col-md-4">
-            <h3>Filter by Rioter</h3>
-            <form method="#" action="#" id="filterForm">
-                {% if not all %}
-                    {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="glorious_posts" type="posts" id="rioter-select" %}
-                {% else %}
-                    {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="total_posts" type="posts" id="rioter-select" %}
-                {% endif %}
-            </form>
-        </div>
-        <div class="col-md-4">
-            <h3>Filter by region</h3>
-            <form method="#" action="#" id="regionFilter">
-                {% include "utils/filters/filter_checkbox.html" with name="region-filter" types=regions colmd=3 %}
-            </form>
-        </div>
-        <div class="col-md-4">
-            <h3 class="cursorHelp" title="Includes {{glorious_sections|join:', '}}">Show Design Boards only</h3>
-            <form method="#" action="#" id="designFilter">
-                <div class="col-md-12 filterCheckbox">
-                    <label class="checkbox-inline" for="design-only">
-                        <input id="designOnlyCheck" class="design-only" value="design-only" type="checkbox" name="design-only"> Design Only
-                    </label>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="col-md-12">
-        <a href="{% url "red-posts-search" %}">
-            <button type="button" class="btn btn-default">More search options...</button>
-        </a>
-        <hr>
-    </div>
-    <hr>
-    {% csrf_token %}
-    {% include "utils/red_posts_datatable.html" with table_id="red-table" %}
+    {% include "utils/components/full_red_table.html" %}
 {% endblock %}
 
 {% block js %}
@@ -84,7 +52,7 @@ Red Posts -
     <!-- Lock the search bar when scrolling -->
     <script>
         $(document).scroll(function() {
-            var detect = 230;
+            var detect = 150;
             if ($(document).scrollTop() >= detect)
             {
                 $('#red-table_wrapper > .top').addClass('fixed-below-navbar');
@@ -93,4 +61,5 @@ Red Posts -
             }
         });
     </script>
+    {% include "utils/scripts/filters_panel_setup.html" %}
 {% endblock %}

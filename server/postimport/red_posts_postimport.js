@@ -61,7 +61,7 @@ db.reds.find(query).forEach(function(res) {
     // Check for tags !
     for (i=0;i<tags.length;i++)
     {
-        var regexTest = new RegExp("\\b" + tags[i] + "\\b", "gi");
+        var regexTest = new RegExp(tags[i], "gi");
         if (regexTest.test(new_post['contents']) || regexTest.test(new_post['thread']))
         {
            new_post['tags'].push(tags[i]);

@@ -14,81 +14,83 @@ Search -
 {% block contents %}
     {% load staticfiles %}
     {% load template_tags %}
-    <form method="GET" action="{% url "red-posts" %}">
-        <div class="container">
-              <div id="topRowFixed" class="row">
-            <div class="col-md-2 text-center">
-                <div>
-                    {{form.is_and.label}} {% include "utils/help_text.html" with text=form.is_and.help_text placement="bottom" %}
-                </div>
-                <div>
-                    {{form.is_and}}
-                </div>
-                {{form.all}}
-            </div>
-            <div class="col-md-3">
-                <button type="submit" class="btn btn-primary btn-block">Search</button>
-            </div>
-            <div id="searchSummary" class="col-md-7">
-                <ul>
-                    <li>If "Match All" is unchecked, additional search strings will <b>not</b> be included in the search.</li>
-                </ul>
-            </div>
-        </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4 text-center">
-                <h3>{{form.champions.label}}</h3>
-                <div class="row bot15">
-                    <div class="col-md-1">
-
+    <div class="col-md-12">
+        <form method="GET" action="{% url "red-posts" %}">
+            <div class="container-detach">
+                  <div id="topRowFixed" class="row">
+                <div class="col-md-2 text-center">
+                    <div>
+                        {{form.is_and.label}} {% include "utils/help_text.html" with text=form.is_and.help_text placement="bottom" %}
                     </div>
-                    <div class="col-md-10">
-                        <div class="input-group bot15">
-                            <span class="input-group-addon btn btn-default" id="clear_champion-filter">Clear</span>
-                            <input type="text" id="champion-filter" class="form-control" placeholder="Find champion...">
+                    <div>
+                        {{form.is_and}}
+                    </div>
+                    {{form.all}}
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                </div>
+                <div id="searchSummary" class="col-md-7">
+                    <ul>
+                        <li>If "Match All" is unchecked, additional search strings will <b>not</b> be included in the search.</li>
+                    </ul>
+                </div>
+            </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <h3>{{form.champions.label}}</h3>
+                    <div class="row bot15">
+                        <div class="col-md-1">
+
                         </div>
-                        {{form.champions}}
-                    </div>
-                    <div class="col-md-1">
+                        <div class="col-md-10">
+                            <div class="input-group bot15">
+                                <span class="input-group-addon btn btn-default" id="clear_champion-filter">Clear</span>
+                                <input type="text" id="champion-filter" class="form-control" placeholder="Find champion...">
+                            </div>
+                            {{form.champions}}
+                        </div>
+                        <div class="col-md-1">
 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8 formScrolls">
+                    <h3>{{form.tags.label}}</h3>
+                    {{form.tags}}
+                    <h3>{{form.section.label}}</h3>
+                    {{form.section}}
+                    <h3>{{form.region.label}}</h3>
+                    {{form.region}}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>{{form.date_before.label}}</h3>
+                            {{form.date_before}}
+                        </div>
+                        <div class="col-md-6">
+                            <h3>{{form.date_after.label}}</h3>
+                            {{form.date_after}}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3>{{form.rioter.label}} {% include "utils/help_text.html" with text=form.rioter.help_text placement="top" %}</h3>
+                            {{form.rioter}}
+                            <div id="rioters-list"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h3>{{form.search.label}} {% include "utils/help_text.html" with text=form.search.help_text placement="top" %}</h3>
+                            {{form.search}}
+                            <h3>{{form.thread_id.label}} {% include "utils/help_text.html" with text=form.thread_id.help_text placement="top" %}</h3>
+                            {{form.thread_id}}
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8 formScrolls">
-                <h3>{{form.tags.label}}</h3>
-                {{form.tags}}
-                <h3>{{form.section.label}}</h3>
-                {{form.section}}
-                <h3>{{form.region.label}}</h3>
-                {{form.region}}
-                <div class="row">
-                    <div class="col-md-6">
-                        <h3>{{form.date_before.label}}</h3>
-                        {{form.date_before}}
-                    </div>
-                    <div class="col-md-6">
-                        <h3>{{form.date_after.label}}</h3>
-                        {{form.date_after}}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h3>{{form.rioter.label}} {% include "utils/help_text.html" with text=form.rioter.help_text placement="top" %}</h3>
-                        {{form.rioter}}
-                        <div id="rioters-list"></div>
-                    </div>
-                    <div class="col-md-6">
-                        <h3>{{form.search.label}} {% include "utils/help_text.html" with text=form.search.help_text placement="top" %}</h3>
-                        {{form.search}}
-                        <h3>{{form.thread_id.label}} {% include "utils/help_text.html" with text=form.thread_id.help_text placement="top" %}</h3>
-                        {{form.thread_id}}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
 {% endblock %}
 
 {% block js %}
@@ -99,7 +101,12 @@ Search -
             var url_icons = "{% static "images/icons/" %}";
 
             // Champions
-            buttonize('#id_champions input', function(o) { var champ = o.val(); return '<img class="searchChampionIcon" title="'+champ+'" data-ref="'+champ+'" src="'+url_portraits+capitalize(champ.replace(/\W/g, '').toLowerCase())+'.png"></img>'; }, '#id_champions', 'medium-block-grid-9 small-block-grid-8');
+            buttonize('#id_champions input', function(o) {
+                var champ = o.val();
+                var url_id = urlIDize(champ);
+                return '<img class="searchChampionIcon" title="'+champ+'" data-ref="'+champ+'" src="'+url_portraits+url_id+'.png"></img>';
+                }, '#id_champions', 'medium-block-grid-9 small-block-grid-8');
+
             $('.searchChampionIcon').css({'opacity':'0.4'});
             $('.searchChampionIcon').click(function() {
                 ref = $(this).attr('data-ref');

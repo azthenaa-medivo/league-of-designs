@@ -55,6 +55,8 @@ class RedPostsSSP(DataTablesServerSideProcessor):
         super(RedPostsSSP, self).data_postprocess()
         for d in self.result_data:
             d['contents'] = to_markdown(d['contents'])
+            if "has_parent" in d and d["has_parent"]:
+                d["parent"]["contents"] = to_markdown(d["parent"]["contents"])
 
 class RioterSSP(DataTablesServerSideProcessor):
     def filter(self):

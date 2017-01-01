@@ -11,7 +11,6 @@
                             var totalWidth = c.length * 110;
                             wrapper.width(totalWidth);
                             var parentWidth = wrapper.parent().width();
-                            console.log(parentWidth + " " + totalWidth + " " + (c.length - 3)*(-105));
 
                             // There are 3 champions displayed.
                             // So we stop the drag after (N - 3)*110.
@@ -20,8 +19,8 @@
                                 wrapper.draggable({
                                     axis: "x",
                                     drag: function(event, ui) {
-                                        ui.position.left = Math.min(-10, ui.position.left);
-                                        ui.position.left = Math.max((c.length - 3)*(-105), ui.position.left);
+                                        ui.position.left = Math.min(0, ui.position.left);
+                                        ui.position.left = Math.max((c.length - 3)*(-110), ui.position.left);
                                         // ui.position.left = Math.max((-1)*(parentWidth-totalWidth), ui.position.left);
                                     }
                                 });

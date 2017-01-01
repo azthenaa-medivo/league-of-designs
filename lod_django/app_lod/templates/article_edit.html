@@ -7,37 +7,39 @@
 {% block header %}
 {% load staticfiles %}
 {% load template_tags %}
-        <div class="row">
-            <div class="col-md-8">
-                <h1>
-                    {# Articles should be Champion agnostic, we'll remove/change that sometime in the future I think #}
-                    {% if champion %}
-                    <a href="{% url "champion" champion.url_id %}">
-                        <img src="{% static "images/portraits/" %}{{champion.portrait}}"></img>
-                    </a>
-                    {% endif %}
-                    {% if article %}
-                    <a href="{% url "article-view" article_id=article_id %}">{{article.title}}</a>
-                    {% include "utils/article_admin.html" with article=article %}
-                    {% else %}
-                    New Article{% if champion %} about {{champion.name}}{% endif %}
-                    {% endif %}
-                </h1>
-                {% if article %}
-                <a href="{% url "article-view" article_id=article_id %}">View article.</a>
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                {# Articles should be Champion agnostic, we'll remove/change that sometime in the future I think #}
+                {% if champion %}
+                <a href="{% url "champion" champion.url_id %}">
+                    <img src="{% static "images/portraits/" %}{{champion.portrait}}"></img>
+                </a>
                 {% endif %}
-            </div>
+                {% if article %}
+                <a href="{% url "article-view" article_id=article_id %}">{{article.title}}</a>
+                {% include "utils/article_admin.html" with article=article %}
+                {% else %}
+                New Article{% if champion %} about {{champion.name}}{% endif %}
+                {% endif %}
+            </h1>
+            {% if article %}
+            <a href="{% url "article-view" article_id=article_id %}">View article.</a>
+            {% endif %}
         </div>
+    </div>
 {% endblock %}
 
 {% block contents %}
-    {% load template_tags %}
-    <form action="{% url "article-edit" article_id=article_id %}" method="post">
-        {% csrf_token %}
-        {% include "utils/form_snippet.html" %}
-        <input type="submit" value="Submit" />
-    </form>
-    <div class="autoGenButtonWrapper col-md-1"><button type="button" onclick="autoGen()">Auto</button></div>
+    <div class="col-md-12">
+        {% load template_tags %}
+        <form action="{% url "article-edit" article_id=article_id %}" method="post">
+            {% csrf_token %}
+            {% include "utils/form_snippet.html" %}
+            <input type="submit" value="Submit" />
+        </form>
+        <div class="autoGenButtonWrapper col-md-1"><button type="button" onclick="autoGen()">Auto</button></div>
+    </div>
 {% endblock %}
 
 {% block js %}

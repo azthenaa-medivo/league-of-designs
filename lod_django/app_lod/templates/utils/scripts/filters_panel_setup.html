@@ -1,0 +1,8 @@
+    <script>
+        $(document).ready(function() {
+            $("#toggle-filters").click(function (e) {
+                var currentBottom = $("#red-posts-filters-panel").css("bottom");
+                $("#red-posts-filters-panel").animate({bottom: currentBottom !== "-165px" ? "-165px" : 0}, 400);
+            });
+        });
+    </script>

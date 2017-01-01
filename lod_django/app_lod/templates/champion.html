@@ -24,113 +24,93 @@
 {% block contents %}
         {% load staticfiles %}
         {% load template_tags %}
-        <div id="toggle-tabs" class="row">
-            <div id="tab-red-posts" class="col-md-12">
-                <h2>Red Posts about {{champion.name}}</h2>
-                <div class="col-md-12 bot15">
-                    <div class="col-md-4">
-                        <h3>Filter by Rioter</h3>
-                        <form method="#" action="#" id="filterForm">
-                            {% include "utils/filters/filter_choice.html" with list=champion.rioter_counter|sort:"name" value="name" label="name" sub="count" type="posts" id="rioter-select" %}
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <h3>Filter by region</h3>
-                        <form method="#" action="#" id="regionFilter">
-                            {% include "utils/filters/filter_checkbox.html" with name="region-filter" types=regions colmd=3 %}
-                        </form>
-                    </div>
-                    <div class="col-md-4">
-                        <h3 class="cursorHelp" title="Includes {{glorious_sections|join:', '}}">Show Design Boards only</h3>
-                        <form method="#" action="#" id="designFilter">
-                            <div class="col-md-12 filterCheckbox">
-                                <label for="design-only" class="checkbox-inline">
-                                    <input class="design-only" value="design-only" type="checkbox" name="design-only"> Design Only
-                                </label>
-                            </div>
-                        </form>
+        <div class="col-md-12">
+            <div id="toggle-tabs">
+                <div id="tab-red-posts">
+                    <h2>Red Posts about {{champion.name}}</h2>
+                    {% csrf_token %}
+                    <div class="row">
+                        {% include "utils/components/full_red_table.html" %}
                     </div>
                 </div>
-                {% include "utils/red_posts_datatable.html" with table_id="red-table" %}
-            </div>
-            <div id="tab-discussion" class="hidden col-md-12">
-                <h2>Discussions and Articles about {{champion.name}}</h2>
-                {% if user.is_authenticated %}
-                <div>Hey, how about <a href="{% url "article-edit" article_id='ritoplsnerf' %}?champion={{champion.url_id}}">you write something</a> ?</div>
-                {% endif %}
-                <hr>
-                {% for article in champion.articles %}
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3>
-                            <a href="{% url "article-view" article_id=article.url_id%}">{{article.title}}</a>
-                            {% include "utils/article_admin.html" with article=article %}
-                        </h3>
-                    </div>
-                </div>
-                <div>{{article.contents|truncatesmart:142|markdown | safe}}</div>
-                <hr>
-                {% empty %}
-                <div>No article for {{champion.name}}. Maybe you'll want to create one ? 8)</div>
-                {% endfor %}
-            </div>
-            <div id="tab-about" class="hidden col-md-12">
-                <h2>About {{champion.name}}</h2>
-                <div id="resource-div">
-                    {% if champion.resource == "None" %}
-                        {{champion.name}} doesn't run on any resource. How convenient.
-                    {% else %}
-                        {{champion.name}} runs on <span class="resource-{{champion.resource}}">{{champion.resource}}</span>.
+                <div id="tab-discussion" class="hidden">
+                    <h2>Discussions and Articles about {{champion.name}}</h2>
+                    {% if user.is_authenticated %}
+                    <div>Hey, how about <a href="{% url "article-edit" article_id='ritoplsnerf' %}?champion={{champion.url_id}}">you write something</a> ?</div>
                     {% endif %}
+                    <hr>
+                    {% for article in champion.articles %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3>
+                                <a href="{% url "article-view" article_id=article.url_id%}">{{article.title}}</a>
+                                {% include "utils/article_admin.html" with article=article %}
+                            </h3>
+                        </div>
+                    </div>
+                    <div>{{article.contents|truncatesmart:142|markdown | safe}}</div>
+                    <hr>
+                    {% empty %}
+                    <div>No article for {{champion.name}}. Maybe you'll want to create one ? 8)</div>
+                    {% endfor %}
                 </div>
-                <div id="status">
-                    {% if champion.status %}
-                        <span class="status-{{champion.status}}">{{champion.name}} {{champion.status|status}}</span>
-                    {% else %}
-                        <span class="status-None">{{champion.name}} is in a murky place - does s/he needs a rework ? Wait for some tweaks ? Or
-                        is a CertainlyT creation ?</span>
-                    {% endif %}
-                </div>
-                <div class="top15" id="summary">
-                    <h4>Summary
-                        {% if user.is_authenticated %}
-                        <a class="small-pencil" href="{% url "champion-edit" url_id=champion.url_id %}">
-                            <i class="glyphicon glyphicon-pencil"></i>
-                        </a>
-                        {% endif %}
-                    </h4>
-                    {% if champion.summary %}
-                        {{champion.summary|markdown | safe}}
-                    {% else %}
-                        {% if user.is_authenticated %}
-                        You should write a <a href="{% url "champion-edit" url_id=champion.url_id %}">summary</a> for this champion !
+                <div id="tab-about" class="hidden">
+                    <h2>About {{champion.name}}</h2>
+                    <div id="resource-div">
+                        {% if champion.resource == "None" %}
+                            {{champion.name}} doesn't run on any resource. How convenient.
                         {% else %}
-                        No summary available for {{champion.name}}. <a href="{% url "champion" url_id="Ziggs" %}">Don't worry, I got this</a>.
+                            {{champion.name}} runs on <span class="resource-{{champion.resource}}">{{champion.resource}}</span>.
                         {% endif %}
-                    {% endif %}
-                </div>
-                <div class="top15">
-                    <table class="table championTable">
-                        {% for s in champion.spells %}
-                            <tr>
-                                <td>
-                                    {% if s.is_multi %}
-                                        {% for i in s.image %}
-                                            <img class="spell-pic" title="zomg overloaded kit ritorino plserino" alt="{{s.name}}" src="{% static "images/spells/" %}{{i}}">&nbsp;
-                                        {% endfor %}
-                                    {% else %}
-                                        <img class="spell-pic" title="zomg overloaded kit ritorino plserino"  alt="{{s.name}}" src="{% static "images/spells/" %}{{s.image}}">
-                                    {% endif %}
-                                </td>
-                                <td class="text-center vtd">
-                                    <span class="spell-name">{{s.name}}</span>
-                                </td>
-                                <td class="vtd">
-                                    <span class="spell-description">{{s.description|safe}}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+                    </div>
+                    <div id="status">
+                        {% if champion.status %}
+                            <span class="status-{{champion.status}}">{{champion.name}} {{champion.status|status}}</span>
+                        {% else %}
+                            <!--<span class="status-None">{{champion.name}} is in a murky place - does s/he needs a rework ? Wait for some tweaks ? Or is a CertainlyT creation ?</span>-->
+                        {% endif %}
+                    </div>
+                    <div class="top15" id="summary">
+                        <h4>Summary
+                            {% if user.is_authenticated %}
+                            <a class="small-pencil" href="{% url "champion-edit" url_id=champion.url_id %}">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </a>
+                            {% endif %}
+                        </h4>
+                        {% if champion.summary %}
+                            {{champion.summary|markdown | safe}}
+                        {% else %}
+                            {% if user.is_authenticated %}
+                            You should write a <a href="{% url "champion-edit" url_id=champion.url_id %}">summary</a> for this champion !
+                            {% else %}
+                            No summary available for {{champion.name}}. <a href="{% url "champion" url_id="Ziggs" %}">Don't worry, I got this</a>.
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="top15">
+                        <table class="table championTable">
+                            {% for s in champion.spells %}
+                                <tr>
+                                    <td>
+                                        {% if s.is_multi %}
+                                            {% for i in s.image %}
+                                                <img class="spell-pic" title="zomg overloaded kit ritorino plserino" alt="{{s.name}}" src="{% static "images/spells/" %}{{i}}">&nbsp;
+                                            {% endfor %}
+                                        {% else %}
+                                            <img class="spell-pic" title="zomg overloaded kit ritorino plserino"  alt="{{s.name}}" src="{% static "images/spells/" %}{{s.image}}">
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center vtd">
+                                        <span class="spell-name">{{s.name}}</span>
+                                    </td>
+                                    <td class="vtd">
+                                        <span class="spell-description">{{s.description|safe}}</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,4 +166,5 @@
             {% include "utils/scripts/datatable_red_posts_init.html" %}
         });
     </script>
+    {% include "utils/scripts/filters_panel_setup.html" %}
 {% endblock %}

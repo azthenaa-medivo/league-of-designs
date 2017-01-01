@@ -18,6 +18,13 @@ def get_portrait(champ):
 def get_filter(d, k):
     return d.get(k, None)
 
+@register.filter(name="plural")
+def print_s(l):
+    if l > 1:
+        return "s"
+    else:
+        return ""
+
 @register.filter(name="print_js")
 def print_rightfully(data):
     if isinstance(data, datetime):
