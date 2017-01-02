@@ -66,7 +66,7 @@
 </div>
 
 <!-- modal -->
-<div class="modal fade red-post-modal" id="modal-post-{{_id}}" tabindex="-1" role="dialog" aria-labelledby="modalPost-{{post_id}}">
+<div class="modal fade red-post-modal" id="modal-post-{{_id}}" tabindex="-1" role="dialog" aria-labelledby="modalPost-{{_id}}">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -96,14 +96,8 @@
                 <h4>About</h4>
                 <div>
                     <h5>Section : {{section}}</h5>
-                    <div>
-
-                    </div>
                     {{#if tags}}
-                    <h5 >Tags</h5>
-                    <div>
-                        {{#each tags}}{{this}}{{#unless @last}},{{/unless}}{{/each}}
-                    </div>
+                    <h5>Tags : {{#each tags}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</h5>
                     {{/if}}
                 </div>
                     {{#if champions_data}}

@@ -40,6 +40,7 @@ db.champions.find().forEach(function(res) {
             'total_posts': 0,
             'glorious_posts': 0,
             'home': null,
+            'latest_post': null,
         }
     };
     // Resource

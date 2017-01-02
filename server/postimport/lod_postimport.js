@@ -66,14 +66,14 @@ db.mr_champions.find().forEach(function(champion_res) {
             total++;
 
             // Latest post
-            if (latest_post !== undefined)
+            if (latest_post === null)
             {
+                latest_post = red;
+            } else {
                 if (red['date'] > latest_post['date'])
                 {
                     latest_post = red;
                 }
-            } else {
-                latest_post = red;
             }
         });
     var update_rioter_counter = champion_res['rioter_counter'] === undefined ? []:champion_res['rioter_counter'];

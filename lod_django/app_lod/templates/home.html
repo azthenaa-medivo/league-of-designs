@@ -36,7 +36,8 @@
                     <div>Ever wondered what Riot has in store for <a href="{% url "champion" "Irelia" %}">Irelia</a> ?
                         If they considered shipping <a href="{% url "red-posts" %}?is_and=on&champions=Illaoi&champions=Teemo">Teemo with Illaoi</a> ?
                         What about them <a href="{% url "red-posts" %}?tags=Marksman&is_and=on">class updates</a> ?
-                        <b>League of Designs</b> looks for those fascinating topics on League of Legends' Boards. Check them out !</div>
+                        <b>League of Designs</b> looks for those fascinating topics on League of Legends' Boards.
+                        Have a look !</div>
                 </div>
                 <div class="col-md-12 top15">
                     <div class="row">
@@ -205,6 +206,11 @@
                     {% endif %}
                     </div>
                     <div class="col-md-2"></div>
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2 top15">
+                            <a href="{% url "red-posts" %}"><i class="grid-link glyphicon glyphicon-education"></i> View all Red Posts..</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}
