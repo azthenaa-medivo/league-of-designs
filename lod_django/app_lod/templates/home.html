@@ -74,7 +74,7 @@
                         </h4>
                     </div>
                     <div>
-                        {% for c in champions %}
+                        {% for c in data.champions %}
                         <a href="{% url "champion" c.url_id %}"><img  class="mini-icon" title="{{c.name}}, {{c.total_posts|int}} posts" src="{% static "images/portraits" %}/{{c.portrait}}"></img></a>
                         {% endfor %}
                     </div>
@@ -96,7 +96,7 @@
                     </div>
                     <div>
                         <ul class="medium-block-grid-2">
-                            {% for r in rioters %}
+                            {% for r in data.rioters %}
                             <a href="{% url "rioter" r.url_id %}" class="btn btn-default">{{r.name}}</button>
                             {% endfor %}
                         </ul>
@@ -126,7 +126,7 @@
                             <a href="{% url "articles-list" %}">
                             <div class="row">
                                 <div class="col-md-8">
-                                    What's new ?
+                                    What's new on LoD ?
                                 </div>
                                 <div class="col-md-4 text-right">
                                     <i class="grid-link glyphicon glyphicon-book"></i>
@@ -135,7 +135,7 @@
                             </a>
                         </h3>
                         <div>
-                            {% for a in articles %}
+                            {% for a in data.news %}
                             <div><h4>{% if a.champion != "None" %}<a href="{% url "champion" url_id=a.champion_data.url_id %}"><img class="mini-icon" src="{% static "images/portraits/" %}{{a.champion_data.portrait}}"></a>{% endif %}{{a.title}} {% include "utils/article_admin.html" with article=a %}</h4></div>
                             <div class="text-right"><small>{{a.date_created}} ({% include "utils/date_span.html" with date=a.date_created|isoformat %})</small></div>
                             <div class="newsHomeContent">{{a.contents|markdown | safe}}</div>
@@ -151,7 +151,7 @@
                     <div class="col-md-2"></div>
                 </div>
             </div>
-            {% for r in reds %}
+            {% for r in data.reds %}
             <div class="item">
                 <div class="row bot15 top15">
                     <div class="col-md-2"></div>

@@ -25,42 +25,57 @@ db.mr_champions.find().forEach(function(champion_res) {
     var rioter_counter = {};
     var glorious = champion_res['glorious_posts'];
     var total = champion_res['total_posts'];
+    var latest_post = champion_res['latest_post'];
+
     var query = ids.cleanse ? {
                         '$text': {'$search': champion_res['search']},
                         'champions': {'$not': {'$in': [champion_res['name']]}}}:
                         {'post_id': {'$in': ids.post_ids}, '$text': {'$search': champion_res['search']},
                         'champions': {'$not': {'$in': [champion_res['name']]}}};
     db.mr_reds.find(query).forEach(
-                        function(red){
-                            var new_tags = [];
-                            var red_update = {'$push': {
-                                                'champions_data': {
-                                                    'name': champion_res['name'],
-                                                    'url_id': champion_res['url_id'],
-                                                    'portrait': champion_res['portrait'],
-                                                    'search': champion_res['search'],
-                                                },
-                                                'champions': champion_res['name'],
-                            }, '$addToSet': {}};
-                            red_update['$addToSet']['tags'] = {'$each': champion_res['tags']};
-                            mr_reds_bulk.find({'_id': red['_id'],}).update(red_update);
-                            // Update Rioter Counters DOTA2 SPECIALIZATION ZOMG GC YOU ARE BAD wowsoTILT
-                            if (red['rioter'] in rioter_counter)
-                            {
-                                rioter_counter[red['rioter']]['count'] += 1;
-                            } else {
-                                rioter_counter[red['rioter']] = {};
-                                rioter_counter[red['rioter']]['count'] = 1;
-                                rioter_counter[red['rioter']]['name'] = red['rioter'];
-                                rioter_counter[red['rioter']]['url_id'] = red['rioter_url_id'];
-                            }
-                            // Update posts number ! wowsoLOD1.2
-                            if (contains(glorious_sections, red['section']))
-                            {
-                                glorious++;
-                            }
-                            total++;
-                        });
+        function(red){
+            var new_tags = [];
+            var red_update = {'$push': {
+                                'champions_data': {
+                                    'name': champion_res['name'],
+                                    'url_id': champion_res['url_id'],
+                                    'portrait': champion_res['portrait'],
+                                    'search': champion_res['search'],
+                                },
+                                'champions': champion_res['name'],
+            }, '$addToSet': {}};
+
+            red_update['$addToSet']['tags'] = {'$each': champion_res['tags']};
+            mr_reds_bulk.find({'_id': red['_id'],}).update(red_update);
+
+            // Update Rioter Counters DOTA2 SPECIALIZATION ZOMG GC YOU ARE BAD wowsoTILT
+            if (red['rioter'] in rioter_counter)
+            {
+                rioter_counter[red['rioter']]['count'] += 1;
+            } else {
+                rioter_counter[red['rioter']] = {};
+                rioter_counter[red['rioter']]['count'] = 1;
+                rioter_counter[red['rioter']]['name'] = red['rioter'];
+                rioter_counter[red['rioter']]['url_id'] = red['rioter_url_id'];
+            }
+            // Update posts number ! wowsoLOD1.2
+            if (contains(glorious_sections, red['section']))
+            {
+                glorious++;
+            }
+            total++;
+
+            // Latest post
+            if (latest_post !== undefined)
+            {
+                if (red['date'] > latest_post['date'])
+                {
+                    latest_post = red;
+                }
+            } else {
+                latest_post = red;
+            }
+        });
     var update_rioter_counter = champion_res['rioter_counter'] === undefined ? []:champion_res['rioter_counter'];
     for (var r in rioter_counter)
     {
@@ -78,7 +93,8 @@ db.mr_champions.find().forEach(function(champion_res) {
     mr_champions_bulk.find({'_id': champion_res['_id']}).update({'$set': {
                                                                          'rioter_counter': update_rioter_counter,
                                                                          'total_posts': total,
-                                                                         'glorious_posts': glorious}});
+                                                                         'glorious_posts': glorious,
+                                                                         'latest_post': latest_post}});
 });
 
 mr_reds_bulk.execute();
