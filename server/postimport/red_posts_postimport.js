@@ -45,6 +45,8 @@ db.reds.find(query).forEach(function(res) {
         'section': post_section,
         'is_glorious': contains(glorious_sections, post_section),
         'tags': [],
+        'champions': [],
+        'champions_data': [],
     }
     var parent = digInto['parentComment'];
     if (parent != undefined)
