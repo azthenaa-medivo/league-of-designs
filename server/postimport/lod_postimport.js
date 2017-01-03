@@ -66,7 +66,7 @@ db.mr_champions.find().forEach(function(champion_res) {
             total++;
 
             // Latest post
-            if (latest_post === null)
+            if (latest_post === null || latest_post === undefined)
             {
                 latest_post = red;
             } else {
