@@ -130,6 +130,7 @@ var special_champion_land = {
     "Blitzcrank": "zaun",
     "Braum": "freljord",
     "Caitlyn": "piltover",
+    "Camille": "piltover",
     "Cassiopeia": "noxus",
     "Cho'Gath": "void",
     "Corki": "piltover",
