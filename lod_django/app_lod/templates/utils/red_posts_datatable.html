@@ -4,7 +4,7 @@
 {% include "utils/components/red_table_handlebars.html" %}
 
 <table id="{{table_id}}" class="stripe hover red-posts-table">
-    <thead>
+    <thead data-toggle="popover-sort-reds">
         <tr>
             <th>Rioter</th>
             <th>Date</th>
@@ -31,5 +31,5 @@
             <th>Thread ID</th>
             <th>Relevancy</th>
         </tr>
-    </tfoot>
+    </tfoot data-toggle="popover-sort-reds">
 </table>

@@ -40,9 +40,14 @@
                         Have a look !</div>
                 </div>
                 <div class="col-md-12 top15">
-                    <div class="row">
+                    <div class="row bot5">
                         <div class="col-md-6 col-md-offset-3">
                             <a href="{% url "red-posts" %}" class="btn btn-primary btn-block">Dive into the Red Posts !</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <a href="{% url "red-posts-search" %}" class="btn btn-default btn-block">Search something specific !</a>
                         </div>
                     </div>
                 </div>
@@ -68,7 +73,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <a href="{% url "champions-grid" %}">
-                                    <i class="glyphicon glyphicon-search"></i>
+                                    <i class="glyphicon glyphicon-fullscreen"></i>
                                     </a>
                                 </div>
                             </div>
@@ -89,7 +94,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <a href="{% url "rioters" %}">
-                                    <i class="glyphicon glyphicon-search"></i>
+                                    <i class="glyphicon glyphicon-fullscreen"></i>
                                     </a>
                                 </div>
                             </div>
@@ -118,8 +123,8 @@
         <!--</ol>-->
 
         <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox">
-            <div class="item active">
+        <div id="news-and-reds" role="listbox">
+            <div class="item">
                 <div class="row bot15">
                     <div class="col-md-2"></div>
                     <div class="col-md-8" id="news">
@@ -161,11 +166,11 @@
                             <div class="col-md-9">
                                 <div class="red-header red-post-message-header">
                                     <a href="{% url "rioter" r.rioter_url_id %}" class="rioter">{{r.rioter}}</a>,
-                                    {% include "utils/date_span.html" with date=r.date|isoformat %}
+                                    {% include "utils/date_span.html" with date=r.date|isoformat %}, in section {{r.section}}
                                     <br>
                                     In <a href="{% url "red-posts" %}?thread_id={{r.thread_id}}&is_and=true">
                                     <i title="Rundown for thread « {{r.thread}} »" class="glyphicon glyphicon glyphicon-list rundown-link"></i></a>
-                                    &nbsp;<a href="{{r.url}}" target="_blank">{{r.thread}}</a>
+                                    &nbsp;<a class="thread-link" href="{{r.url}}" target="_blank">{{r.thread}}</a>
                                 </div>
                             </div>
                         </div>
@@ -208,7 +213,7 @@
                     <div class="col-md-2"></div>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 top15">
-                            <a href="{% url "red-posts" %}"><i class="grid-link glyphicon glyphicon-education"></i> View all Red Posts..</a>
+                            <a href="{% url "red-posts" %}"><i class="grid-link glyphicon glyphicon-education"></i> View all Red Posts...</a>
                         </div>
                     </div>
                 </div>
@@ -216,13 +221,13 @@
             {% endfor %}
         </div>
 
-        <!-- Controls -->
-        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
         </a>
-        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
     </div>
@@ -272,6 +277,13 @@
             window.open($(this).data('href'), '_self');
         });
 
+        $('#news-and-reds').slick({
+            autoplay: true,
+            autoplaySpeed: 3000,
+            adaptiveHeight: true,
+            prevArrow: '<a class="carousel-control left fix-carousel-home" role="button" data-slide="prev"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span><span class="sr-only">Previous</span></a>',
+            nextArrow: '<a class="carousel-control right fix-carousel-home" role="button" data-slide="next"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span><span class="sr-only">Next</span></a>',
+        });
     </script>
 <!-- wowsoSPOOKY -->
 <script>

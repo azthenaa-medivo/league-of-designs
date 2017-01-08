@@ -102,12 +102,6 @@
     // Timeout messages
     setTimeout(function() { $('#messagesDiv').animate({'height':'0px'}, function() { $('#messagesDiv').hide() } );}, 5000);
 
-    $("th").hover(function() {
-        $(this).animate({'background-color': 'rgba(128,0,0,1)', 'color':'white'});
-    }, function() {
-        $(this).animate({'background-color': 'rgba(255,255,255,1)', 'color':'black'});
-    });
-
     // Ago function (+ interval wowsoSPOOKY)
     function agoStuff() {
         var now = new Date();
@@ -125,5 +119,11 @@
             $(this).animate({'border-color': 'red'});
         }, function() {
             $(this).animate({'border-color': 'black'});
+    });
+
+    $('[data-toggle="popover-sort-reds"]').attr({'title': "Click here to sort Red Posts !"}).popover({
+        trigger: "hover",
+        placement: "top",
+        template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3></div>',
     });
 });

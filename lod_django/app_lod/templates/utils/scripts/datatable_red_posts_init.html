@@ -1,6 +1,7 @@
             // Then ready the Red Table !
             var canDraw = false;
             // Special filter stuff
+            var rioter = [];
             var gloriousRegions = ['NA'];
             var onlyRegions = false;
             var gloriousSections = {{g_sections | safe}};
@@ -16,7 +17,7 @@
 
             // Filter Rioter, don't mind me I have no idea why this is working ???
             $('#rioter-select').change(function() {
-                redTable.column(0).search($(this).val());
+                rioter[0] = $(this).val();
                 safeDraw();
             });
 

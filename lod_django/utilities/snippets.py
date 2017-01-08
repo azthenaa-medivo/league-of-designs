@@ -1,8 +1,10 @@
 import datetime
+import json
 import re
 from bson import ObjectId
 from json import JSONEncoder
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from app_database.postimport import postimport as pi
@@ -33,6 +35,30 @@ def render_to(template):
             return output
         return wrapper
     return renderer
+
+def return_simple_ajax(collection, consumer, signal_key="simple"):
+    """If a function can answer a basic jQuery Ajax request.
+        As with other requests in LoD, expects the query parameters in a sub "args" key,
+        and the relevant data is wrapped inside a "data" entry.
+        - collection : MongoDB collection where we'll find the data.
+        - consumer : Consumer that we will use to retrieve the data.
+        - signal : If this key is found in the request.GET data (with any value), will do work, otherwise is ignored.
+        """
+    def ajax_wrapper(func):
+        def wrapper(request, *args, **kw):
+            if signal_key in request.GET:
+                query = {}
+                projection = {}
+                if "args" in request.GET:
+                    args = json.loads(request.GET.get('args'))
+                    query = args.get("query", {})
+                    projection = args.get("projection", {})
+                data = consumer.get(collection, query=query, projection=projection)
+                return HttpResponse(JSONObjectIdEncoder().encode({"data": list(data)}), content_type='application/json')
+            else:
+                return func(request, *args, **kw)
+        return wrapper
+    return ajax_wrapper
 
 def postimport(script):
     """

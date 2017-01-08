@@ -21,8 +21,15 @@
         <link href="{% static "css/dataTables.min.css" %}" rel="stylesheet">
         <link href="{% static "css/jquery-ui.min.css" %}" rel="stylesheet">
         <link href="{% static "css/foundationTest.css" %}" rel="stylesheet">
+        <link href="{% static "css/slick.css" %}" rel="stylesheet">
+        <link href="{% static "css/slick.default.css" %}" rel="stylesheet">
         {% block css %}{% endblock %}
         <link href="{% static "css/lod.css" %}" rel="stylesheet">
+
+        <!-- Load jQuery now so that the whole page can use it properly. -->
+        <script src="{% static "js/jquery.js" %}"></script>
+        <script src="{% static "js/jquery-ui.min.js" %}"></script>
+        <script src="{% static "js/jquery.highlight.js" %}"></script>
     </head>
     <body class="base-bg {% block bodyStyle %}style-default{% endblock %}">
         <div class="body-wrapper">
@@ -117,27 +124,16 @@
                 </footer>
             </div>
 
-            <div id="nav-button">
-                <!-- Back to top button -->
-                <a href="#top" onclick="$('html,body').animate({scrollTop:0},'slow');return false;">
-                    <span id="top-link-block" class="text-center nav-button well well-sm">
-                        <i class="glyphicon glyphicon-chevron-up"></i> Back to Top
-                    </span>
-                </a>
-            </div>
-
             <!-- Global Handlebars -->
             {% include "utils/components/champions_table_handlebars.html" %}
             <!-- JS wait there are many... oh well. Just download them once. -->
-            <script src="{% static "js/jquery.js" %}"></script>
-            <script src="{% static "js/jquery-ui.min.js" %}"></script>
-            <script src="{% static "js/jquery.highlight.js" %}"></script>
             <script src="{% static "js/jquery.color.js" %}"></script>
             <script src="{% static "js/js.cookie.js" %}"></script>
             <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
             <script src="{% static "js/dataTables.min.js" %}"></script>
             <script src="{% static "js/dataTables.highlight.min.js" %}"></script>
             <script src="{% static "js/handlebars.js" %}"></script>
+            <script src="{% static "js/slick.min.js" %}"></script>
             <script src="{% static "js/util.js" %}"></script>
             <script src="{% static "js/lod.js" %}"></script>
             <script>

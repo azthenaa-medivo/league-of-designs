@@ -73,7 +73,7 @@ var special_champion_names = {
     'Morgana': 'morg',
     'Nasus': 'doge',
     'Nautilus': 'naut',
-    'Nidalee': 'nida',
+    'Nidalee': 'nida nid',
     'Nocturne': 'noc',
     'Pantheon': 'panth',
     'Quinn': 'valor squak',

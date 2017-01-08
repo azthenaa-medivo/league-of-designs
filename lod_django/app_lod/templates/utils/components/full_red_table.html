@@ -16,10 +16,10 @@
                     <div class="col-md-4">
                         <h3>Filter by Rioter</h3>
                         <form method="#" action="#" id="filterForm">
-                            {% if not all %}
-                                {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="glorious_posts" type="posts" id="rioter-select" %}
-                            {% else %}
-                                {% include "utils/filters/filter_choice.html" with list=rioters value="name" label="name" sub="total_posts" type="posts" id="rioter-select" %}
+                            {% if filter_rioter_ajax_url %}
+                                {% include "utils/filters/filter_choice.html" with ajax_url=filter_rioter_ajax_url params=filter_rioter_params id="rioter-select" value="name" label="name" sub="total_posts" type="posts" %}
+                            {% elif champion_filters %}
+                                {% include "utils/filters/filter_choice_champion.html" with id="rioter-select" type="posts" %}
                             {% endif %}
                         </form>
                     </div>

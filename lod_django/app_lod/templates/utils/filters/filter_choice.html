@@ -3,14 +3,26 @@
     <div class="col-md-12">
         <select class="form-control" id="{{id}}">
             <option value="">--- All ---</option>
-            {% for option in list %}
-            {% if option|get:sub != 0 %}
-            <option value="{{option|get:value}}">
-                <!-- TODO : Optimize that stuff so I don't load the Rioters in Memory OOOOPS YOU DIDN'T READ THAT -->
-                {{option|get:label}} ({{option|get:sub|int}} {{type}})
-            </option>
-            {% endif %}
-            {% endfor %}
         </select>
     </div>
 </div>
+
+{% if ajax_url %}
+<script>
+    $(document).ready(function() {
+        $.ajax({
+                "url": "{% url ajax_url %}",
+                "type": "GET",
+                "data": { 'simple': true, 'args': JSON.stringify( {{params | safe}} ) },
+            })
+            .done(function(data) {
+                var rioters = data["data"];
+                for (var i=0;i<rioters.length;i++)
+                {
+                    var obj = rioters[i];
+                    $('#{{id}}').append('<option value="'+obj["{{value}}"]+'">'+obj["{{label}}"]+' ('+obj["{{sub}}"]+' {{type}})</option>');
+                }
+            });
+    });
+</script>
+{% endif %}

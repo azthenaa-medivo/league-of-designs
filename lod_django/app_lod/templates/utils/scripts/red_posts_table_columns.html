@@ -8,23 +8,18 @@
 
                             var wrapper = $(td).find(".red-post-champions-cell-container");
                             var c = wrapper.find(".champion-sneak-wrapper");
-                            var totalWidth = c.length * 110;
-                            wrapper.width(totalWidth);
+                            wrapper.width("320px");
                             var parentWidth = wrapper.parent().width();
 
-                            // There are 3 champions displayed.
-                            // So we stop the drag after (N - 3)*110.
-                            if (c.length > 3)
-                            {
-                                wrapper.draggable({
-                                    axis: "x",
-                                    drag: function(event, ui) {
-                                        ui.position.left = Math.min(0, ui.position.left);
-                                        ui.position.left = Math.max((c.length - 3)*(-110), ui.position.left);
-                                        // ui.position.left = Math.max((-1)*(parentWidth-totalWidth), ui.position.left);
-                                    }
-                                });
-                            }
+                            $(td).find('.red-post-champions-cell-container').slick({
+                                autoplay: c.length > 3,
+                                slidesToShow: 3,
+                                slidesToScroll: 3,
+                                autoplaySpeed: 1500,
+                                appendArrows: $(td).find(".champions-label-message"),
+                                prevArrow: '<i class="glyphicon glyphicon-chevron-left slick-arrow custom-prev-arrow"></i>',
+                                nextArrow: '<i class="glyphicon glyphicon-chevron-right slick-arrow custom-next-arrow"></i>',
+                            });
                         }
                     },
                     {

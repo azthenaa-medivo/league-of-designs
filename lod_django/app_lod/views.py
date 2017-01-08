@@ -1,5 +1,8 @@
+from lod_django.utilities.snippets import return_simple_ajax
+
 __author__ = 'artemys'
 
+import ast
 import json
 from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown, build_red_title
 from app_database.consumer import LoDConsumer
@@ -29,15 +32,15 @@ def view_red_posts(request):
         database = 'lod'
         results = RedPostsSSP(request, database, collection).output_result()
         return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
-    rioters = consumer.get('mr_rioters', projection={'name': 1, 'glorious_posts': 1, 'total_posts': 1}, sort_field='name', sort_order=1)
     param_is_and = True
     get_data = {}
     if len(request.GET) != 0:
         param_is_and = False
         form = RedPostDetailedSearchForm(request.GET)
         get_data = form.cleaned_data if form.is_valid() else None
-    return {'rioters': rioters, 'get_data': get_data, 'param_is_and': param_is_and, 'g_sections': GLORIOUS_SECTIONS,
-            'regions': zip(REGIONS, REGIONS), 'red_title': build_red_title(get_data, consumer)} # TRICK SHOT
+    return {'get_data': get_data, 'param_is_and': param_is_and, 'g_sections': GLORIOUS_SECTIONS,
+            'regions': zip(REGIONS, REGIONS), 'red_title': build_red_title(get_data, consumer),
+            'filter_rioter_ajax_url': 'rioters', 'filter_rioter_params': '{projection: {name: 1, url_id: 1, total_posts: 1}}'}
 
 @render_to('red_posts_search.html')
 def view_red_posts_search(request):
@@ -53,7 +56,9 @@ def view_champion(request, url_id):
     if champion is None:
         messages.add_message(request, messages.INFO, "Looks like champion %s hasn't been released yet." % url_id)
         return HttpResponseRedirect('/')
-    return {'champion': champion, 'regions': zip(REGIONS, REGIONS), 'g_sections': GLORIOUS_SECTIONS}
+    # rioters_for_champ = consumer.get('mr_rioters', query={'champions_occurrences.name': champion['name']})
+    return {'champion': champion, 'regions': zip(REGIONS, REGIONS), 'g_sections': GLORIOUS_SECTIONS,
+            'champion_filters': True}
 
 @render_to('champions_grid.html')
 def view_champions_grid(request):
@@ -87,20 +92,20 @@ def edit_champion(request, url_id):
     return {'champion': champion, 'form': form}
 
 @render_to('rioters.html')
+@return_simple_ajax("mr_rioters", consumer)
 def view_rioters(request):
     if request.is_ajax():
         collection = 'mr_rioters'
         database = 'lod'
-        results = RioterSSP(request, database, collection).output_result()
+        rioters = RioterSSP(request, database, collection)
+        results = rioters.output_result()
         return HttpResponse(JSONObjectIdEncoder().encode(results), content_type='application/json')
-        # rioters = consumer.get('mr_rioters', projection={'name': 1, 'last_post': 1, 'glorious_posts': 1, 'total_posts': 1,
-        #                                              'url_id': 1})
     return {}
 
 @render_to('rioter.html')
 def view_rioter(request, rioter_url_id):
     rioter = consumer.get_one('mr_rioters', query={'url_id': rioter_url_id})
-    return {'rioter': rioter, 'g_sections': GLORIOUS_SECTIONS}
+    return {'rioter': rioter, 'g_sections': GLORIOUS_SECTIONS, 'simple_rioter': 1}
 
 @render_to('article.html')
 def view_article(request, article_id):

@@ -97,6 +97,11 @@ def get_last(array):
     array.sort(key=operator.itemgetter('date'))
     return array[-1]
 
+@register.filter(name="wiki_link")
+def get_wiki_link(champion):
+    link = "http://leagueoflegends.wikia.com/wiki/"+champion['name'].replace('\s', '_')
+    return link
+
 @register.filter
 def truncatesmart(value, limit=80):
     """
