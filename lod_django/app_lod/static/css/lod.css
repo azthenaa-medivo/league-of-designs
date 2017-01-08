@@ -128,20 +128,16 @@ footer {
     width: 64px;
 }
 
+.news-champion-icon {
+    margin-right: 7px;
+}
+
 .cursorHelp {
     cursor: help;
 }
 
 .cursorPointer {
     cursor: pointer;
-}
-
-#homeHeaderCaret {
-    cursor: pointer;
-}
-
-#tourButton {
-    border-radius;
 }
 
 .quote-op {

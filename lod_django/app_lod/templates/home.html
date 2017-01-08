@@ -142,7 +142,7 @@
                         </h3>
                         <div>
                             {% for a in data.news %}
-                            <div><h4>{% if a.champion != "None" %}<a href="{% url "champion" url_id=a.champion_data.url_id %}"><img class="mini-icon" src="{% static "images/portraits/" %}{{a.champion_data.portrait}}"></a>{% endif %}{{a.title}} {% include "utils/article_admin.html" with article=a %}</h4></div>
+                            <div><h4>{% if a.champion != "None" %}<a class="news-champion-icon" href="{% url "champion" url_id=a.champion_data.url_id %}"><img class="mini-icon" src="{% static "images/portraits/" %}{{a.champion_data.portrait}}"></a>{% endif %}{{a.title}} {% include "utils/article_admin.html" with article=a %}</h4></div>
                             <div class="text-right"><small>{{a.date_created}} ({% include "utils/date_span.html" with date=a.date_created|isoformat %})</small></div>
                             <div class="newsHomeContent">{{a.contents|markdown | safe}}</div>
                             <hr>
