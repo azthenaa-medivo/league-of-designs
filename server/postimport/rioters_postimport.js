@@ -13,21 +13,30 @@ if (!(ids.has_work))
 
 load('utils.js');
 
-var query = ids.cleanse ? {}:{'name': {'$in': ids.rioters}};
+var query = ids.cleanse ? {}:{'rioter': {'$in': ids.rioters}};
+
+print("Query : " + JSON.stringify(query))
 
 var rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
 
+// Aggregates the Red Posts by Rioter and count total_posts.
+// Result : List of Rioters with total_posts count in "count".
 var rioters = db.mr_reds.aggregate([
     { $match: query },
-	{ $group: { _id: "$rioter", count: {$sum: 1}, }}
-])
+	{ $group: { _id: "$rioter", count: {$sum: 1} } }
+]);
 
+
+// Aggregates the Red Posts by Rioter and count glorious_posts.
+// Result : List of Rioters with glorious_posts count in "count".
 var glorious_per_rioter = db.mr_reds.aggregate([
     { $match: { section: { $in: glorious_sections }}},
 	{ $group: { _id: "$rioter", count: {$sum: 1}, }},
 	{ $out: "glorious_per_rioter" },
 ])
 
+// Aggregates the number of champion occurrences for each Rioter.
+// Out : List of Rioters and Champions occurrences (champion + times quoted).
 var champ_per_rioter = db.mr_reds.aggregate([
 	{ $group: { _id: { champions: "$champions", rioter: "$rioter"}}},
 	{ $unwind: "$_id.champions" },
@@ -36,6 +45,8 @@ var champ_per_rioter = db.mr_reds.aggregate([
 	{ $out: "champ_per_rioter" },
 ])
 
+// Aggregates the number of Section occurrences for each Rioter.
+// Out : List of Rioters and Sections occurrences.
 var section_per_rioter = db.mr_reds.aggregate([
 	{ $group: { _id: { section: "$section", rioter: "$rioter"}, count: { $sum: 1 }}},
 	{ $group: { _id: "$_id.rioter", sections: { $push: { section: "$_id.section", count: "$count"}}}},
@@ -73,11 +84,11 @@ rioters.forEach(function(r) {
     rioters_bulk.find({ "name": r._id }).upsert().updateOne( update )
 });
 
-db.champ_per_rioter.drop()
-db.section_per_rioter.drop()
-db.glorious_per_rioter.drop()
-
 rioters_bulk.execute();
 
 print("gen:index")
 db.mr_rioters.createIndex( { 'name': "text", 'posts': "text"} );
+
+db.champ_per_rioter.drop();
+db.section_per_rioter.drop();
+db.glorious_per_rioter.drop();

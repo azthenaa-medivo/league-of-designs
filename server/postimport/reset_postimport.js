@@ -28,8 +28,11 @@ print('reset:mr_rioters[posts,last_post,champions_occurrences,]');
 
 db.mr_rioters.update({},
                         {'$set': {
+                                    'total_posts': 0,
+                                    'glorious_posts': 0,
                                     'posts': [],
                                     'last_post': null,
                                     'champions_occurrences': [],
+                                    'sections_occurrences': [],
                         }},
                         {'multi':1});

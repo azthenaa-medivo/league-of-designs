@@ -112,6 +112,22 @@
             });
 
             {% include "utils/scripts/datatable_red_posts_init.html" with table_id="red-table" %}
+
+            $("#red-table").on("page.dt", function() {
+                $('html,body').animate({scrollTop: $("#red-table").offset().top-60}, 1000);
+            });
+        });
+    </script>
+    <!-- Lock the search bar when scrolling -->
+    <script>
+        $(document).scroll(function() {
+            var detect = 350;
+            if ($(document).scrollTop() >= detect)
+            {
+                $('#red-table_wrapper > .top').addClass('fixed-below-navbar');
+            } else {
+                $('#red-table_wrapper > .top').removeClass('fixed-below-navbar');
+            }
         });
     </script>
     {% include "utils/scripts/filters_panel_setup.html" %}
