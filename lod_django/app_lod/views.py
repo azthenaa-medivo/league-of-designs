@@ -1,10 +1,8 @@
-from lod_django.utilities.snippets import return_simple_ajax
-
 __author__ = 'artemys'
 
 import ast
 import json
-from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown, build_red_title
+from utilities.snippets import render_to, JSONObjectIdEncoder, to_markdown, build_red_title, return_simple_ajax
 from app_database.consumer import LoDConsumer
 from .lod_ssp import RedPostsSSP, RioterSSP
 from .models import ARTICLE_TYPE, ROLES, REGIONS, GLORIOUS_SECTIONS
