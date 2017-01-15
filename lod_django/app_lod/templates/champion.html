@@ -14,10 +14,10 @@
                 <div class="col-md-4">
                     <div id="display-buttons-div" class="row">
                         <div class="col-md-4">
-                            <a href="#reds"><button data-toggle="tab-red-posts" class="display-button btn btn-default active">Red Posts</button></a>
+                            <a href="#reds"><button data-toggle="tab-red-posts" class="tab-switch-button display-button btn btn-default active">Red Posts</button></a>
                         </div>
                         <div class="col-md-4">
-                            <a href="#discussion"><button data-toggle="tab-discussion" class="display-button btn btn-default">Discussion</button></a>
+                            <a href="#discussion"><button data-toggle="tab-discussion" class="tab-switch-button display-button btn btn-default">Discussion</button></a>
                         </div>
                         <div class="col-md-4">
                             <a target="_blank" href="{{ champion|wiki_link }}"><button class="display-button btn btn-primary">Wiki</button></a>
@@ -73,7 +73,7 @@
         });
     </script>
     <script>
-        $('.display-button').click(function(event) {
+        $('.tab-switch-button').click(function(event) {
             b = $(event.target);
             $('#toggle-tabs').children().each(function(res) {
                 if ($(this).attr('id') === b.attr('data-toggle'))
