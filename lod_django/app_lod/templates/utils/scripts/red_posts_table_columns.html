@@ -11,8 +11,9 @@
                             wrapper.width("320px");
                             var parentWidth = wrapper.parent().width();
 
-                            $(td).find('.red-post-champions-cell-container').slick({
-                                autoplay: c.length > 3,
+                            var toSlide = $(td).find('.red-post-champions-cell-container');
+                            toSlide.slick({
+                                autoplay: true,
                                 slidesToShow: 3,
                                 slidesToScroll: 3,
                                 autoplaySpeed: 1500,
@@ -20,6 +21,9 @@
                                 prevArrow: '<i class="glyphicon glyphicon-chevron-left slick-arrow custom-prev-arrow"></i>',
                                 nextArrow: '<i class="glyphicon glyphicon-chevron-right slick-arrow custom-next-arrow"></i>',
                             });
+
+                            // This solves Slick Slide not showing stuff after loading another page.
+                            $(window).trigger('resize');
                         }
                     },
                     {
