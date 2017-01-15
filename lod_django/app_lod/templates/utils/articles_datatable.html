@@ -23,8 +23,8 @@
                 <div class="row">
                     <div class="col-md-1 text-center">
                         <!-- WHAT ARE YOU LOOKING AT ? -->
+                    {% if user.is_authenticated %}
                     {% include "utils/article_admin.html" with article=a %}
-                    {% if user.is_authenticated == False %}
                         -
                     {% endif %}
                     </div>
@@ -35,7 +35,7 @@
             </td>
             <td class="text-center">
                 {{a.type}}
-                {% if a.type == 'Champion' %}
+                {% if a.champion_data  %}
                     <br>
                     {% include "utils/mini_champion_icon.html" with champion=a.champion_data %}
                 {% endif %}
