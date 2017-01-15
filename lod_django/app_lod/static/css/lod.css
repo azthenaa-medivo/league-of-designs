@@ -120,12 +120,20 @@ footer {
     box-shadow: 0 0 3px 2px #D3D3D3, 0 0 3px 1px rgb(129, 129, 129) inset;
 }
 
+.slick-slide img.mini-icon {
+    display: inline-block;
+}
+
 .fix-carousel-home {
     z-index: 3;
 }
 
 .fix-carousel-home.slick-arrow {
     top: 0;
+}
+
+.slick-slide img {
+    display: inline-block;
 }
 
 .home-red .red-post-champions-cell-container {
