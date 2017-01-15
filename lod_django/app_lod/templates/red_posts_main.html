@@ -47,8 +47,9 @@ Red Posts -
                 {% include "utils/scripts/datatable_red_posts_default_config.html" %}
             });
             {% include "utils/scripts/datatable_red_posts_init.html" with table_id="red-table" %}
+
             $("#red-table").on("page.dt", function() {
-                $('html,body').animate({scrollTop: $("#red-table").offset().top}, 1000);
+                $('html,body').animate({scrollTop: $("#red-table").offset().top-60}, 1000);
             });
         });
     </script>

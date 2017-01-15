@@ -46,6 +46,16 @@ table.dataTable span.highlight {
     background-color: white;
 }
 
+.navbar-home-key {
+    margin-right: 8px;
+}
+
+.navbar-home-key > img {
+    height: 32px;
+    width: 32px;
+    margin-top: -5px;
+}
+
 .page-header {
     margin: 20px 0px 5px;
 }

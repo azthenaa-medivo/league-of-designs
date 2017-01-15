@@ -44,7 +44,11 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="{% url "home" %}"><i class="glyphicon glyphicon-home"></i>&nbsp;&nbsp;League of Designs</a>
+                        <a class="navbar-brand" href="{% url "home" %}">
+                            <span class="navbar-home-key">
+                                <img src="{% static "images/lod/lod.png" %}" alt="League of Designs" title="How about a drink to the homepage ?" class=""></img>
+                            </span>
+                        </a>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -136,6 +140,7 @@
             <script src="{% static "js/slick.min.js" %}"></script>
             <script src="{% static "js/util.js" %}"></script>
             <script src="{% static "js/lod.js" %}"></script>
+            <script src="{% static "js/Chart.bundle.min.js" %}"></script>
             <script>
             var csrftoken = Cookies.get('csrftoken');
             function csrfSafeMethod(method) {
