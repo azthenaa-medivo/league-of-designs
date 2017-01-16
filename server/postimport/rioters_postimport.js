@@ -15,8 +15,6 @@ load('utils.js');
 
 var query = ids.cleanse ? {}:{'rioter': {'$in': ids.rioters}};
 
-print("Query : " + JSON.stringify(query))
-
 var rioters_bulk = db.mr_rioters.initializeUnorderedBulkOp();
 
 // Aggregates the Red Posts by Rioter and count total_posts.
