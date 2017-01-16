@@ -5,6 +5,8 @@ from app_database.datatables_ssp import DataTablesServerSideProcessor
 from utilities.snippets import JSONObjectIdEncoder, to_markdown
 
 class RedPostsSSP(DataTablesServerSideProcessor):
+    MAX_BATCH = 50
+
     def filter(self):
         # Columns specific search
         # I'm going to make something ugly there don't mind me please
@@ -50,6 +52,11 @@ class RedPostsSSP(DataTablesServerSideProcessor):
         if key in ['$or', '$and']:
             workon = {key: [{k: v} for k, v in workon.items()]}
         self.query = workon
+
+    def run_queries(self):
+        if self.dt_length > self.MAX_BATCH:
+            self.dt_length = self.MAX_BATCH
+        super().run_queries()
 
     def data_postprocess(self):
         super(RedPostsSSP, self).data_postprocess()

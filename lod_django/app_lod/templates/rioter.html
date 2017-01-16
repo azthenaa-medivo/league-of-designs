@@ -50,6 +50,7 @@
                 <div class="col-md-4 text-center">
                     <h4>Has got some glorious tales to tell !</h4>
                     {% with fav=rioter|favourite_champions:11 %}
+                    {% if fav|length != 0 %}
                     {% for c in fav reversed %}
                     {% if not forloop.first %}
                         <div class="inline rioter-top-champions">
@@ -62,6 +63,9 @@
                         </div>
                     {% endif %}
                     {% endfor %}
+                    {% else %}
+                    ...But nobody came.
+                    {% endif %}
                     {% endwith %}
                 </div>
             </div>
