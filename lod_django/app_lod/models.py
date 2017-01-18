@@ -27,7 +27,7 @@ ALL_SECTIONS = ["Gameplay", "Dev Corner", "Gameplay & Balance", "Champions & Gam
                 "Announcements", "Boards Feedback", "Esports", "Community Creations", "Memes & Games",
                 "Miscellaneous", "Skins & Champion Concepts", "Story & Art", "Report a Bug", "Tips & Tricks",
                 "Team Recruitment", "Sound & Music", "League Videos", "Fantasy LCS", "General Discussion", "Bugs",
-                "Client & New Features Feedback", "Site Feedback", "General PBE Feedback"]
+                "Client & New Features Feedback", "Site Feedback", "General PBE Feedback", "Mechs Vs Minions"]
 
 ROLES = ["Assassin", "Fighter", "Mage", "Support", "Marksman", "Tank", "Juggernaut"]
 
