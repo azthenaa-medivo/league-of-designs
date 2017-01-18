@@ -32,7 +32,7 @@ Champions -
         </div>
         <hr>
         <div id="champions-grid">
-            <ul class="small-block-grid-5 medium-block-grid-7">
+            <ul class="small-block-grid-3 medium-block-grid-7">
                 {% for c in champions %}
                     <li id="{{c.name}}" title="{{c.name}}" class="champion-block text-center" data-search="{{c.name}} {{c.search}} {% for tag in c.tags %}{{tag}} {% endfor %}">
                         <div class="row">

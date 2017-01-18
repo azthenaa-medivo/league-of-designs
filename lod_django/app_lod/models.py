@@ -20,7 +20,7 @@ ARTICLE_TYPE = (
 )
 
 GLORIOUS_SECTIONS = ["Gameplay", "Dev Corner", "Gameplay & Balance", "Champions & Gameplay", "Live Gameplay Balance",
-                     "Champions & Gameplay Feedback","Maps & Modes",]
+                     "Champions & Gameplay Feedback", "Maps & Modes", "Story & Art", "Sound & Music", "General PBE Feedback"]
 
 ALL_SECTIONS = ["Gameplay", "Dev Corner", "Gameplay & Balance", "Champions & Gameplay", "Live Gameplay Balance",
                 "Champions & Gameplay Feedback", "Maps & Modes",
