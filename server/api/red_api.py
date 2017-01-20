@@ -69,8 +69,8 @@ class RiotAPI:
                     rioter = d['comment']['user']['name']
                 else:
                     rioter = d['discussion']['user']['name']
-                print("Adding rioter : " + rioter + " from realm " + realm + ", post : " + post_id)
                 self.rioters.add(rioter)
+        print("Adding " + str(len(realm_posts) - self.CONF_MAX_BATCH) + " Red Posts for " + realm + ".")
         if len(realm_posts) > self.CONF_MAX_BATCH:
             # Now we remove the last n elements from the bottom of the array (they're sorted by date descending).
             realm_posts = realm_posts[len(realm_posts) - self.CONF_MAX_BATCH:]
