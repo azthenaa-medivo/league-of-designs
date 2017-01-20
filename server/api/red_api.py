@@ -20,11 +20,16 @@ class RiotAPI:
     database = mongo_client.lod
     champion_collection = database.champions
     red_posts_collection = database.reds
-    red_posts_tmp_collection = database.reds_tmp
     config_collection = database.config
 
-    CONF_MAX_BATCH = 150
+    # Per realm
+    CONF_MAX_BATCH = 50
     realms = ['na', 'euw', 'pbe']
+
+    conf = None
+    has_work_flag = False
+    rioters = set([])
+    bulk = None
 
     def get_champions(self):
         """Fetches the champion pool."""
@@ -46,53 +51,68 @@ class RiotAPI:
         if len(data) == 0:
             print('Nothing to insert for realm "%s" !' % realm)
             return 0
-        self.red_posts_tmp_collection.remove({})
-        bulk = self.red_posts_collection.initialize_ordered_bulk_op()
-        # Check config 'last_batch' and include those that miss.
-        # For the moment we don't care about posts edits. We will. Worry not.
-        conf = self.config_collection.find_one({'name': 'last_batch'})
-        rioters = set()
-        flag_update_conf = False
-        if conf is None:
-            conf = {'name': 'last_batch', 'post_ids': []}
+        realm_posts = self.conf.get(realm, [])
         for d in reversed(data):
             if d.get('comment') is None:
                 post_id = d['discussion']['id']
             else:
                 post_id = d['comment']['discussion']['id'] + ',' + d['comment']['id']
-            if post_id not in conf['post_ids']:
+            if post_id not in realm_posts:
                 d['post_id'] = post_id
                 d['region'] = realm
-                bulk.insert(d)
                 # Update conf
-                flag_update_conf = True
-                conf['post_ids'].append(post_id)
+                self.has_work_flag = True
+                self.bulk.insert(d)
+                realm_posts.append(post_id)
+                # Find the Rioter
                 if 'comment' in d:
-                    rioters.add(d['comment']['user']['name'])
+                    rioter = d['comment']['user']['name']
                 else:
-                    rioters.add(d['discussion']['user']['name'])
-        if len(conf['post_ids']) > self.CONF_MAX_BATCH:
+                    rioter = d['discussion']['user']['name']
+                print("Adding rioter : " + rioter + " from realm " + realm + ", post : " + post_id)
+                self.rioters.add(rioter)
+        if len(realm_posts) > self.CONF_MAX_BATCH:
             # Now we remove the last n elements from the bottom of the array (they're sorted by date descending).
-            conf['post_ids'] = conf['post_ids'][len(conf['post_ids']) - self.CONF_MAX_BATCH:]
-        conf['has_work'] = flag_update_conf
-        conf['rioters'] = list(rioters)
-        self.config_collection.update_one({'name': 'last_batch'}, {'$set': conf}, upsert=True)
-        try:
-            return bulk.execute()
-        except InvalidOperation:
-            print('Nothing to insert for realm "%s" !' % realm)
-            return 0
+            realm_posts = realm_posts[len(realm_posts) - self.CONF_MAX_BATCH:]
+        self.conf[realm] = realm_posts
 
     def get_red_posts_and_store(self, realms=None, parameters=None, mega_bulk=False):
         """Retrieves the latest Red Posts and puts them into the database."""
         if realms is None:
             realms = self.realms
         count = {realm: 0 for realm in realms}
+        self.init_red_import()
         for realm in realms:
             data = self.get_red_posts(realm, parameters=parameters).json()
             count[realm] = len(data)
             self.store_red_posts(data, realm, mega_bulk=False)
+        self.save_conf()
         return count
+
+    def init_red_import(self):
+        self.bulk = self.red_posts_collection.initialize_ordered_bulk_op()
+        # Check config 'last_batch' and include those that miss.
+        if self.conf is None:
+            self.conf = self.config_collection.find_one({'name': 'last_batch'})
+            if self.conf is None:
+                self.conf = {'name': 'last_batch', 'post_ids': [], 'rioters': self.rioters}
+                for realm in self.realms:
+                    self.conf[realm] = []
+
+    def save_conf(self):
+        # Assemble all realms
+        all_posts = []
+        for p in [self.conf[realm] for realm in self.realms]:
+            all_posts.extend(p)
+        self.conf['post_ids'] = list(all_posts)
+        self.conf['has_work'] = self.has_work_flag
+        self.conf['rioters'] = list(self.rioters)
+        self.config_collection.update_one({'name': 'last_batch'}, {'$set': self.conf}, upsert=True)
+        try:
+            return self.bulk.execute()
+        except InvalidOperation:
+            print('Nothing to insert !')
+            return 0
 
     def flush(self):
         self.champion_collection.drop()

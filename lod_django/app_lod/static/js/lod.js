@@ -3,18 +3,6 @@
  */
 
  $(document).ready(function() {
-    // Back to top button
-    // Only enable if the document has a long scroll bar
-    // Note the window height + offset
-    $('#top-link-block').affix({
-        offset: {top:100}
-    });
-//    if ( ($(window).height() + 100) < $(document).height() ) {
-//        $('#top-link-block').removeClass('hidden').affix({
-//            offset: {top:100}
-//        });
-//    }
-
     // Navbar search tool
     var template_champion_portrait = Handlebars.compile($("#handlebars-champion-portrait").html());
     var template_champion_red_posts_count = Handlebars.compile($("#handlebars-champion-red-posts-count").html());

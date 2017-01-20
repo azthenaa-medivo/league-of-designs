@@ -24,11 +24,12 @@ var rioters = db.mr_reds.aggregate([
 	{ $group: { _id: "$rioter", count: {$sum: 1} } }
 ]);
 
+var glorious_query = ids.cleanse ? {section: { $in: glorious_sections }}:{ section: { $in: glorious_sections }, rioter: {$in: ids.rioters}}
 
 // Aggregates the Red Posts by Rioter and count glorious_posts.
 // Result : List of Rioters with glorious_posts count in "count".
 var glorious_per_rioter = db.mr_reds.aggregate([
-    { $match: { section: { $in: glorious_sections }}},
+    { $match: glorious_query },
 	{ $group: { _id: "$rioter", count: {$sum: 1}, }},
 	{ $out: "glorious_per_rioter" },
 ])
@@ -36,6 +37,7 @@ var glorious_per_rioter = db.mr_reds.aggregate([
 // Aggregates the number of champion occurrences for each Rioter.
 // Out : List of Rioters and Champions occurrences (champion + times quoted).
 var champ_per_rioter = db.mr_reds.aggregate([
+    { $match : query },
 	{ $group: { _id: { champions: "$champions", rioter: "$rioter"}}},
 	{ $unwind: "$_id.champions" },
 	{ $group: { _id: { champion: "$_id.champions", rioter: "$_id.rioter"}, count: { $sum: 1} }},
@@ -46,12 +48,14 @@ var champ_per_rioter = db.mr_reds.aggregate([
 // Aggregates the number of Section occurrences for each Rioter.
 // Out : List of Rioters and Sections occurrences.
 var section_per_rioter = db.mr_reds.aggregate([
+    { $match : query },
 	{ $group: { _id: { section: "$section", rioter: "$rioter"}, count: { $sum: 1 }}},
 	{ $group: { _id: "$_id.rioter", sections: { $push: { section: "$_id.section", count: "$count"}}}},
 	{ $out: "section_per_rioter" },
 ])
 
 rioters.forEach(function(r) {
+//    print("\n=======\n"+r._id+"\n=======\n")
     var champ = db.champ_per_rioter.findOne({ "_id": r._id })
     if (champ !== null)
     {
@@ -62,6 +66,7 @@ rioters.forEach(function(r) {
             champ.champions[i].portrait = url_id + ".png"
         }
     }
+
     var section = db.section_per_rioter.findOne({ "_id": r._id })
     var glorious = db.glorious_per_rioter.findOne({ "_id": r._id })
     var last_post
