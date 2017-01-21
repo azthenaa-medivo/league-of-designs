@@ -22,11 +22,10 @@
         {% load template_tags %}
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-4">
-                    <h4>Welcome to {{ rioter.name }}'s personal page !</h4>
-                    <div>
-                        Check out his favourite champions and all her/his posts !
-                    </div>
+                <div class="col-md-4 text-center">
+                    <h4>Spotted in these sections !</h4>
+                    <canvas id="top-sections">
+                    </canvas>
                 </div>
                 <div class="col-md-4 text-center">
                     {% with fav=rioter|favourite_champions:1 %}
@@ -99,7 +98,6 @@
                             var topFilterChamp = $(".top-champion.selected").map(function() { return $(this).attr("data-name"); }).get();
                             var defaultFilterChamp = [$("#champion-select").val()];
                             var finalChamp = defaultFilterChamp[0] === "" ? topFilterChamp : topFilterChamp.concat(defaultFilterChamp);
-                            console.log(finalChamp);
                             q = {'query': {
                                     "is_and": true,
                                     "rioter": ['{{rioter.name}}'],
@@ -128,6 +126,59 @@
 
             $("#red-table").on("page.dt", function() {
                 $('html,body').animate({scrollTop: $("#red-table").offset().top-60}, 1000);
+            });
+
+            // Sections chart
+            var chartBox = $("#top-sections")[0];
+            var sectionsChart = new Chart(chartBox, {
+                type: 'bar',
+                data: {
+                    labels: [{% for s in rioter.sections_occurrences|top:5 %}"{{s.section | safe}}" ,{% endfor %}],
+                    datasets: [{
+                        label: 'Posts',
+                        data: [{% for s in rioter.sections_occurrences|top:5 %}{{s.count}} ,{% endfor %}],
+                        backgroundColor: [
+                            '#F90000',
+                            '#ffa700',
+                            '#26382E',
+                            '#22181C',
+                            '#5A0001',
+                        ],
+                        borderColor: [
+                            '#A90000',
+                            '#dfa700',
+                            '#16281E',
+                            '#12080C',
+                            '#1A0001',
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    title: {
+                        text: "Favourite sections",
+                        fontFamily: "Georgia",
+                        display: false,
+                    },
+                    legend: {
+                        display: false,
+                    },
+                    tooltips: {
+                        titleFontFamily: "Georgia",
+                    },
+                    scales:
+                    {
+                        xAxes: [{
+                            display: false
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                suggestedMin: 1,
+                                stepSize: 50,
+                            },
+                        }]
+                    }
+                }
             });
         });
     </script>

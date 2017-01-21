@@ -53,6 +53,7 @@ var champ_per_rioter = db.mr_champions.aggregate([
 var section_per_rioter = db.mr_reds.aggregate([
     { $match : query },
 	{ $group: { _id: { section: "$section", rioter: "$rioter"}, count: { $sum: 1 }}},
+	{ $sort: {"count" : -1, "_id.section": 1}},
 	{ $group: { _id: "$_id.rioter", sections: { $push: { section: "$_id.section", count: "$count"}}}},
 	{ $out: "section_per_rioter" },
 ])

@@ -604,6 +604,10 @@ a.no-underline:hover {
     border: 3px solid black;
 }
 
+.top-sections {
+    height: 100%;
+}
+
 .rioter-top-champions {
     position:relative;
     text-align:center;

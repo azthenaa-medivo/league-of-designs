@@ -55,6 +55,10 @@ def to_markdown_wrapper(string):
 def status(string):
     return STATUS_MESSAGES[string]
 
+@register.filter(name="top")
+def get_first_n(array, n):
+    return array[0:n]
+
 @register.filter(name="favourite_champions")
 def favourite(rioter, number=1):
     if 'champions_occurrences' not in rioter:
@@ -99,7 +103,7 @@ def get_last(array):
 
 @register.filter(name="wiki_link")
 def get_wiki_link(champion):
-    link = "http://leagueoflegends.wikia.com/wiki/"+champion['name'].replace('\s', '_')
+    link = "http://leagueoflegends.wikia.com/wiki/"+champion['name'].replace(' ', '_')
     return link
 
 @register.filter
