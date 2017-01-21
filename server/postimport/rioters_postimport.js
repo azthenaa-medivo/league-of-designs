@@ -34,15 +34,17 @@ var glorious_per_rioter = db.mr_reds.aggregate([
 	{ $out: "glorious_per_rioter" },
 ])
 
+var query_champ = ids.cleanse ? {}:{'rioter_counter.name': {'$in': ids.rioters}};
+
 // Aggregates the number of champion occurrences for each Rioter.
 // Out : List of Rioters and Champions occurrences (champion + times quoted).
-var champ_per_rioter = db.mr_reds.aggregate([
-    { $match : query },
-	{ $group: { _id: { champions: "$champions", rioter: "$rioter"}}},
-	{ $unwind: "$_id.champions" },
-	{ $group: { _id: { champion: "$_id.champions", rioter: "$_id.rioter"}, count: { $sum: 1} }},
-	{ $group: { _id: "$_id.rioter", champions: { $push: { name: "$_id.champion", count: "$count" }}}},
-	{ $out: "champ_per_rioter" },
+var champ_per_rioter = db.mr_champions.aggregate([
+	{ $project : { "rioter_counter": 1, "name": 1, "url_id": 1, "portrait": 1 } },
+	{ $match : query_champ }, // Get all champions OK
+	{ $unwind : "$rioter_counter" },
+	{ $group : { _id : "$rioter_counter.name",
+	    champions_occurrences : { $push : { count: "$rioter_counter.count", name: "$name", url_id: "$url_id", portrait: "$portrait" } } } },
+	{ $out: "champ_per_rioter" }
 ])
 
 // Aggregates the number of Section occurrences for each Rioter.
@@ -57,18 +59,9 @@ var section_per_rioter = db.mr_reds.aggregate([
 rioters.forEach(function(r) {
 //    print("\n=======\n"+r._id+"\n=======\n")
     var champ = db.champ_per_rioter.findOne({ "_id": r._id })
-    if (champ !== null)
-    {
-        for (i=0;i<champ.champions.length;i++)
-        {
-            var url_id = urlIDize(champ.champions[i].name)
-            champ.champions[i].url_id = url_id
-            champ.champions[i].portrait = url_id + ".png"
-        }
-    }
-
     var section = db.section_per_rioter.findOne({ "_id": r._id })
     var glorious = db.glorious_per_rioter.findOne({ "_id": r._id })
+
     var last_post
     var reds = db.mr_reds.find({'rioter': r._id}).sort({'date':-1}).limit(1)
     if (reds.hasNext())
@@ -81,7 +74,7 @@ rioters.forEach(function(r) {
         "glorious_posts": glorious === null ? 0:glorious.count,
         "url_id": urlIDize(r._id),
         "last_post": last_post,
-        "champions_occurrences": champ === null ? []:champ.champions,
+        "champions_occurrences": champ === null ? []:champ.champions_occurrences,
         "sections_occurrences": section.sections,
     }}
     rioters_bulk.find({ "name": r._id }).upsert().updateOne( update )
@@ -90,7 +83,7 @@ rioters.forEach(function(r) {
 rioters_bulk.execute();
 
 print("gen:index")
-db.mr_rioters.createIndex( { 'name': "text", 'posts': "text"} );
+db.mr_rioters.createIndex( { 'name': "text", 'posts': "text" } );
 
 db.champ_per_rioter.drop();
 db.section_per_rioter.drop();

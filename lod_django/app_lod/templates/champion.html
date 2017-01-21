@@ -118,17 +118,5 @@
             });
         });
     </script>
-    <!-- Lock the search bar when scrolling -->
-    <script>
-        $(document).scroll(function() {
-            var detect = 230;
-            if ($(document).scrollTop() >= detect)
-            {
-                $('#red-table_wrapper > .top').addClass('fixed-below-navbar');
-            } else {
-                $('#red-table_wrapper > .top').removeClass('fixed-below-navbar');
-            }
-        });
-    </script>
     {% include "utils/scripts/filters_panel_setup.html" %}
 {% endblock %}

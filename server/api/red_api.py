@@ -40,6 +40,7 @@ class RiotAPI:
     def get_champions_and_store(self):
         """Collects the champion pool and stores it."""
         champ_data = self.get_champions()
+        self.champion_collection.remove({})
         self.champion_collection.insert_many([d for c, d in champ_data.items()])
 
     def get_red_posts(self, realm='na', parameters=None):
