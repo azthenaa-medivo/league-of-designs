@@ -136,7 +136,7 @@
                     labels: [{% for s in rioter.sections_occurrences|top:5 %}"{{s.section | safe}}" ,{% endfor %}],
                     datasets: [{
                         label: 'Posts',
-                        data: [{% for s in rioter.sections_occurrences|top:5 %}{{s.count}} ,{% endfor %}],
+                        data: [{% for s in rioter.sections_occurrences|top:5 %}{{s.count|int}} ,{% endfor %}],
                         backgroundColor: [
                             '#F90000',
                             '#ffa700',
@@ -171,12 +171,6 @@
                         xAxes: [{
                             display: false
                         }],
-                        yAxes: [{
-                            ticks: {
-                                suggestedMin: 1,
-                                stepSize: 50,
-                            },
-                        }]
                     }
                 }
             });
