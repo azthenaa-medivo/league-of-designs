@@ -1,0 +1,11 @@
+{% load template_tags %}
+<div class="row">
+    <div class="col-md-12">
+        <select class="form-control" id="{{id}}">
+            <option value="">--- All ---</option>
+            {% for champion in rioter.champions_occurrences reversed %}
+            <option value="{{champion.name}}">{{champion.name}} ({{champion.count|int}} {{type}})</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>

@@ -301,6 +301,11 @@ footer {
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+}
+
+.champions-label * {
+    pointer-events: all;
 }
 
 .champions-label p {
@@ -609,14 +614,18 @@ a.no-underline:hover {
     width: 64px;
 }
 
-.rioter-top-champions span {
+.rioter-top-champions span.rioter-top-champ-counter {
     position: absolute;
-    left: 0px;
-    width: 100%;
+    right: 0px;
+    bottom: 0px;
     z-index: 100;
     text-shadow: 2px 2px #000000;
-    font-size: 24px;
-    top: 5px;
+    font-size: 20px;
+    padding-left: 6px;
+    padding-right: 3px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50% 0 0 50%;
+    pointer-events: none;
 }
 
 .top-champion {

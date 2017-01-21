@@ -14,12 +14,14 @@
             <div id="filters-containers" class="col-md-12 filters-borders">
                 <div class="row">
                     <div class="col-md-4">
-                        <h3>Filter by Rioter</h3>
+                        <h3>Filter by {% if filter_rioter_page %}Champion{% else %}Rioter{% endif %}</h3>
                         <form method="#" action="#" id="filterForm">
                             {% if filter_rioter_ajax_url %}
                                 {% include "utils/filters/filter_choice.html" with ajax_url=filter_rioter_ajax_url params=filter_rioter_params id="rioter-select" value="name" label="name" sub="total_posts" type="posts" %}
-                            {% elif champion_filters %}
+                            {% elif filter_champion_page %}
                                 {% include "utils/filters/filter_choice_champion.html" with id="rioter-select" type="posts" %}
+                            {% elif filter_rioter_page %}
+                                {% include "utils/filters/filter_choice_rioter.html" with id="champion-select" type="posts" %}
                             {% endif %}
                         </form>
                     </div>

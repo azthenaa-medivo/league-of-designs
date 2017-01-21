@@ -57,14 +57,14 @@
                             <div class="rioter top-champion" data-name="{{c.name}}">
                                 <img class="cursor-pointer round-portrait" title="{{c.name}}" alt="{{c.name}}" src="{% static "images/portraits/" %}{{c|portrait}}"></img>
                                 <span>
-                                    <span class="mdi">{{c.count|int}}</span>
+                                    <span class="rioter-top-champ-counter">{{c.count|int}}</span>
                                 </span>
                             </div>
                         </div>
                     {% endif %}
                     {% endfor %}
                     {% else %}
-                    ...But nobody came.
+                    ...But nobody came. :)
                     {% endif %}
                     {% endwith %}
                 </div>
@@ -96,10 +96,14 @@
                     "type": "GET",
                     "data":
                         function ( args ) {
+                            var topFilterChamp = $(".top-champion.selected").map(function() { return $(this).attr("data-name"); }).get();
+                            var defaultFilterChamp = [$("#champion-select").val()];
+                            var finalChamp = defaultFilterChamp[0] === "" ? topFilterChamp : topFilterChamp.concat(defaultFilterChamp);
+                            console.log(finalChamp);
                             q = {'query': {
                                     "is_and": true,
                                     "rioter": ['{{rioter.name}}'],
-                                    "champions": $(".top-champion.selected").map(function() { return $(this).attr("data-name"); }).get(),
+                                    "champions": finalChamp,
                                 }
                             };
 
@@ -112,6 +116,11 @@
 
             $(".top-champion").click(function(e) {
                 $(this).toggleClass("selected");
+                redTable.ajax.reload();
+            });
+
+            // Filter Rioter, don't mind me I have no idea why this is working ???
+            $('#champion-select').change(function() {
                 redTable.ajax.reload();
             });
 

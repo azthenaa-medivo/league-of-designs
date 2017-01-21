@@ -56,7 +56,7 @@ def view_champion(request, url_id):
         return HttpResponseRedirect('/')
     # rioters_for_champ = consumer.get('mr_rioters', query={'champions_occurrences.name': champion['name']})
     return {'champion': champion, 'regions': zip(REGIONS, REGIONS), 'g_sections': GLORIOUS_SECTIONS,
-            'champion_filters': True}
+            'filter_champion_page': True}
 
 @render_to('champions_grid.html')
 def view_champions_grid(request):
@@ -103,7 +103,7 @@ def view_rioters(request):
 @render_to('rioter.html')
 def view_rioter(request, rioter_url_id):
     rioter = consumer.get_one('mr_rioters', query={'url_id': rioter_url_id})
-    return {'rioter': rioter, 'g_sections': GLORIOUS_SECTIONS, 'simple_rioter': 1}
+    return {'rioter': rioter, 'g_sections': GLORIOUS_SECTIONS, 'simple_rioter': 1, 'filter_rioter_page': True}
 
 @render_to('article.html')
 def view_article(request, article_id):

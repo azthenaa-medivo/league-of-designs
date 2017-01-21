@@ -40,8 +40,9 @@ var query_champ = ids.cleanse ? {}:{'rioter_counter.name': {'$in': ids.rioters}}
 // Out : List of Rioters and Champions occurrences (champion + times quoted).
 var champ_per_rioter = db.mr_champions.aggregate([
 	{ $project : { "rioter_counter": 1, "name": 1, "url_id": 1, "portrait": 1 } },
-	{ $match : query_champ }, // Get all champions OK
+	{ $match : query_champ },
 	{ $unwind : "$rioter_counter" },
+	{ $sort: {"rioter_counter" : -1, "name": 1}},
 	{ $group : { _id : "$rioter_counter.name",
 	    champions_occurrences : { $push : { count: "$rioter_counter.count", name: "$name", url_id: "$url_id", portrait: "$portrait" } } } },
 	{ $out: "champ_per_rioter" }
@@ -56,7 +57,10 @@ var section_per_rioter = db.mr_reds.aggregate([
 	{ $out: "section_per_rioter" },
 ])
 
+var i = 0;
+
 rioters.forEach(function(r) {
+    i = i + 1
 //    print("\n=======\n"+r._id+"\n=======\n")
     var champ = db.champ_per_rioter.findOne({ "_id": r._id })
     var section = db.section_per_rioter.findOne({ "_id": r._id })
@@ -79,6 +83,8 @@ rioters.forEach(function(r) {
     }}
     rioters_bulk.find({ "name": r._id }).upsert().updateOne( update )
 });
+
+print("Updated " + i + " Rioters.")
 
 rioters_bulk.execute();
 
