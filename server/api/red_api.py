@@ -65,6 +65,7 @@ class RiotAPI:
                 self.has_work_flag = True
                 self.bulk.insert(d)
                 realm_posts.append(post_id)
+                print(post_id)
                 # Find the Rioter
                 if 'comment' in d:
                     rioter = d['comment']['user']['name']
@@ -72,9 +73,7 @@ class RiotAPI:
                     rioter = d['discussion']['user']['name']
                 self.rioters.add(rioter)
         print("Adding " + str(len(realm_posts) - self.CONF_MAX_BATCH) + " Red Posts for " + realm + ".")
-        if len(realm_posts) > self.CONF_MAX_BATCH:
-            # Now we remove the last n elements from the bottom of the array (they're sorted by date descending).
-            realm_posts = realm_posts[len(realm_posts) - self.CONF_MAX_BATCH:]
+        realm_posts = realm_posts[-self.CONF_MAX_BATCH:]
         self.conf[realm] = realm_posts
 
     def get_red_posts_and_store(self, realms=None, parameters=None, mega_bulk=False):
