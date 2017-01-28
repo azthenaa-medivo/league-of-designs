@@ -24,8 +24,13 @@
             <div class="row">
                 <div class="col-md-4 text-center">
                     <h4>Spotted in these sections !</h4>
-                    <canvas id="top-sections">
-                    </canvas>
+                    <div class="row">
+                        <div id="top-sections-wrapper" class="col-md-6 col-md-offset-3">
+                            <canvas id="top-sections">
+                            </canvas>
+                            <div id="chartjs-tooltip"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-4 text-center">
                     {% with fav=rioter|favourite_champions:1 %}
@@ -131,7 +136,10 @@
             // Sections chart
             var chartBox = $("#top-sections")[0];
             var sectionsChart = new Chart(chartBox, {
-                type: 'bar',
+                type: 'pie',
+                tooltipFontSize: 10,
+                tooltipTemplate: {% verbatim %}"<%if (label){%><%=label%>: <%}%><%= value %>hrs",{% endverbatim %}
+                percentageInnerCutout : 70,
                 data: {
                     labels: [{% for s in rioter.sections_occurrences|top:5 %}"{{s.section | safe}}" ,{% endfor %}],
                     datasets: [{
@@ -164,7 +172,43 @@
                         display: false,
                     },
                     tooltips: {
-                        titleFontFamily: "Georgia",
+                        enabled: false,
+                        // titleFontFamily: "Georgia",
+                        custom: function(tooltip) {
+                          // Tooltip Element
+                          var tooltipEl = $('#chartjs-tooltip');
+                          // Have the tooltip appear/disappear when you hover on/off the chart
+                          $("#top-sections-wrapper").mouseover(function(e) {
+                            tooltipEl.css('visibility', 'visible');
+                          });
+                          $("#top-sections-wrapper").mouseleave(function(e) {
+                            tooltipEl.css('visibility', 'hidden');
+                          });
+                          // Set Text
+                          if (tooltip.body) {
+                            var innerHtml = [
+                              (tooltip.body[0].lines || []).join('\n')
+                            ];
+                            tooltipEl.html(innerHtml.join('\n').replace(/,/g, ', '));
+                          }
+                          // Find Y Location on page
+                          var top = 0;
+                          if (tooltip.yAlign) {
+                            top = tooltip.y + tooltip.caretHeight + tooltip.caretPadding;
+                          }
+                          var position = $(this._chart.canvas)[0].getBoundingClientRect();
+                          // Display, position, and set styles for font
+                          tooltipEl.css({
+                            opacity: 1,
+                            width: tooltip.width ? (tooltip.width + 'px') : 'auto',
+                            left: tooltip.x + 'px',
+                            top: position.height/2 + 'px',
+                            fontFamily: tooltip._fontFamily,
+                            fontSize: tooltip.fontSize,
+                            fontStyle: tooltip._fontStyle,
+                            padding: tooltip.yPadding + 'px ' + tooltip.xPadding + 'px',
+                          });
+                        }
                     },
                     scales:
                     {

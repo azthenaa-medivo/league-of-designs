@@ -54,9 +54,9 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="lod-navbar-collapse">
                         <ul class="nav navbar-nav">
-                            <li title="Red Posts" id="li-red-posts" class="{% active_page request "red-posts" %}"><a href="{% url "red-posts" %}"><i class="glyphicon glyphicon-book"></i></a></li>
-                            <li title="Rioters" id="li-rioters" class="{% active_page request "rioter" %}"><a href="{% url "rioters" %}"><i class="glyphicon glyphicon-sunglasses"></i></a></li>
-                            <li title="Champions" id="li-champions" class="{% active_page request "champion" %}"><a href="{% url "champions-grid" %}"><i class="glyphicon glyphicon-queen"></i></a></li>
+                            <li title="Red Posts" id="li-red-posts" class="{% active_page request "red-posts" %}"><a href="{% url "red-posts" %}"><i class="glyphicon glyphicon-book"></i>&nbsp;&nbsp;Red Posts</a></li>
+                            <li title="Rioters" id="li-rioters" class="{% active_page request "rioter" %}"><a href="{% url "rioters" %}"><i class="glyphicon glyphicon-sunglasses"></i>&nbsp;&nbsp;Rioters</a></li>
+                            <li title="Champions" id="li-champions" class="{% active_page request "champion" %}"><a href="{% url "champions-grid" %}"><i class="glyphicon glyphicon-queen"></i>&nbsp;&nbsp;Champions</a></li>
                             <form class="navbar-form navbar-left" role="search" method="GET" action="{% url "red-posts" %}">
                                 <div class="form-group">
                                     <div class="input-group">
