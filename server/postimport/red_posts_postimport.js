@@ -52,6 +52,7 @@ db.reds.find(query).forEach(function(res) {
         'tags': [],
         'champions': [],
         'champions_data': [],
+        'done': 0,
     }
     var parent = digInto['parentComment'];
     if (parent != undefined)

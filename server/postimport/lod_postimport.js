@@ -32,7 +32,7 @@ db.mr_champions.find().forEach(function(champion_res) {
                         'champions': {'$not': {'$in': [champion_res['name']]}}}:
                         {'post_id': {'$in': ids.post_ids}, '$text': {'$search': champion_res['search']},
                         'champions': {'$not': {'$in': [champion_res['name']]}},
-                        'done': {'$ne': 1} };
+                        'done': { '$ne': 1 } };
     db.mr_reds.find(query).forEach(
         function(red){
             var new_tags = [];
