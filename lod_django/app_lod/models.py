@@ -20,13 +20,14 @@ ARTICLE_TYPE = (
 )
 
 GLORIOUS_SECTIONS = ["Gameplay", "Dev Corner", "Gameplay & Balance", "Champions & Gameplay", "Live Gameplay Balance",
-                     "Champions & Gameplay Feedback", "Maps & Modes", "Story & Art", "Sound & Music", "General PBE Feedback"]
+                     "Champions & Gameplay Feedback", "Maps & Modes", "Story & Art", "Sound & Music",
+                     "Story, Art, & Sound", "General PBE Feedback"]
 
 ALL_SECTIONS = ["Gameplay", "Dev Corner", "Gameplay & Balance", "Champions & Gameplay", "Live Gameplay Balance",
                 "Champions & Gameplay Feedback", "Maps & Modes",
                 "Announcements", "Boards Feedback", "Esports", "Community Creations", "Memes & Games",
                 "Miscellaneous", "Skins & Champion Concepts", "Story & Art", "Report a Bug", "Tips & Tricks",
-                "Team Recruitment", "Sound & Music", "League Videos", "Fantasy LCS", "General Discussion", "Bugs",
+                "Team Recruitment", "Sound & Music", "Story, Art, & Sound", "League Videos", "Fantasy LCS", "General Discussion", "Bugs",
                 "Client & New Features Feedback", "Site Feedback", "General PBE Feedback", "Mechs Vs Minions"]
 
 ROLES = ["Assassin", "Fighter", "Mage", "Support", "Marksman", "Tank", "Juggernaut"]

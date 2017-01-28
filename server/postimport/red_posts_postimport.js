@@ -12,8 +12,13 @@ load('utils.js');
 var bulk = db.mr_reds.initializeUnorderedBulkOp();
 var query = ids.cleanse ? {}:{'post_id': {'$in': ids.post_ids}};
 
+var red_updates = 0;
+
 db.reds.find(query).forEach(function(res) {
     // If it's a self-post (not a reply), there's no 'comment' field.
+
+    red_updates = red_updates + 1;
+
     var post_id, post_url, post_section, post_thread, digInto;
     if (res['comment'] === undefined)
     {
@@ -72,4 +77,7 @@ db.reds.find(query).forEach(function(res) {
     bulk.find({'post_id': res['post_id']}).upsert().update({'$set': new_post});
 });
 
+print("Red Updates : " + red_updates)
+
 bulk.execute();
+db.mr_reds.createIndex( { 'thread': "text", 'contents' : "text" } );

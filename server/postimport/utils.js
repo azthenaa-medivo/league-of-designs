@@ -1,7 +1,8 @@
 print('load:utils.js');
 
 var glorious_sections = ["Gameplay", "Dev Corner", "Gameplay & Balance", "Champions & Gameplay", "Maps & Modes",
-                            "Live Gameplay Balance", "Champions & Gameplay Feedback", "Story & Art", "Sound & Music", "General PBE Feedback"];
+                            "Live Gameplay Balance", "Champions & Gameplay Feedback", "Story & Art", "Story, Art, & Sound",
+                            "Sound & Music", "General PBE Feedback"];
 var tags = ["rework", "buff", "nerf"];
 
 function urlIDize(text) {

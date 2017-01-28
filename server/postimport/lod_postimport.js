@@ -31,7 +31,8 @@ db.mr_champions.find().forEach(function(champion_res) {
                         '$text': {'$search': champion_res['search']},
                         'champions': {'$not': {'$in': [champion_res['name']]}}}:
                         {'post_id': {'$in': ids.post_ids}, '$text': {'$search': champion_res['search']},
-                        'champions': {'$not': {'$in': [champion_res['name']]}}};
+                        'champions': {'$not': {'$in': [champion_res['name']]}},
+                        'done': {'$ne': 1} };
     db.mr_reds.find(query).forEach(
         function(red){
             var new_tags = [];
@@ -43,12 +44,12 @@ db.mr_champions.find().forEach(function(champion_res) {
                                     'search': champion_res['search'],
                                 },
                                 'champions': champion_res['name'],
-            }, '$addToSet': {}};
+            }, '$addToSet': {}, '$set': {'done': 1}};
 
             red_update['$addToSet']['tags'] = {'$each': champion_res['tags']};
             mr_reds_bulk.find({'_id': red['_id'],}).update(red_update);
 
-            // Update Rioter Counters DOTA2 SPECIALIZATION ZOMG GC YOU ARE BAD wowsoTILT
+            // Update Rioter Counters
             if (red['rioter'] in rioter_counter)
             {
                 rioter_counter[red['rioter']]['count'] += 1;
