@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import copy
+import datetime
+import dateutil.parser
+import pytz
 import requests
 from pymongo import MongoClient
 from pymongo.errors import InvalidOperation
@@ -33,9 +36,9 @@ class RiotAPI:
 
     def get_champions(self):
         """Fetches the champion pool."""
-        url_champions = 'https://global.api.pvp.net/api/lol/static-data/euw/v1.2/champion'
-        fields = 'altimages,blurb,image,info,lore,partype,passive,spells,tags'
-        return requests.get(url_champions, params={'champData': fields, 'api_key': self.key}).json()['data']
+        url_champions = 'https://euw1.api.riotgames.com/lol/static-data/v3/champions'
+        fields = ['blurb', 'image', 'info', 'lore', 'partype', 'passive', 'spells', 'tags']
+        return requests.get(url_champions, params={'api_key': self.key, 'tags': fields}).json()['data']
 
     def get_champions_and_store(self):
         """Collects the champion pool and stores it."""
@@ -52,19 +55,27 @@ class RiotAPI:
         if len(data) == 0:
             print('Nothing to insert for realm "%s" !' % realm)
             return 0
-        realm_posts = self.conf.get(realm, [])
+        last_post = self.conf.get('last_'+realm, datetime.datetime.fromtimestamp(1, pytz.utc))
+        new_realm_posts = []
+        new_last_post = last_post
+        new_posts = 0
         for d in reversed(data):
+            post_date = None
             if d.get('comment') is None:
                 post_id = d['discussion']['id']
+                post_date = dateutil.parser.parse(d['discussion']['createdAt'])
             else:
                 post_id = d['comment']['discussion']['id'] + ',' + d['comment']['id']
-            if post_id not in realm_posts:
+                post_date = dateutil.parser.parse(d['comment']['createdAt'])
+            if post_date.replace(tzinfo=last_post.tzinfo) > last_post:
+                new_posts += 1
+                new_last_post = post_date
                 d['post_id'] = post_id
                 d['region'] = realm
                 # Update conf
                 self.has_work_flag = True
                 self.bulk.insert(d)
-                realm_posts.append(post_id)
+                new_realm_posts.append(post_id)
                 print(post_id)
                 # Find the Rioter
                 if 'comment' in d:
@@ -72,9 +83,9 @@ class RiotAPI:
                 else:
                     rioter = d['discussion']['user']['name']
                 self.rioters.add(rioter)
-        print("Adding " + str(len(realm_posts) - self.CONF_MAX_BATCH) + " Red Posts for " + realm + ".")
-        realm_posts = realm_posts[-self.CONF_MAX_BATCH:]
-        self.conf[realm] = realm_posts
+        print("Adding " + str(new_posts) + " Red Posts for " + realm + ".")
+        self.conf[realm] = new_realm_posts
+        self.conf['last_' + realm] = new_last_post
 
     def get_red_posts_and_store(self, realms=None, parameters=None, mega_bulk=False):
         """Retrieves the latest Red Posts and puts them into the database."""
