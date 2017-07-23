@@ -15,6 +15,7 @@ Champions -
 {% block contents %}
     {% load staticfiles %}
     {% load template_tags %}
+    {% include "utils/components/champion_grid_handlebar.html" %}
     <div class="col-md-12">
         <div class="container-detach">
             <div id="search-row">
@@ -32,69 +33,64 @@ Champions -
         </div>
         <hr>
         <div id="champions-grid">
-            <ul class="small-block-grid-3 medium-block-grid-7">
-                {% for c in champions %}
-                    <li id="{{c.name}}" title="{{c.name}}" class="champion-block text-center" data-search="{{c.name}} {{c.search}} {% for tag in c.tags %}{{tag}} {% endfor %}">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <a href="{% url "champion" c.url_id %}">
-                                    <img class="sneak-view" title="{{c.name}}" alt="{{c.name}}" src="{% static "images/sneak/" %}{{c.url_id}}.png"></img>
-                                </a>
-                                <div class="champions-label">
-                                    <p class="champion-label">{{c.name}}</p>
-                                    <p data-posts="{{c.total_posts|int}}"><span class="rioter">{{c.total_posts|int}}</span> Red Post{{c.total_posts|plural}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+
         </div>
     </div>
 {% endblock %}
 
 {% block js %}
-    <!-- Search input -->
     <script>
         $(document).ready(function() {
-            var all = $('.champion-block');
+            var template_champions = Handlebars.compile($("#handlebars-champions-grid").html());
 
-            $('#champions-grid-search').bind('keyup', function(e) {
-                var search = $(this).val();
-                // Reset the grid
-                $('#champions-grid ul').html(all);
-                filter(search);
-            });
+            $.ajax({
+                    "url": "{% url "champions-grid" %}",
+                    "type": "GET",
+                    "data": { 'args': JSON.stringify( {projection: {url_id: 1, name: 1, search: 1, total_posts: 1, glorious_posts: 1 } } ) },
+                })
+                .done(function(data) {
+                    data["data"].sort(function(x, y) { return x.name.localeCompare(y.name); } );
+                    $("#champions-grid").html(template_champions(data));
+                    setupSearch();
+             });
 
-            function filter(text) {
-                if (text !== '')
-                {
-                    // Filter the grid
-                    $('.champion-block').each(function() {
-                        if (!($(this).attr('data-search').toLowerCase().indexOf(text.toLowerCase()) > -1))
-                        {
-                            $(this).remove();
-                        }
-                    });
-                    // Print something is everyone's off.
-                    if ($('#champions-grid li').length == 0)
+             function setupSearch()
+             {
+                var all = $('.champion-block');
+
+                $('#champions-grid-search').bind('keyup', function(e) {
+                    var search = $(this).val();
+                    // Reset the grid
+                    $('#champions-grid ul').html(all);
+                    filter(search);
+                });
+
+                function filter(text) {
+                    if (text !== '')
                     {
-                        $('#champions-grid ul').text("No one\'s come by that name here, mate. I mean, who " +
-                                "would you call \""+text+"\" anyway ? Not me, flower.");
+                        // Filter the grid
+                        $('.champion-block').each(function() {
+                            if (!($(this).attr('data-search').toLowerCase().indexOf(text.toLowerCase()) > -1))
+                            {
+                                $(this).remove();
+                            }
+                        });
+                        // Print something is everyone's off.
+                        if ($('#champions-grid li').length == 0)
+                        {
+                            $('#champions-grid ul').text("No one\'s come by that name here, mate. I mean, who " +
+                                    "would you call \""+text+"\" anyway ? Not me, flower.");
+                        }
                     }
                 }
-            }
 
-            // AND FOCUS IT MAN
-            $('#champions-grid-search').focus();
-        });
-    </script>
-    <!-- No Red Posts !  (╯°□°）╯︵ ┻━┻ -->
-    <script>
-        $(document).ready(function() {
-            $('p[data-posts=0]').each(function() {
-                $(this).text(Math.random()<0.9 ? 'No Red Posts !' : '(╯°□°）╯︵ ┻━┻' ).removeClass('rioter').addClass('norioter');
-            });
+                // AND FOCUS IT MAN
+                $('#champions-grid-search').focus();
+
+                $('p[data-posts=0]').each(function() {
+                    $(this).text(Math.random()<0.9 ? 'No Red Posts !' : '(╯°□°）╯︵ ┻━┻' ).removeClass('rioter').addClass('norioter');
+                });
+             }
         });
     </script>
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends "utils/components/handlebar_main.html" %}
+
+{% block h_id %}handlebars-champions-grid{% endblock %}
+
+{% block template %}
+{% load staticfiles %}
+{% load template_tags %}
+{% verbatim %}
+<ul class="small-block-grid-3 medium-block-grid-7">
+    {{#each data}}
+<li id="{{this.name}}" title="{{this.name}}" class="champion-block text-center" data-search="{{this.name}} {{this.search}} ">
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{% endverbatim %}{% url "champion" '' %}{% verbatim %}{{this.url_id}}">
+                <img class="sneak-view" title="{{this.name}}" alt="{{this.name}}" src="{% endverbatim %}{% static "images/sneak/" %}{% verbatim %}{{this.url_id}}.png"></img>
+            </a>
+            <div class="champions-label">
+                <p class="champion-label">{{this.name}}</p>
+                <p data-posts="{{this.total_posts}}"><span class="rioter">{{this.total_posts}}</span> Red Post</p>
+            </div>
+        </div>
+    </div>
+</li>
+    {{/each}}
+</ul>
+{% endverbatim %}
+{% endblock %}
