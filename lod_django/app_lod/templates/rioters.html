@@ -59,14 +59,21 @@ Rioters -
                 "ajax": {
                     "url": "{% url 'rioters' %}",
                     "type": "GET",
-                    "data": function ( args ) { return {"args": JSON.stringify( args )}; }
+                    "data": function ( args ) {
+                        var q = {
+                            'projection': {url_id: 1, name: 1, last_post: 1, total_posts: 1, glorious_posts: 1,
+                                            'last_post.post_id': 1, 'last_post.thread': 1, 'last_post.url': 1,
+                                            'last_post.date': 1}
+                        };
+                        return {"args": JSON.stringify( $.extend(args, q) )};
+                    }
                 },
 
                 "order": [[ 1, "desc" ]],
 
                 "language": {
                     //"loadingRecords": languageLoading,
-                    "zeroRecords": 'Hm ? I CANNOT HEAR YOU.',
+                    "zeroRecords": 'I CANNOT HEAR YOU.',
                     //"processing": languageLoading,
                 },
 

@@ -37,6 +37,7 @@ class DataTablesServerSideProcessor(object):
     def run_queries(self):
         if self.dt_query is not None:
             self.filter()
+        self.projection.update(**self.dt_projection)
         self.sort()
         self.result_data = self.consumer.get(self.collection, query=self.query, projection=self.projection if self.projection != {} else None,
                                              skip=self.dt_skip, limit=self.dt_length)

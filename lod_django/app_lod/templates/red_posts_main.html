@@ -41,7 +41,7 @@ Red Posts -
                                 }
                             };
                             {% include "utils/scripts/datatable_red_posts_default_auto_filter.html" %}
-                            return {"args": JSON.stringify( $.extend(args, q))};
+                            return { "args": JSON.stringify( $.extend(args, q) ) };
                         },
                 },
                 {% include "utils/scripts/datatable_red_posts_default_config.html" %}
