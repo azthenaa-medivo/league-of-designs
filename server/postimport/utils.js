@@ -59,6 +59,7 @@ var special_champion_names = {
     'Jarvan IV': 'jarvan j4',
     'Kassadin': 'kass',
     'Katarina': 'kata',
+    'Kayn': 'rhaast edgy',
     'Kindred': 'lamb wolf',
     'Kha\'Zix': 'kha zix kz',
     'Kled': 'skaarl holyshit',
@@ -94,6 +95,7 @@ var special_champion_names = {
     'Volibear': 'volibro voli',
     'Warwick': 'ww',
     'Wukong': 'wu',
+    'Xayah': 'edgy'
 }
 
 var special_champion_resources = {
@@ -185,9 +187,11 @@ var special_champion_land = {
     "Nunu": "freljord",
     "Olaf": "freljord",
     "Orianna": "piltover",
+    "Ornn": "freljord",
     "Pantheon": "targon",
     "Poppy": "demacia",
     "Quinn": "demacia",
+    "Rakan": "ionia",
     "Rammus": "shurima",
     "Rek'Sai": "void",
     "Renekton": "shurima",
@@ -214,7 +218,7 @@ var special_champion_land = {
     "Twisted Fate": "bilgewater",
     "Twitch": "zaun",
     "Udyr": "freljord",
-    "Urgot": "noxus",
+    "Urgot": "piltover",
     "Varus": "ionia",
     "Vayne": "demacia",
     "Vel'Koz": "void",
@@ -224,6 +228,7 @@ var special_champion_land = {
     "Volibear": "freljord",
     "Warwick": "zaun",
     "Wukong": "ionia",
+    "Xayah": "ionia",
     "Xerath": "shurima",
     "Xin Zhao": "demacia",
     "Yasuo": "ionia",
