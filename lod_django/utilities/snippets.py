@@ -3,7 +3,7 @@ import json
 import re
 from bson import ObjectId
 from json import JSONEncoder
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext

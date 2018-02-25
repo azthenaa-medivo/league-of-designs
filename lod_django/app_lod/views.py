@@ -10,7 +10,7 @@ from .forms import ChampionForm, ArticleForm, NewArticleForm, RedPostDetailedSea
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required

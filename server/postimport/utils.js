@@ -57,6 +57,7 @@ var special_champion_names = {
     'Gangplank': 'gp',
     'Heimerdinger': 'heimer donger ヽ༼ຈل͜ຈ༽ﾉ',
     'Jarvan IV': 'jarvan j4',
+    'Kai\'Sa': 'kaisa',
     'Karthus': '',
     'Kassadin': 'kass',
     'Katarina': 'kata',
@@ -168,6 +169,7 @@ var special_champion_land = {
     "Jayce": "piltover",
     "Jhin": "ionia",
     "Jinx": "piltover",
+    "Kai'Sa": "void",
     "Kalista": "shadow-isles",
     "Karma": "ionia",
     "Karthus": "shadow-isles",
@@ -243,5 +245,6 @@ var special_champion_land = {
     "Zed": "ionia",
     "Ziggs": "piltover",
     "Zilean": "shurima",
+    "Zoe": "targon",
     "Zyra": "shadow-isles",
 };
