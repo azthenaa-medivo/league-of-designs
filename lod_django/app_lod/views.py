@@ -185,14 +185,13 @@ def view_login(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                messages.add_message(request, messages.SUCCESS, 'Welcome, ' + username + ' !', extra_tags='text-success')
+                messages.add_message(request, messages.SUCCESS, 'Welcome, ' + username + '!', extra_tags='text-success')
                 return HttpResponseRedirect(next)
             else:
                 messages.add_message(request, messages.WARNING, 'User '+username+' has been deactivated.', extra_tags='text-warning')
         else:
             messages.add_message(request, messages.ERROR, 'Something went wrong with the provided credentials.', extra_tags='text-danger')
-    return render(request, "login.html", context=RequestContext(request, {'username': username,
-                                                                          'next': next}))
+    return render(request, "login.html", context={'username': username, 'next': next})
 
 @render_to('sitemap.html')
 def view_sitemap(request):

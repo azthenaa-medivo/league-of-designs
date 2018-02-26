@@ -5,7 +5,7 @@ from bson import ObjectId
 from json import JSONEncoder
 from django.urls import reverse
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from app_database.postimport import postimport as pi
 from .templatetags.markdown_extension import QuoteExtension
@@ -29,9 +29,9 @@ def render_to(template):
         def wrapper(request, *args, **kw):
             output = func(request, *args, **kw)
             if isinstance(output, (list, tuple)):
-                return render_to_response(output[1], output[0], RequestContext(request))
+                return render(output[1], output[0], RequestContext(request))
             elif isinstance(output, dict):
-                return render_to_response(template, output, RequestContext(request))
+                return render(request, template, output)
             return output
         return wrapper
     return renderer
