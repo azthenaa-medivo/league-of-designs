@@ -198,6 +198,7 @@ var special_champion_land = {
     "Ornn": "freljord",
     "Pantheon": "targon",
     "Poppy": "demacia",
+    "Pyke": "bilgewater",
     "Quinn": "demacia",
     "Rakan": "ionia",
     "Rammus": "shurima",
