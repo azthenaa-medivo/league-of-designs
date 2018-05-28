@@ -104,3 +104,5 @@ db.champions.find().forEach(function(res) {
 });
 
 bulk.execute();
+
+db.mr_champions.createIndex( { 'name': "text", 'search': "text" } );
